@@ -37,7 +37,9 @@ add_library(${PROJECT_NAME} SHARED
         src/checkIpAddr.c
         src/test.c
         src/loadUserAgents.c
-        src/loadUserAgents.h)
+        src/loadUserAgents.h
+        src/loadIpNetworks.c
+        src/loadIpNetworks.h)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 

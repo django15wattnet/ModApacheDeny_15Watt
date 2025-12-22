@@ -9,7 +9,7 @@
 
 int loadUserAgents(
     const ModuleConfig *moduleConfig,
-    ModuleDataUserAgents **data,
+    ModuleDataUserAgents **dataUserAgents,
     apr_pool_t *pool,
     const server_rec *serverRec
 );

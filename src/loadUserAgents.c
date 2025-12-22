@@ -6,11 +6,10 @@
 
 int loadUserAgents(
     const ModuleConfig *moduleConfig,
-    ModuleDataUserAgents **data,
+    ModuleDataUserAgents **dataUserAgents,
     apr_pool_t *pool,
     const server_rec *serverRec
 ) {
-    printf("loadUserAgents\n");
     MYSQL_ROW row;
     MYSQL *conn = mysql_init(NULL);
     if (conn == NULL) {
@@ -55,12 +54,13 @@ int loadUserAgents(
     }
 
     int cntUserAgents = (int)mysql_num_rows(res);
-    *data = apr_pcalloc(pool, sizeof(ModuleDataUserAgents) + cntUserAgents * sizeof(const char *));
-    (*data)->cntUserAgents = cntUserAgents;
+    // size of                ↓ Integer     ↓ + count strings * size of pointer
+    *dataUserAgents = apr_pcalloc(pool, sizeof(int) + cntUserAgents * sizeof(const char *));
+    (*dataUserAgents)->cntUserAgents = cntUserAgents;
 
     int index = 0;
     while ((row = mysql_fetch_row(res))) {
-        (*data)->userAgents[index] = apr_pstrdup(pool, row[0]);
+        (*dataUserAgents)->userAgents[index] = apr_pstrdup(pool, row[0]);
         index++;
     }
 

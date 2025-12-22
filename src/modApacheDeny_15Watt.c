@@ -2,8 +2,6 @@
 // Created by Thomas Siemion on 29.11.25.
 //
 #include "modApacheDeny_15Watt.h"
-#include "loadUserAgents.h"
-#include "checkIpAddr.h"
 
 /* ********************************** */
 /* START config / directives handlers */
@@ -72,7 +70,12 @@ static const command_rec modApacheDeny_15Watt_directives[] =
 
 /* ***************** */
 /* START Module data */
-ModuleDataUserAgents *moduleDataUserAgents = NULL;
+ModuleDataUserAgents  *moduleDataUserAgents  = NULL;
+ModuleDataHostnames   *moduleDataHostnames   = NULL;
+ModuleDataIpV4        *moduleDataIpV4        = NULL;
+ModuleDataIpV6        *moduleDataIpV6        = NULL;
+ModuleDataNetInfoIpV4 *moduleDataNetInfoIpV4 = NULL;
+
 
 /* END Module data   */
 /* ***************** */
@@ -138,8 +141,9 @@ int handlerServerConfig(
         moduleConfig.allowEmptyUserAgent = 1;       // Default: allow empty User-Agent
     }
 
-    // Build the datastructures for user agents to block
+
     if (NULL == moduleDataUserAgents) {
+        // Build the datastructures for user agents to block
         if (0 != loadUserAgents(&moduleConfig, &moduleDataUserAgents, pconf, s)) {
             ap_log_error(
                 APLOG_MARK,
@@ -147,6 +151,25 @@ int handlerServerConfig(
                 0,
                 s,
                 "Failed to load user agents to block from database"
+            );
+        }
+
+        // Build the datastructures for IP addresses, networks and hostnames to block
+        if (0 != loadIpNetworks(
+            &moduleConfig,
+            &moduleDataHostnames,
+            &moduleDataIpV4,
+            &moduleDataIpV6,
+            &moduleDataNetInfoIpV4,
+            pconf,
+            s
+        )) {
+            ap_log_error(
+                APLOG_MARK,
+                APLOG_ERR,
+                0,
+                s,
+                "Failed to load IP addresses, networks and hostnames to block from database"
             );
         }
     }
@@ -176,22 +199,51 @@ static int requestHandler(request_rec *r)
         return DECLINED;
     }
 
-    const char *user_agent = apr_table_get(r->headers_in, "User-Agent");
+    const char *userAgent = apr_table_get(r->headers_in, "User-Agent");
 
-    if ((NULL == user_agent || 1 == strcmp(user_agent, "")) && 2 == moduleConfig.allowEmptyUserAgent) {
+    if (
+        (NULL == userAgent || 1 == strcmp(userAgent, ""))
+        &&
+        DoNotAllowEmptyUserAgent == moduleConfig.allowEmptyUserAgent
+    ) {
         // Empty or not provided User-Agent is not allowed
+        ap_log_rerror(
+            APLOG_MARK,
+            APLOG_INFO,
+            0,
+            r,
+            "modApacheDeny_15Watt blocked empty user agent"
+        );
+
         return HTTP_FORBIDDEN;
     }
 
-    if (NULL != user_agent) {
+    if (NULL != userAgent) {
+        // The request has a User-Agent, so check if it is in the block list
         for (int i = 0; i < moduleDataUserAgents->cntUserAgents; i++) {
 
-            if (NULL != strstr(user_agent, moduleDataUserAgents->userAgents[i])) {
-                ap_rprintf(r, "Blocked User Agent: %s matched %s<br>\n", user_agent, moduleDataUserAgents->userAgents[i]);
+            if (NULL != strstr(userAgent, moduleDataUserAgents->userAgents[i])) {
+                ap_log_rerror(
+                    APLOG_MARK,
+                    APLOG_INFO,
+                    0,
+                    r,
+                    "modApacheDeny_15Watt blocked by user agent = %s",
+                    userAgent
+                );
+
                 return HTTP_FORBIDDEN;
             }
         }
     }
+
+    // The user agent ist not blocked, so check the IP address / hostname
+    // Hier wird es interessant, die Client-IP-Adresse scheint immer vorhanden zu
+    // sein. Wie das mit den Hostnamen aussieht, muss ich noch testen.
+    
+    // switch (detectAddressType(r->)) {
+    //
+    // }
 
     // DECLINED means "not handled", so other modules can try to handle the request
     return DECLINED;

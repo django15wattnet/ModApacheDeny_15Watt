@@ -22,6 +22,8 @@
 #include "ap_config.h"
 #include <mysql/mysql.h>
 
+#include "checkIpAddr.h"
+
 /* Configuration structure for the module */
 typedef struct {
     const char *dbHost;
@@ -33,15 +35,47 @@ typedef struct {
     int  allowEmptyUserAgent;
 } ModuleConfig;
 
+#define DoAllowEmptyUserAgent    1
+#define DoNotAllowEmptyUserAgent 2
+
 /* Structure to hold the user agents to block */
 typedef struct {
     int cntUserAgents;
     char *userAgents[];
 } ModuleDataUserAgents;
 
+/* Structure to hold IPv4 network to block information */
+typedef struct {
+    int cntNetInfoIpV4;
+    NetInfoIpV4 *netInfoIpV4[];
+} ModuleDataNetInfoIpV4;
+
+/* Structure to hold IPv6 network to block */
+typedef struct {
+    int cntIpV4;
+    char *ipV4[];
+} ModuleDataIpV4;
+
+/* Structure to hold IPv6 addresses to block */
+typedef struct {
+    int cntIpV6;
+    char *ipV6[];
+} ModuleDataIpV6;
+
+/* Structure to hold hostnames to block */
+typedef struct {
+    int cntHostnames;
+    char *hostnames[];
+} ModuleDataHostnames;
+
+/* @todo Struktur zum speichern von IpV6-Netzwerken */
+
 
 static void register_hooks(apr_pool_t *pool);
 static int requestHandler(request_rec *r);
 int handlerServerConfig(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, server_rec *s);
+
+#include "loadUserAgents.h"
+#include "loadIpNetworks.h"
 
 #endif //MODAPACHEDENY_15WATT_MODAPACHEDENY_15WATT_H

@@ -20,10 +20,15 @@
 
 #define addressType_RegExHostname "^[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$"
 
+/* Structure to hold IPv4 network information */
 typedef struct {
     uint32_t network;
     uint32_t mask;
 } NetInfoIpV4;
+
+/*
+ * @todo Strukturen für IPv6 Netzwerke erstellen
+ */
 
 
 int detectIpFamily(const char *ip);
