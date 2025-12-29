@@ -31,6 +31,7 @@ typedef struct {
     const char *dbHost;
     const char *dbUser;
     const char *dbPwd;
+    int         dbPort;
     const char *database;
     const char *tableAddresses;
     const char *tableUserAgents;

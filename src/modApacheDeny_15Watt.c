@@ -25,6 +25,12 @@ const char *setConfigDbPwd(cmd_parms *cmd, void *cfg, const char *arg)
     return NULL;
 }
 
+const char *setConfigDbPort(cmd_parms *cmd, void *cfg, const char *arg)
+{
+    moduleConfig.dbPort = atoi(arg);
+    return NULL;
+}
+
 const char *setConfigDatabase(cmd_parms *cmd, void *cfg, const char *arg)
 {
     moduleConfig.database = arg;
@@ -58,6 +64,7 @@ static const command_rec modApacheDeny_15Watt_directives[] =
     AP_INIT_TAKE1("modApacheDeny_15Watt_dbHost",              setConfigDbHost,              NULL, RSRC_CONF, "Database host"),
     AP_INIT_TAKE1("modApacheDeny_15Watt_dbUser",              setConfigDbUser,              NULL, RSRC_CONF, "Database user"),
     AP_INIT_TAKE1("modApacheDeny_15Watt_dbPwd",               setConfigDbPwd,               NULL, RSRC_CONF, "Database pasword"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_dbPort",              setConfigDbPort,              0   , RSRC_CONF, "Database port"),
     AP_INIT_TAKE1("modApacheDeny_15Watt_database",            setConfigDatabase,            NULL, RSRC_CONF, "Name of the database holding the tables"),
     AP_INIT_TAKE1("modApacheDeny_15Watt_tableAddresses",      setConfigTableAddresses,      NULL, RSRC_CONF, "Name of the database table holding the addresses to block"),
     AP_INIT_TAKE1("modApacheDeny_15Watt_tableUserAgents",     setConfigTableUserAgents,     NULL, RSRC_CONF, "Name of the database table holding the user agents to block"),
@@ -124,6 +131,9 @@ int handlerServerConfig(
     }
     if (NULL == moduleConfig.dbPwd) {
         moduleConfig.dbPwd = "";
+    }
+    if (0 == moduleConfig.dbPort) {
+        moduleConfig.dbPort = 3306;
     }
     if (NULL == moduleConfig.database) {
         moduleConfig.database = "test";
@@ -199,7 +209,7 @@ static int requestHandler(request_rec *r)
         APLOG_INFO,
         0,
         r,
-        "modApacheDeny_15Watt user agent=%s  ip=%s host=%s",
+        "modApacheDeny_15Watt client info, user agent=%s  ip=%s host=%s",
         userAgent,
         r->useragent_ip,
         r->useragent_host
