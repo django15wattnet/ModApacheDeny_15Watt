@@ -10,8 +10,6 @@
  */
 int ipv4_in_cidr(const char *ip, const char *cidr) {
     char network[64];
-    char *slash;
-    int prefix_len;
     struct in_addr ip_addr, net_addr;
     uint32_t mask;
 
@@ -19,14 +17,14 @@ int ipv4_in_cidr(const char *ip, const char *cidr) {
     strncpy(network, cidr, sizeof(network) - 1);
     network[sizeof(network) - 1] = '\0';
 
-    slash = strchr(network, '/');
+    char *slash = strchr(network, '/');
     if (!slash) {
         fprintf(stderr, "Ungültiges IPv4-CIDR-Format: %s\n", cidr);
         return 0;
     }
 
     *slash = '\0';
-    prefix_len = atoi(slash + 1);
+    int prefix_len = atoi(slash + 1);
     if (prefix_len < 0 || prefix_len > 32) {
         fprintf(stderr, "Ungültige Präfixlänge: %d\n", prefix_len);
         return 0;

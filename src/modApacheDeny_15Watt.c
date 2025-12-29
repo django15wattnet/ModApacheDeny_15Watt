@@ -134,9 +134,6 @@ int handlerServerConfig(
     if (NULL == moduleConfig.tableUserAgents) {
         moduleConfig.tableUserAgents = "block_user_agent";
     }
-
-    printf("moduleConfig.allowEmptyUserAgent = %d\n", moduleConfig.allowEmptyUserAgent);
-
     if (0 == moduleConfig.allowEmptyUserAgent) {
         moduleConfig.allowEmptyUserAgent = 1;       // Default: allow empty User-Agent
     }
@@ -191,15 +188,22 @@ static void register_hooks(apr_pool_t *pool)
 
 static int requestHandler(request_rec *r)
 {
-    if (NULL == moduleDataUserAgents) {
-        return DECLINED;
-    }
-
     if (!r->handler) {
         return DECLINED;
     }
 
     const char *userAgent = apr_table_get(r->headers_in, "User-Agent");
+
+    ap_log_rerror(
+        APLOG_MARK,
+        APLOG_INFO,
+        0,
+        r,
+        "modApacheDeny_15Watt user agent=%s  ip=%s host=%s",
+        userAgent,
+        r->useragent_ip,
+        r->useragent_host
+    );
 
     if (
         (NULL == userAgent || 1 == strcmp(userAgent, ""))
@@ -212,13 +216,13 @@ static int requestHandler(request_rec *r)
             APLOG_INFO,
             0,
             r,
-            "modApacheDeny_15Watt blocked empty user agent"
+            "modApacheDeny_15Watt blocked client by empty user agent"
         );
 
         return HTTP_FORBIDDEN;
     }
 
-    if (NULL != userAgent) {
+    if ((NULL != moduleDataUserAgents) && (NULL != userAgent)) {
         // The request has a User-Agent, so check if it is in the block list
         for (int i = 0; i < moduleDataUserAgents->cntUserAgents; i++) {
 
@@ -228,7 +232,7 @@ static int requestHandler(request_rec *r)
                     APLOG_INFO,
                     0,
                     r,
-                    "modApacheDeny_15Watt blocked by user agent = %s",
+                    "modApacheDeny_15Watt blocked client by user agent = %s",
                     userAgent
                 );
 
@@ -238,115 +242,110 @@ static int requestHandler(request_rec *r)
     }
 
     // The user agent ist not blocked, so check the IP address / hostname
-    // Hier wird es interessant, die Client-IP-Adresse scheint immer vorhanden zu
-    // sein. Wie das mit den Hostnamen aussieht, muss ich noch testen.
-    
-    // switch (detectAddressType(r->)) {
-    //
-    // }
+
+    // May block clients by there IpV4
+    if (
+        (NULL != moduleDataIpV4)
+        &&
+        (NULL != r->useragent_ip)
+        &&
+        (addressType_IPv4 == detectAddressType(r->useragent_ip))
+    ) {
+
+        for (int i = 0; i < moduleDataIpV4->cntIpV4; i++) {
+            if (0 == strcmp(r->useragent_ip, moduleDataIpV4->ipV4[i])) {
+                ap_log_rerror(
+                    APLOG_MARK,
+                    APLOG_INFO,
+                    0,
+                    r,
+                    "modApacheDeny_15Watt blocked client by ipV4 address = %s",
+                    r->useragent_ip
+                );
+
+                return HTTP_FORBIDDEN;
+            }
+        }
+    }
+
+    // May block by clients ipV6
+    if (
+        (NULL != moduleDataIpV6)
+        &&
+        (NULL != r->useragent_ip)
+        &&
+        (addressType_IPv6 == detectAddressType(r->useragent_ip))) {
+
+        for (int i = 0; i < moduleDataIpV6->cntIpV6; i++) {
+            if (0 == strcmp(r->useragent_ip, moduleDataIpV6->ipV6[i])) {
+                ap_log_rerror(
+                    APLOG_MARK,
+                    APLOG_INFO,
+                    0,
+                    r,
+                    "modApacheDeny_15Watt blocked client by ipV6 address = %s",
+                    r->useragent_ip
+                );
+
+                return HTTP_FORBIDDEN;
+            }
+        }
+    }
+
+    // May block clients by there hostname
+    if (
+        (NULL != moduleDataHostnames)
+        &&
+        (NULL != r->useragent_host)
+    ) {
+        for (int i = 0; i < moduleDataHostnames->cntHostnames; i++) {
+            if (true == stringEndsWith(r->useragent_host, moduleDataHostnames->hostnames[i])) {
+                ap_log_rerror(
+                    APLOG_MARK,
+                    APLOG_INFO,
+                    0,
+                    r,
+                    "modApacheDeny_15Watt blocked client by hostname = %s",
+                    r->useragent_host
+                );
+
+                return HTTP_FORBIDDEN;
+            }
+        }
+    }
+
+
+    // Block Ip by IpV4 CIDR
+    if (
+        (NULL != moduleDataNetInfoIpV4)
+        &&
+        (NULL != r->useragent_ip)
+        &&
+        (addressType_IPv4 == detectAddressType(r->useragent_ip))
+    ) {
+        struct in_addr ipAddr;
+        if (1 == inet_pton(AF_INET, r->useragent_ip, &ipAddr)) {
+            for (int i = 0; i < moduleDataNetInfoIpV4->cntNetInfoIpV4; i++) {
+                const NetInfoIpV4 *netInfoV4 = moduleDataNetInfoIpV4->netInfoIpV4[i];
+
+                if ((ipAddr.s_addr & netInfoV4->mask) == (netInfoV4->network & netInfoV4->mask)) {
+
+                    ap_log_rerror(
+                        APLOG_MARK,
+                        APLOG_INFO,
+                        0,
+                        r,
+                        "modApacheDeny_15Watt blocked client ip = %s by ipv4 cidr = %s",
+                        r->useragent_ip,
+                        netInfoV4->cidr
+                    );
+
+                    return HTTP_FORBIDDEN;
+                }
+            }
+        }
+    }
 
     // DECLINED means "not handled", so other modules can try to handle the request
     return DECLINED;
-
-
-
-    /* Now that we are handling this request, we'll write out "Hello, world!" to the client.
-     * To do so, we must first set the appropriate content type, followed by our output.
-     */
-    /*
-    ap_set_content_type(r, "text/html");
-    ap_rprintf(r, "Hello, world!\n<br>");
-
-    const char *user_agent = apr_table_get(r->headers_in, "User-Agent");
-    const char *client_ip = r->connection->client_ip;
-
-    if (NULL == user_agent) {
-        user_agent = "kein UserAgent";
-    }
-
-    ap_rprintf(r, "%s\n", user_agent);
-    ap_rprintf(r, "\n<br>%s\n<br>", client_ip ? client_ip : "unbekannt");
-
-    int addrType = detectAddressType(client_ip ? client_ip : "");
-    ap_rprintf(r, "Address Type: %d\n<br>", addrType);
-
-    // printf("Msg = %s\n", r->pool);
-
-
-    ap_rprintf(r, "Loaded %d user agents to block\n<br>", moduleDataUserAgents->cntUserAgents);
-
-
-
-    return OK;
-
-
-
-    MYSQL *conn;
-    MYSQL_RES *res;
-    MYSQL_ROW row;
-
-    // MySQL-Verbindungsdetails
-    const char *server = "192.168.64.1";
-    const char *user = "root";
-    const char *password = "monster1"; // Passwort ändern
-    const char *database = "thomas.siemion.photography";
-
-    // MySQL initialisieren
-    conn = mysql_init(NULL);
-    if (!conn) {
-        ap_rputs("mysql_init() fehlgeschlagen\n", r);
-        return OK; //HTTP_INTERNAL_SERVER_ERROR;
-    }
-    // Verbindung herstellen
-    if (!mysql_real_connect(conn, server, user, password, database, 0, NULL, 0)) {
-        ap_rprintf(r, "Fehler bei Verbindung: %s\n", mysql_error(conn));
-        mysql_close(conn);
-        return OK; //HTTP_INTERNAL_SERVER_ERROR;
-    }
-    */
-
-    // SQL-Query ausführen
-    /*
-    *
-    SELECT
-        COUNT(id) AS cnt
-    FROM
-        block_user_agent_site_data
-    WHERE
-         'XYT Custom-AsyncHttpClient ABC' LIKE concat('%', `value`, '%')
-     */
-    /*
-    if (mysql_query(conn, "SELECT datum, title FROM news_site_data")) {
-        ap_rprintf(r, "Query-Fehler: %s\n", mysql_error(conn));
-        mysql_close(conn);
-        return OK; //HTTP_INTERNAL_SERVER_ERROR;
-    }
-
-    // Ergebnis holen
-    res = mysql_store_result(conn);
-    if (!res) {
-        ap_rprintf(r, "Ergebnisfehler: %s\n", mysql_error(conn));
-        mysql_close(conn);
-        return OK; //HTTP_INTERNAL_SERVER_ERROR;
-    }
-
-    // Ergebnis ausgeben
-    int num_fields = mysql_num_fields(res);
-    while ((row = mysql_fetch_row(res))) {
-        for (int i = 0; i < num_fields; i++) {
-            ap_rprintf(r,"%s\t", row[i] ? row[i] : "NULL");
-        }
-        int l = strlen(row[1]);
-        ap_rprintf(r, "\tlen = %d<br>\n", l);
-    }
-
-    // Speicher freigeben
-    mysql_free_result(res);
-    mysql_close(conn);
-*/
-    /* Lastly, we must tell the server that we took care of this request and everything went fine.
-     * We do so by simply returning the value OK to the server.
-     */
-    return OK;
-
 }

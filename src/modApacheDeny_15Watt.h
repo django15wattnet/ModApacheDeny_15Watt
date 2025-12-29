@@ -21,8 +21,10 @@
 #include "http_request.h"
 #include "ap_config.h"
 #include <mysql/mysql.h>
+#include <arpa/inet.h>
 
 #include "checkIpAddr.h"
+#include "functionsString.h"
 
 /* Configuration structure for the module */
 typedef struct {

@@ -24,6 +24,7 @@
 typedef struct {
     uint32_t network;
     uint32_t mask;
+    const char *cidr;
 } NetInfoIpV4;
 
 /*

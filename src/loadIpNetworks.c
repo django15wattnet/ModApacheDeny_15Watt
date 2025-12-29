@@ -126,6 +126,7 @@ int loadIpNetworks(
             case addressType_CidrIPv4:
                 ptrNetInfoIpV4 = apr_pcalloc(pool, sizeof(NetInfoIpV4));
                 compileIpV4Cidr(row[0], ptrNetInfoIpV4);
+                ptrNetInfoIpV4->cidr = apr_pstrdup(pool, row[0]);
                 (*dataNetInfoIpV4)->netInfoIpV4[idxNetInfoIpV4] = ptrNetInfoIpV4;
                 idxNetInfoIpV4++;
                 break;
