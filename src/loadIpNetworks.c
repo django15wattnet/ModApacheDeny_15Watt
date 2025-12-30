@@ -27,8 +27,15 @@ int loadIpNetworks(
         return -1;
     }
 
-    if (mysql_real_connect(conn, moduleConfig->dbHost, moduleConfig->dbUser,
-                           moduleConfig->dbPwd, moduleConfig->database, 0, NULL, 0) == NULL) {
+    if (mysql_real_connect(
+            conn,
+            moduleConfig->dbHost,
+            moduleConfig->dbUser,
+            moduleConfig->dbPwd,
+            moduleConfig->database,
+            moduleConfig->dbPort,
+            NULL,
+            0) == NULL) {
         ap_log_error(
             APLOG_MARK,
             APLOG_ERR,
@@ -38,7 +45,7 @@ int loadIpNetworks(
         );
         mysql_close(conn);
         return -2;
-                           }
+    }
 
     char query[1024];
     snprintf(query, sizeof(query), "SELECT value FROM %s", moduleConfig->tableAddresses);
