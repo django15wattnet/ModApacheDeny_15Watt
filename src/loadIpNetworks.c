@@ -10,6 +10,7 @@ int loadIpNetworks(
     ModuleDataIpV4 **dataIpV4,
     ModuleDataIpV6 **dataIpV6,
     ModuleDataNetInfoIpV4 **dataNetInfoIpV4,
+    ModuleDataNetInfoIpV6 **dataNetInfoIpV6,
     apr_pool_t *pool,
     const server_rec *serverRec
 ) {
@@ -66,6 +67,7 @@ int loadIpNetworks(
     // Get the counts of IpV4-, IpV6-Adressen und Hostnamen
     // and allocate the data structures
     int cntNetInfoIpV4 = 0;
+    int cntNetInfoIpV6 = 0;
     int cntIpV4        = 0;
     int cntIpV6        = 0;
     int cntHostnames   = 0;
@@ -82,6 +84,9 @@ int loadIpNetworks(
             case addressType_IPv6:
                 cntIpV6++;
                 break;
+            case addressType_CidrIPv6:
+                cntNetInfoIpV6++;
+                break;
             case addressType_Hostname:
                 cntHostnames++;
                 break;
@@ -92,7 +97,7 @@ int loadIpNetworks(
                     APLOG_WARNING,
                     0,
                     serverRec,
-                    "Unknown address type for value '%s' in table '%s'",
+                    "modApacheDeny_15Watt Unknown address type for value '%s' in table '%s'",
                     row[0],
                     moduleConfig->tableAddresses
                 );
@@ -116,6 +121,9 @@ int loadIpNetworks(
     *dataIpV6 = apr_pcalloc(pool, sizeof(int) + cntIpV6 * sizeof(const char *));
     (*dataIpV6)->cntIpV6 = cntIpV6;
 
+    *dataNetInfoIpV6 = apr_pcalloc(pool, sizeof(int) + cntNetInfoIpV6 * sizeof(NetInfoIpV6 *));
+    (*dataNetInfoIpV6)->cntNetInfoIpV6 = cntNetInfoIpV6;
+
     *dataHostnames = apr_palloc(pool, sizeof(int) + cntHostnames * sizeof(const char *));
     (*dataHostnames)->cntHostnames = cntHostnames;
 
@@ -123,8 +131,10 @@ int loadIpNetworks(
     int idxIpV4        = 0;
     int idxIpV6        = 0;
     int idxNetInfoIpV4 = 0;
+    int idxNetInfoIpV6 = 0;
 
     NetInfoIpV4 *ptrNetInfoIpV4;
+    NetInfoIpV6 *ptrNetInfoIpV6;
 
     while ((row = mysql_fetch_row(res))) {
 
@@ -146,6 +156,14 @@ int loadIpNetworks(
             case addressType_IPv6:
                 (*dataIpV6)->ipV6[idxIpV6] = apr_pstrdup(pool, row[0]);
                 idxIpV6++;
+                break;
+
+            case addressType_CidrIPv6:
+                ptrNetInfoIpV6 = apr_pcalloc(pool, sizeof(NetInfoIpV6));
+                compileIpV6Cidr(row[0], ptrNetInfoIpV6);
+                ptrNetInfoIpV6->cidr = apr_pstrdup(pool, row[0]);
+                (*dataNetInfoIpV6)->netInfoIpV6[idxNetInfoIpV6] = ptrNetInfoIpV6;
+                idxNetInfoIpV6++;
                 break;
 
             case addressType_Hostname:

@@ -53,7 +53,7 @@ typedef struct {
     NetInfoIpV4 *netInfoIpV4[];
 } ModuleDataNetInfoIpV4;
 
-/* Structure to hold IPv6 network to block */
+/* Structure to hold IPv4 addresses to block */
 typedef struct {
     int cntIpV4;
     char *ipV4[];
@@ -64,6 +64,12 @@ typedef struct {
     int cntIpV6;
     char *ipV6[];
 } ModuleDataIpV6;
+
+/* Structure to hold IPv6 network to block */
+typedef struct {
+  int cntNetInfoIpV6;
+  NetInfoIpV6 *netInfoIpV6[];
+} ModuleDataNetInfoIpV6;
 
 /* Structure to hold hostnames to block */
 typedef struct {

@@ -47,7 +47,7 @@ int detectAddressType(const char *addr)
     }
 
     // Check for CIDR notation
-    char network[64];
+    char network[128];
 
     strncpy(network, addr, sizeof(network) - 1);
     network[sizeof(network) - 1] = '\0';
@@ -123,6 +123,76 @@ int compileIpV4Cidr(const char *cidr, NetInfoIpV4 *netInfoIpV4)
     }
 
     netInfoIpV4->network = addrNet.s_addr & netInfoIpV4->mask;
+
+    return 1;
+}
+
+
+int compileIpV6Cidr(const char *cidr, NetInfoIpV6 *netInfoIpV6)
+{
+    char network[128];
+    char *slash;
+    int prefix_len;
+
+    // CIDR-String kopieren und in Netzadresse / Präfix splitten
+    strncpy(network, cidr, sizeof(network) - 1);
+    network[sizeof(network) - 1] = '\0';
+
+    slash = strchr(network, '/');
+    if (!slash) {
+        fprintf(stderr, "Ungültiges IPv6-CIDR-Format: %s\n", cidr);
+        return 0;
+    }
+
+    *slash = '\0';
+    prefix_len = atoi(slash + 1);
+    if (prefix_len < 0 || prefix_len > 128) {
+        fprintf(stderr, "Ungültige Präfixlänge: %d\n", prefix_len);
+        return 0;
+    }
+
+    if (inet_pton(AF_INET6, network, &netInfoIpV6->net_addr6) != 1) {
+        fprintf(stderr, "Ungültige IPv6-Netzadresse: %s\n", network);
+        return 0;
+    }
+
+    // Anzahl voller Bytes und verbleibender Bits im Präfix
+    netInfoIpV6->full_bytes = prefix_len / 8;
+    netInfoIpV6->remaining_bits = prefix_len % 8;
+
+    if (netInfoIpV6->remaining_bits > 0) {
+        netInfoIpV6->mask = (unsigned char)(0xFF << (8 - netInfoIpV6->remaining_bits));
+    }
+
+    return 1;
+}
+
+
+int isIpV6InNetwork(const char *ipV6, const NetInfoIpV6 *netInfoIpV6)
+{
+    struct in6_addr ip_addr6;
+    int i;
+
+    // IPv6-Adresse parsen
+    if (inet_pton(AF_INET6, ipV6, &ip_addr6) != 1) {
+        fprintf(stderr, "Ungültige IPv6-Adresse: %s\n", ipV6);
+        return 0;
+    }
+
+    // Volle Bytes vergleichen
+    for (i = 0; i < netInfoIpV6->full_bytes; i++) {
+        if (ip_addr6.s6_addr[i] != netInfoIpV6->net_addr6.s6_addr[i]) {
+            return 0;
+        }
+    }
+
+    // Restbits vergleichen
+    if (netInfoIpV6->remaining_bits > 0) {
+        if ((ip_addr6.s6_addr[netInfoIpV6->full_bytes] & netInfoIpV6->mask) !=
+            (netInfoIpV6->net_addr6.s6_addr[netInfoIpV6->full_bytes] & netInfoIpV6->mask)) {
+            return 0;
+        }
+    }
 
     return 1;
 }

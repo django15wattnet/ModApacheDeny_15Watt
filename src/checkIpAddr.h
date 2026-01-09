@@ -27,13 +27,20 @@ typedef struct {
     const char *cidr;
 } NetInfoIpV4;
 
-/*
- * @todo Strukturen für IPv6 Netzwerke erstellen
- */
+/* Structure to hold IPv6 network information */
+typedef struct {
+    struct in6_addr net_addr6;
+    int full_bytes;
+    int remaining_bits;
+    unsigned char mask;
+    const char *cidr;
+} NetInfoIpV6;
 
 
 int detectIpFamily(const char *ip);
 int detectAddressType(const char *addr);
 int compileIpV4Cidr(const char *cidr, NetInfoIpV4 *netInfoIpV4);
+int compileIpV6Cidr(const char *cidr, NetInfoIpV6 *netInfoIpV6);
+int isIpV6InNetwork(const char *ipV6, const NetInfoIpV6 *netInfoIpV6);
 
 #endif //MODAPACHEDENY_15WATT_CHECKIPADDR_H

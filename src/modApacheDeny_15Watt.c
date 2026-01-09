@@ -82,7 +82,7 @@ ModuleDataHostnames   *moduleDataHostnames   = NULL;
 ModuleDataIpV4        *moduleDataIpV4        = NULL;
 ModuleDataIpV6        *moduleDataIpV6        = NULL;
 ModuleDataNetInfoIpV4 *moduleDataNetInfoIpV4 = NULL;
-
+ModuleDataNetInfoIpV6 *moduleDataNetInfoIpV6 = NULL;
 
 /* END Module data   */
 /* ***************** */
@@ -157,7 +157,7 @@ int handlerServerConfig(
                 APLOG_ERR,
                 0,
                 s,
-                "Failed to load user agents to block from database"
+                "modApacheDeny_15Watt Failed to load user agents to block from database"
             );
         }
 
@@ -168,6 +168,7 @@ int handlerServerConfig(
             &moduleDataIpV4,
             &moduleDataIpV6,
             &moduleDataNetInfoIpV4,
+            &moduleDataNetInfoIpV6,
             pconf,
             s
         )) {
@@ -176,7 +177,7 @@ int handlerServerConfig(
                 APLOG_ERR,
                 0,
                 s,
-                "Failed to load IP addresses, networks and hostnames to block from database"
+                "modApacheDeny_15Watt Failed to load IP addresses, networks and hostnames to block from database"
             );
         }
     }
@@ -242,7 +243,7 @@ static int requestHandler(request_rec *r)
                     APLOG_INFO,
                     0,
                     r,
-                    "modApacheDeny_15Watt blocked client by user agent = %s",
+                    "modApacheDeny_15Watt blocked client by user agent=%s",
                     userAgent
                 );
 
@@ -269,7 +270,7 @@ static int requestHandler(request_rec *r)
                     APLOG_INFO,
                     0,
                     r,
-                    "modApacheDeny_15Watt blocked client by ipV4 address = %s",
+                    "modApacheDeny_15Watt blocked client by ipV4 address=%s",
                     r->useragent_ip
                 );
 
@@ -293,7 +294,7 @@ static int requestHandler(request_rec *r)
                     APLOG_INFO,
                     0,
                     r,
-                    "modApacheDeny_15Watt blocked client by ipV6 address = %s",
+                    "modApacheDeny_15Watt blocked client by ipV6 address=%s",
                     r->useragent_ip
                 );
 
@@ -315,8 +316,36 @@ static int requestHandler(request_rec *r)
                     APLOG_INFO,
                     0,
                     r,
-                    "modApacheDeny_15Watt blocked client by hostname = %s",
+                    "modApacheDeny_15Watt blocked client by hostname=%s",
                     r->useragent_host
+                );
+
+                return HTTP_FORBIDDEN;
+            }
+        }
+    }
+
+
+    // Block Ip by IpV6 CIDR
+    if (
+        (NULL != moduleDataNetInfoIpV6)
+        &&
+        (NULL != r->useragent_ip)
+        &&
+        (addressType_IPv6 == detectAddressType(r->useragent_ip))
+    ) {
+        for (int i = 0; i < moduleDataNetInfoIpV6->cntNetInfoIpV6; i++) {
+            const NetInfoIpV6 *netInfoV6 = moduleDataNetInfoIpV6->netInfoIpV6[i];
+            if (1 == isIpV6InNetwork(r->useragent_ip, netInfoV6)) {
+
+                ap_log_rerror(
+                    APLOG_MARK,
+                    APLOG_INFO,
+                    0,
+                    r,
+                    "modApacheDeny_15Watt blocked client ip=%s by ipv6 cidr=%s",
+                    r->useragent_ip,
+                    netInfoV6->cidr
                 );
 
                 return HTTP_FORBIDDEN;
@@ -345,7 +374,7 @@ static int requestHandler(request_rec *r)
                         APLOG_INFO,
                         0,
                         r,
-                        "modApacheDeny_15Watt blocked client ip = %s by ipv4 cidr = %s",
+                        "modApacheDeny_15Watt blocked client ip=%s by ipv4 cidr=%s",
                         r->useragent_ip,
                         netInfoV4->cidr
                     );

@@ -14,6 +14,7 @@ int loadIpNetworks(
     ModuleDataIpV4 **dataIpV4,
     ModuleDataIpV6 **dataIpV6,
     ModuleDataNetInfoIpV4 **dataNetInfoIpV4,
+    ModuleDataNetInfoIpV6 **dataNetInfoIpV6,
     apr_pool_t *pool,
     const server_rec *serverRec
 );
