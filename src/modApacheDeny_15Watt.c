@@ -210,7 +210,7 @@ static int requestHandler(request_rec *r)
         APLOG_INFO,
         0,
         r,
-        "modApacheDeny_15Watt client info, user agent=%s  ip=%s host=%s",
+        "modApacheDeny_15Watt client info, user agent=%s ip=%s host=%s",
         userAgent,
         r->useragent_ip,
         r->useragent_host
@@ -235,9 +235,7 @@ static int requestHandler(request_rec *r)
 
     if ((NULL != moduleDataUserAgents) && (NULL != userAgent)) {
         // The request has a User-Agent, so check if it is in the block list
-        for (int i = 0; i < moduleDataUserAgents->cntUserAgents; i++) {
-
-            if (NULL != strstr(userAgent, moduleDataUserAgents->userAgents[i])) {
+        if (true == shouldUserAgentBeBlocked(r, userAgent, moduleDataUserAgents)) {
                 ap_log_rerror(
                     APLOG_MARK,
                     APLOG_INFO,
@@ -247,8 +245,7 @@ static int requestHandler(request_rec *r)
                     userAgent
                 );
 
-                return HTTP_FORBIDDEN;
-            }
+            return HTTP_FORBIDDEN;
         }
     }
 

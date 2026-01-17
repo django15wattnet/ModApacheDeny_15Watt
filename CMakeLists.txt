@@ -41,7 +41,9 @@ add_library(${PROJECT_NAME} SHARED
         src/loadIpNetworks.c
         src/loadIpNetworks.h
         src/functionsString.c
-        src/functionsString.h)
+        src/functionsString.h
+        src/shouldUserAgentBeBlocked.c
+        src/shouldUserAgentBeBlocked.h)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 

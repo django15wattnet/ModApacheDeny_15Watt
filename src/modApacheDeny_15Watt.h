@@ -42,9 +42,21 @@ typedef struct {
 #define DoNotAllowEmptyUserAgent 2
 
 /* Structure to hold the user agents to block */
+enum CompareType {
+    CompareType_Contains   = 1,
+    CompareType_Equals     = 2,
+    CompareType_StartsWith = 3,
+    CompareType_EndsWith   = 4
+};
+
+typedef struct {
+    char *userAgent;
+    enum CompareType compareType;
+} UserAgentInfo;
+
 typedef struct {
     int cntUserAgents;
-    char *userAgents[];
+    UserAgentInfo userAgents[];
 } ModuleDataUserAgents;
 
 /* Structure to hold IPv4 network to block information */
@@ -84,6 +96,7 @@ static void register_hooks(apr_pool_t *pool);
 static int requestHandler(request_rec *r);
 int handlerServerConfig(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, server_rec *s);
 
+#include "shouldUserAgentBeBlocked.h"
 #include "loadUserAgents.h"
 #include "loadIpNetworks.h"
 

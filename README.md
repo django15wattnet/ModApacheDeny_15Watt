@@ -27,9 +27,12 @@ no binaries are provided.
 - apt install libmysqlclient-dev
 - git clone git@github.com:django15wattnet/ModApacheDeny_15Watt.git
 - cd ModApacheDeny_15Watt/src
-- `sudo apxs -I/usr/include/mysql -L/usr/lib/aarch64-linux-gnu -lmysqlclient -lz  -lzstd -lssl -lcrypto -lresolv -lm -n modApacheDeny_15Watt -I /lib/aarch64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -i -a -c modApacheDeny_15Watt.c checkIpAddr.c loadUserAgents.c loadIpNetworks.c functionsString.c`
+- `sudo apxs -I/usr/include/mysql -L/usr/lib/aarch64-linux-gnu -lmysqlclient -lz  -lzstd -lssl -lcrypto -lresolv -lm -n modApacheDeny_15Watt -I /lib/aarch64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -i -a -c modApacheDeny_15Watt.c checkIpAddr.c loadUserAgents.c loadIpNetworks.c functionsString.c shouldUserAgentBeBlocked.c`
 
 This also installs the module to Apache.
+
+### Starting the server in debug mode
+```apachectl -e debug -X```
 
 ## Configuration instructions
 You find a sample configuration file in the `config` folder named 

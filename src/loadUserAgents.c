@@ -60,14 +60,20 @@ int loadUserAgents(
         return -1;
     }
 
-    int cntUserAgents = (int)mysql_num_rows(res);
-    // size of                ↓ Integer     ↓ + count strings * size of pointer
-    *dataUserAgents = apr_pcalloc(pool, sizeof(int) + cntUserAgents * sizeof(const char *));
+    const int cntUserAgents = (int)mysql_num_rows(res);
+
+    // size of                ↓ Integer     ↓ + count strings * size of UserAgentInfo
+    *dataUserAgents = apr_pcalloc(pool, sizeof(int) + cntUserAgents * sizeof(UserAgentInfo));
     (*dataUserAgents)->cntUserAgents = cntUserAgents;
 
     int index = 0;
     while ((row = mysql_fetch_row(res))) {
-        (*dataUserAgents)->userAgents[index] = apr_pstrdup(pool, row[0]);
+        const enum CompareType compareType = detectCompareType(row[0]);
+        cutCompareTypeMarkers(row[0], compareType);
+
+        (*dataUserAgents)->userAgents[index].compareType = compareType;
+        (*dataUserAgents)->userAgents[index].userAgent   = apr_pstrdup(pool, row[0]);
+
         index++;
     }
 
@@ -75,4 +81,52 @@ int loadUserAgents(
     mysql_close(conn);
 
     return 0;
+}
+
+
+enum CompareType detectCompareType(const char *userAgentStr)
+{
+    const int start = stringStartsWith(userAgentStr, "#");
+    const int end   = stringEndsWith(userAgentStr, "#");
+
+    if (1 == start && 1 == end) {
+        return CompareType_Equals;
+    }
+
+    if (1 == start && 0 == end) {
+        return CompareType_StartsWith;
+    }
+
+    if (0 == start && 1 == end) {
+        return CompareType_EndsWith;
+    }
+
+    return CompareType_Contains;
+}
+
+
+void cutCompareTypeMarkers(char *userAgentStr, const enum CompareType compareType)
+{
+    switch (compareType) {
+        case CompareType_Equals:
+            // Remove both '#' characters
+            stringDeleteCharRight(userAgentStr);
+            stringDeleteCharLeft(userAgentStr);
+            break;
+
+        case CompareType_StartsWith:
+            // Remove starting '#' character
+            stringDeleteCharLeft(userAgentStr);
+            break;
+
+        case CompareType_EndsWith:
+            // Remove ending '#' character
+            stringDeleteCharRight(userAgentStr);
+            break;
+
+        case CompareType_Contains:
+        default:
+            // No markers to remove
+            break;
+    }
 }
