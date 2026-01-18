@@ -53,19 +53,26 @@ with a column names value (varchar 255 / text) all other columns are optional.
 ## Data formats
 The module supports the following data formats in the database:
 
-| Data Type     | Format Example                          | Description                            |
-|---------------|-----------------------------------------|----------------------------------------|
+| Data Type   | Format Example                          | Description                            |
+|-------------|-----------------------------------------|----------------------------------------|
 | IP V4 Address | 129.168.0.1                             | A single IPv4 address                  |
 | IP V6 Address | 2001:0db8:85a3:0000:0000:8a2e:0370:7334 | A single IPv6 address                  |
-| IP V4 Range   | 192.168.0.0/24                          | An IPv4 CIDR range                     |
-| IP V6 Range   | 2001:0db8::/32                          | An IPv6 CIDR range                     |
-| Hostname      | example.com                             | A hostname matched LIKE '%example.com' |
-| User Agent    | uncoolBot                               | A user agent string matched LIKE '%uncoolBot%' |
+| IP V4 Range | 192.168.0.0/24                          | An IPv4 CIDR range                     |
+| IP V6 Range | 2001:0db8::/32                          | An IPv6 CIDR range                     |
+| Hostname    | example.com                             | A hostname matched LIKE '%example.com' |
+| User Agent  |                                         |                                        |
+|             | Abc                                     | Matches any user agent containing 'Abc' |
+|             | #Abc                                    | Matches any user agent starting with 'Abc' |
+|             | Abc#                                    | Matches any user agent ending with 'Abc' |
+|             | #Abc#                                   | Matches any user agent exactly 'Abc'
 
 ## Version history
-| Version | Date       | Description                        |
-|---------|------------|------------------------------------|
-| 0.0.1   | 2026-01-09 | Initial release with all basic features |
+| Version | Date       | Description                                                           |
+|--------|------------|-----------------------------------------------------------------------|
+| 0.0.1  | 2026-01-09 | Initial release with all basic features                               |
+| 0.1.0  | 2026-01-17 | Added type of string compare to check if user agent should be blocked |
+| 0.1.1  | 2026-01-18 | Completion of the documentation                                       |
+
 
 ## Future plans
 - restrict module to specific virtual hosts or directories
