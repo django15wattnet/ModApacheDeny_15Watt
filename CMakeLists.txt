@@ -43,7 +43,10 @@ add_library(${PROJECT_NAME} SHARED
         src/functionsString.c
         src/functionsString.h
         src/shouldUserAgentBeBlocked.c
-        src/shouldUserAgentBeBlocked.h)
+        src/shouldUserAgentBeBlocked.h
+        src/loadUserAgentsWl.c
+        src/loadUserAgentsWl.h
+)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")
 

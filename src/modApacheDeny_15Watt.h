@@ -35,6 +35,7 @@ typedef struct {
     const char *database;
     const char *tableAddresses;
     const char *tableUserAgents;
+    const char *tableUserAgentsWl;
     int  allowEmptyUserAgent;
 } ModuleConfig;
 
@@ -54,10 +55,17 @@ typedef struct {
     enum CompareType compareType;
 } UserAgentInfo;
 
+// Structure to hold user agents to block
 typedef struct {
     int cntUserAgents;
     UserAgentInfo userAgents[];
 } ModuleDataUserAgents;
+
+// Structure to hold user agents to whitelist
+typedef struct {
+    int cntUserAgents;
+    UserAgentInfo userAgents[];
+} ModuleDataUserAgentsWl;
 
 /* Structure to hold IPv4 network to block information */
 typedef struct {

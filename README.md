@@ -27,7 +27,7 @@ no binaries are provided.
 - apt install libmysqlclient-dev
 - git clone git@github.com:django15wattnet/ModApacheDeny_15Watt.git
 - cd ModApacheDeny_15Watt/src
-- `sudo apxs -I/usr/include/mysql -L/usr/lib/aarch64-linux-gnu -lmysqlclient -lz  -lzstd -lssl -lcrypto -lresolv -lm -n modApacheDeny_15Watt -I /lib/aarch64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -i -a -c modApacheDeny_15Watt.c checkIpAddr.c loadUserAgents.c loadIpNetworks.c functionsString.c shouldUserAgentBeBlocked.c`
+- `sudo apxs -I/usr/include/mysql -L/usr/lib/aarch64-linux-gnu -lmysqlclient -lz  -lzstd -lssl -lcrypto -lresolv -lm -n modApacheDeny_15Watt -I /lib/aarch64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -i -a -c modApacheDeny_15Watt.c checkIpAddr.c loadUserAgents.c loadUserAgentsWl.c loadIpNetworks.c functionsString.c shouldUserAgentBeBlocked.c`
 
 This also installs the module to Apache.
 
@@ -53,32 +53,36 @@ with a column names value (varchar 255 / text) all other columns are optional.
 ## Data formats
 The module supports the following data formats in the database:
 
-| Data Type   | Format Example                          | Description                            |
-|-------------|-----------------------------------------|----------------------------------------|
-| IP V4 Address | 129.168.0.1                             | A single IPv4 address                  |
-| IP V6 Address | 2001:0db8:85a3:0000:0000:8a2e:0370:7334 | A single IPv6 address                  |
-| IP V4 Range | 192.168.0.0/24                          | An IPv4 CIDR range                     |
-| IP V6 Range | 2001:0db8::/32                          | An IPv6 CIDR range                     |
-| Hostname    | example.com                             | A hostname matched LIKE '%example.com' |
-| User Agent  |                                         |                                        |
-|             | Abc                                     | Matches any user agent containing 'Abc' |
-|             | #Abc                                    | Matches any user agent starting with 'Abc' |
-|             | Abc#                                    | Matches any user agent ending with 'Abc' |
-|             | #Abc#                                   | Matches any user agent exactly 'Abc'
+| Data Type                            | Format Example                          | Description                                |
+|--------------------------------------|-----------------------------------------|--------------------------------------------|
+| IP V4 Address                        | 129.168.0.1                             | A single IPv4 address                      |
+| IP V6 Address                        | 2001:0db8:85a3:0000:0000:8a2e:0370:7334 | A single IPv6 address                      |
+| IP V4 Range                          | 192.168.0.0/24                          | An IPv4 CIDR range                         |
+| IP V6 Range                          | 2001:0db8::/32                          | An IPv6 CIDR range                         |
+| Hostname                             | example.com                             | A hostname matched<br>LIKE '%example.com'  |
+| User Agent <br/>User Agent whitelist |                                         |                                            |
+|                                      | Abc                                     | Matches any user agent containing 'Abc'    |
+|                                      | #Abc                                    | Matches any user agent starting with 'Abc' |
+|                                      | Abc#                                    | Matches any user agent ending with 'Abc'   |
+|                                      | #Abc#                                   | Matches any user agent exactly 'Abc'       
 
 ## Version history
-| Version | Date       | Description                                                           |
-|--------|------------|-----------------------------------------------------------------------|
-| 0.0.1  | 2026-01-09 | Initial release with all basic features                               |
-| 0.1.0  | 2026-01-17 | Added type of string compare to check if user agent should be blocked |
-| 0.1.1  | 2026-01-18 | Completion of the documentation                                       |
+| Version | Date        | Description                                                           |
+|---------|-------------|-----------------------------------------------------------------------|
+| 0.0.1   | 2026-01-09  | Initial release with all basic features                               |
+| 0.1.0   | 2026-01-17  | Added type of string compare to check if user agent should be blocked |
+| 0.1.1   | 2026-01-18  | Completion of the documentation                                       |
+| 0.2.0   | 2026-01-22  | Added support for user agent whitelisted                              |
 
 
 ## Future plans
+- add whitelist user agents (for example for Let's encrypt bot)
+- add support for PostgreSQL database
+- add support for SQLite database
+- add more possible ways to load blocked entries (e.g. from flat/csv files)
 - restrict module to specific virtual hosts or directories
 - create binary packages for easy installation
 - add more logging options
-- add more possible ways to load blocked entries (e.g. from flat files)
 - add reload of blocked entries without apache restart
 - add machine-readable log format
 - add logging statistics
@@ -88,5 +92,6 @@ Apache License Version 2.0, January 2004 \
 http://www.apache.org/licenses/
 
 ## Author
+[Thomas Siemion](https://thomas.siemion.photography/) \
 django15Wattnet: https://github.com/django15wattnet/ \
-Email: modapachedeny@15watt.net
+Email: [modapachedeny@15watt.net](modapachedeny@15watt.net)

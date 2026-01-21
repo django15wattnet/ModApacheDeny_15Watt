@@ -49,6 +49,12 @@ const char *setConfigTableUserAgents(cmd_parms *cmd, void *cfg, const char *arg)
     return NULL;
 }
 
+const char *setConfigTableUserAgentsWl(cmd_parms *cmd, void *cfg, const char *arg)
+{
+    moduleConfig.tableUserAgentsWl = arg;
+    return NULL;
+}
+
 const char *setConfigAllowEmptyUserAgent(cmd_parms *cmd, void *cfg, const char *arg)
 {
     if (0 == strcasecmp(arg, "on") || 0 == strcasecmp(arg, "true") || 0 == strcasecmp(arg, "1")) {
@@ -68,6 +74,7 @@ static const command_rec modApacheDeny_15Watt_directives[] =
     AP_INIT_TAKE1("modApacheDeny_15Watt_database",            setConfigDatabase,            NULL, RSRC_CONF, "Name of the database holding the tables"),
     AP_INIT_TAKE1("modApacheDeny_15Watt_tableAddresses",      setConfigTableAddresses,      NULL, RSRC_CONF, "Name of the database table holding the addresses to block"),
     AP_INIT_TAKE1("modApacheDeny_15Watt_tableUserAgents",     setConfigTableUserAgents,     NULL, RSRC_CONF, "Name of the database table holding the user agents to block"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_tableUserAgentsWl",   setConfigTableUserAgentsWl,   NULL, RSRC_CONF, "Name of the database table holding the user agents to white list"),
     AP_INIT_TAKE1("modApacheDeny_15Watt_allowEmptyUserAgent", setConfigAllowEmptyUserAgent, NULL, RSRC_CONF, "Are empty or missing User-Agent headers allowed (on/off)"),
     { NULL }
 };
@@ -144,10 +151,12 @@ int handlerServerConfig(
     if (NULL == moduleConfig.tableUserAgents) {
         moduleConfig.tableUserAgents = "block_user_agent";
     }
+    if (NULL == moduleConfig.tableUserAgentsWl) {
+        moduleConfig.tableUserAgentsWl = "block_user_agent_white_list";
+    }
     if (0 == moduleConfig.allowEmptyUserAgent) {
         moduleConfig.allowEmptyUserAgent = 1;       // Default: allow empty User-Agent
     }
-
 
     if (NULL == moduleDataUserAgents) {
         // Build the datastructures for user agents to block
