@@ -55,17 +55,11 @@ typedef struct {
     enum CompareType compareType;
 } UserAgentInfo;
 
-// Structure to hold user agents to block
+// Structure to hold user agents to block or white list
 typedef struct {
     int cntUserAgents;
     UserAgentInfo userAgents[];
 } ModuleDataUserAgents;
-
-// Structure to hold user agents to whitelist
-typedef struct {
-    int cntUserAgents;
-    UserAgentInfo userAgents[];
-} ModuleDataUserAgentsWl;
 
 /* Structure to hold IPv4 network to block information */
 typedef struct {

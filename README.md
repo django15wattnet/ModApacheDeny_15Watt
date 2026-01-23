@@ -67,12 +67,12 @@ The module supports the following data formats in the database:
 |                                      | #Abc#                                   | Matches any user agent exactly 'Abc'       
 
 ## Version history
-| Version | Date        | Description                                                           |
-|---------|-------------|-----------------------------------------------------------------------|
-| 0.0.1   | 2026-01-09  | Initial release with all basic features                               |
-| 0.1.0   | 2026-01-17  | Added type of string compare to check if user agent should be blocked |
-| 0.1.1   | 2026-01-18  | Completion of the documentation                                       |
-| 0.2.0   | 2026-01-22  | Added support for user agent whitelisted                              |
+| Version | Date       | Description                                                           |
+|---------|------------|-----------------------------------------------------------------------|
+| 0.0.1   | 2026-01-09 | Initial release with all basic features                               |
+| 0.1.0   | 2026-01-17 | Added type of string compare to check if user agent should be blocked |
+| 0.1.1   | 2026-01-18 | Completion of the documentation                                       |
+| 0.2.0   | 2026-01-23 | Added support for user agent whitelisted                              |
 
 
 ## Future plans

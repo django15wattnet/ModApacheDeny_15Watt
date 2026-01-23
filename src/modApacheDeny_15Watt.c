@@ -3,6 +3,8 @@
 //
 #include "modApacheDeny_15Watt.h"
 
+#include "loadUserAgentsWl.h"
+
 /* ********************************** */
 /* START config / directives handlers */
 ModuleConfig moduleConfig;
@@ -84,12 +86,13 @@ static const command_rec modApacheDeny_15Watt_directives[] =
 
 /* ***************** */
 /* START Module data */
-ModuleDataUserAgents  *moduleDataUserAgents  = NULL;
-ModuleDataHostnames   *moduleDataHostnames   = NULL;
-ModuleDataIpV4        *moduleDataIpV4        = NULL;
-ModuleDataIpV6        *moduleDataIpV6        = NULL;
-ModuleDataNetInfoIpV4 *moduleDataNetInfoIpV4 = NULL;
-ModuleDataNetInfoIpV6 *moduleDataNetInfoIpV6 = NULL;
+ModuleDataUserAgents  *moduleDataUserAgents   = NULL;
+ModuleDataUserAgents  *moduleDataUserAgentsWl = NULL;
+ModuleDataHostnames   *moduleDataHostnames    = NULL;
+ModuleDataIpV4        *moduleDataIpV4         = NULL;
+ModuleDataIpV6        *moduleDataIpV6         = NULL;
+ModuleDataNetInfoIpV4 *moduleDataNetInfoIpV4  = NULL;
+ModuleDataNetInfoIpV6 *moduleDataNetInfoIpV6  = NULL;
 
 /* END Module data   */
 /* ***************** */
@@ -159,7 +162,7 @@ int handlerServerConfig(
     }
 
     if (NULL == moduleDataUserAgents) {
-        // Build the datastructures for user agents to block
+        // Build the datastructure for user agents to block
         if (0 != loadUserAgents(&moduleConfig, &moduleDataUserAgents, pconf, s)) {
             ap_log_error(
                 APLOG_MARK,
@@ -167,6 +170,17 @@ int handlerServerConfig(
                 0,
                 s,
                 "modApacheDeny_15Watt Failed to load user agents to block from database"
+            );
+        }
+
+        // Build the datastructure for user agents to white list
+        if (0 != loadUserAgentsWl(&moduleConfig, &moduleDataUserAgentsWl, pconf, s)) {
+            ap_log_error(
+                APLOG_MARK,
+                APLOG_ERR,
+                0,
+                s,
+                "modApacheDeny_15Watt Failed to load user agents to white list from database"
             );
         }
 
@@ -240,6 +254,23 @@ static int requestHandler(request_rec *r)
         );
 
         return HTTP_FORBIDDEN;
+    }
+
+    // Check whitelist user agenta
+    if ((NULL != moduleDataUserAgentsWl) && (NULL != userAgent)) {
+        // The request has a User-Agent, so check if it is in the block list
+        if (true == shouldUserAgentBeBlocked(r, userAgent, moduleDataUserAgentsWl)) {
+            ap_log_rerror(
+                APLOG_MARK,
+                APLOG_INFO,
+                0,
+                r,
+                "modApacheDeny_15Watt white listed client by user agent=%s",
+                userAgent
+            );
+
+            return DECLINED;
+        }
     }
 
     if ((NULL != moduleDataUserAgents) && (NULL != userAgent)) {

@@ -6,7 +6,7 @@
 
 int loadUserAgentsWl(
     const ModuleConfig *moduleConfig,
-    ModuleDataUserAgentsWl **dataUserAgentsWl,
+    ModuleDataUserAgents **dataUserAgentsWl,
     apr_pool_t *pool,
     const server_rec *serverRec
 ) {
