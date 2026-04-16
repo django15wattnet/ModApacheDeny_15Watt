@@ -46,6 +46,8 @@ add_library(${PROJECT_NAME} SHARED
         src/shouldUserAgentBeBlocked.h
         src/loadUserAgentsWl.c
         src/loadUserAgentsWl.h
+        src/blockHash.c
+        src/blockHash.h
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")

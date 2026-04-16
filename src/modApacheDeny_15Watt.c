@@ -3,7 +3,8 @@
 //
 #include "modApacheDeny_15Watt.h"
 
-#include "loadUserAgentsWl.h"
+#include "blockHash.h"
+#include "loadUserAgentsWhiteList.h"
 
 /* ********************************** */
 /* START config / directives handlers */
@@ -86,13 +87,13 @@ static const command_rec modApacheDeny_15Watt_directives[] =
 
 /* ***************** */
 /* START Module data */
-ModuleDataUserAgents  *moduleDataUserAgents   = NULL;
-ModuleDataUserAgents  *moduleDataUserAgentsWl = NULL;
-ModuleDataHostnames   *moduleDataHostnames    = NULL;
-ModuleDataIpV4        *moduleDataIpV4         = NULL;
-ModuleDataIpV6        *moduleDataIpV6         = NULL;
-ModuleDataNetInfoIpV4 *moduleDataNetInfoIpV4  = NULL;
-ModuleDataNetInfoIpV6 *moduleDataNetInfoIpV6  = NULL;
+ModuleDataUserAgents  *moduleDataUserAgents          = NULL;
+ModuleDataUserAgents  *moduleDataUserAgentsWhiteList = NULL;
+ModuleDataHostnames   *moduleDataHostnames           = NULL;
+ModuleDataIpV4        *moduleDataIpV4                = NULL;
+ModuleDataIpV6        *moduleDataIpV6                = NULL;
+ModuleDataNetInfoIpV4 *moduleDataNetInfoIpV4         = NULL;
+ModuleDataNetInfoIpV6 *moduleDataNetInfoIpV6         = NULL;
 
 /* END Module data   */
 /* ***************** */
@@ -174,7 +175,7 @@ int handlerServerConfig(
         }
 
         // Build the datastructure for user agents to white list
-        if (0 != loadUserAgentsWl(&moduleConfig, &moduleDataUserAgentsWl, pconf, s)) {
+        if (0 != loadUserAgentsWhiteList(&moduleConfig, &moduleDataUserAgentsWhiteList, pconf, s)) {
             ap_log_error(
                 APLOG_MARK,
                 APLOG_ERR,
@@ -204,6 +205,15 @@ int handlerServerConfig(
             );
         }
     }
+
+    ap_log_error(
+        APLOG_MARK,
+        APLOG_ERR,
+        0,
+        s,
+        "XXX blockHashSetUpStore"
+    );
+    blockHashSetUpStore(s, pconf, 100);
 
     return OK;
 }
@@ -257,9 +267,9 @@ static int requestHandler(request_rec *r)
     }
 
     // Check whitelist user agenta
-    if ((NULL != moduleDataUserAgentsWl) && (NULL != userAgent)) {
+    if ((NULL != moduleDataUserAgentsWhiteList) && (NULL != userAgent)) {
         // The request has a User-Agent, so check if it is in the block list
-        if (true == shouldUserAgentBeBlocked(r, userAgent, moduleDataUserAgentsWl)) {
+        if (true == shouldUserAgentBeBlocked(r, userAgent, moduleDataUserAgentsWhiteList)) {
             ap_log_rerror(
                 APLOG_MARK,
                 APLOG_INFO,
@@ -273,7 +283,35 @@ static int requestHandler(request_rec *r)
         }
     }
 
+    // Ab hier den BlockHash verwenden
+    BlockHashEntry *blockHashEntry;
+
     if ((NULL != moduleDataUserAgents) && (NULL != userAgent)) {
+
+        ;
+        // blockHashAddEntry("bla bla", blockTypeUserAgent, true, r->server->process->pool);
+        ;
+        ap_log_rerror(
+                    APLOG_MARK,
+                    APLOG_INFO,
+                    0,
+                    r,
+                    "blockHashAddEntry, res = %d adr = %p",
+                    blockHashAddEntry(userAgent, blockTypeUserAgent, true, r->server->process->pool),
+                    blockHash.blockHash
+                );
+
+        ap_log_rerror(
+                    APLOG_MARK,
+                    APLOG_INFO,
+                    0,
+                    r,
+                    "blockHash count = %d",
+                    blockHashGetEntryCount()
+                );
+
+
+
         // The request has a User-Agent, so check if it is in the block list
         if (true == shouldUserAgentBeBlocked(r, userAgent, moduleDataUserAgents)) {
                 ap_log_rerror(

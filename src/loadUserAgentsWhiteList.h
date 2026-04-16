@@ -7,9 +7,9 @@
 
 #include "modApacheDeny_15Watt.h"
 
-int loadUserAgentsWl(
+int loadUserAgentsWhiteList(
     const ModuleConfig *moduleConfig,
-    ModuleDataUserAgents **dataUserAgentsWl,
+    ModuleDataUserAgents **dataUserAgentsWhiteList,
     apr_pool_t *pool,
     const server_rec *serverRec
 );

@@ -2,11 +2,11 @@
 // Created by Thomas Siemion on 21.01.26.
 //
 
-#include "loadUserAgentsWl.h"
+#include "loadUserAgentsWhiteList.h"
 
-int loadUserAgentsWl(
+int loadUserAgentsWhiteList(
     const ModuleConfig *moduleConfig,
-    ModuleDataUserAgents **dataUserAgentsWl,
+    ModuleDataUserAgents **dataUserAgentsWhiteList,
     apr_pool_t *pool,
     const server_rec *serverRec
 ) {
@@ -63,16 +63,16 @@ int loadUserAgentsWl(
     const int cntUserAgentsWl = (int)mysql_num_rows(res);
 
     // size of                ↓ Integer     ↓ + count strings * size of UserAgentInfo
-    *dataUserAgentsWl = apr_pcalloc(pool, sizeof(int) + cntUserAgentsWl * sizeof(UserAgentInfo));
-    (*dataUserAgentsWl)->cntUserAgents = cntUserAgentsWl;
+    *dataUserAgentsWhiteList = apr_pcalloc(pool, sizeof(int) + cntUserAgentsWl * sizeof(UserAgentInfo));
+    (*dataUserAgentsWhiteList)->cntUserAgents = cntUserAgentsWl;
 
     int index = 0;
     while ((row = mysql_fetch_row(res))) {
         const enum CompareType compareType = detectCompareType(row[0]);
         cutCompareTypeMarkers(row[0], compareType);
 
-        (*dataUserAgentsWl)->userAgents[index].compareType = compareType;
-        (*dataUserAgentsWl)->userAgents[index].userAgent   = apr_pstrdup(pool, row[0]);
+        (*dataUserAgentsWhiteList)->userAgents[index].compareType = compareType;
+        (*dataUserAgentsWhiteList)->userAgents[index].userAgent   = apr_pstrdup(pool, row[0]);
 
         index++;
     }
