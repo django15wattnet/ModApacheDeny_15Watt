@@ -1,7 +1,3 @@
-//
-// Created by Thomas Siemion on 13.12.25.
-//
-
 #ifndef MODAPACHEDENY_15WATT_LOADUSERAGENTS_H
 #define MODAPACHEDENY_15WATT_LOADUSERAGENTS_H
 

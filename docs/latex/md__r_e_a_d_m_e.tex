@@ -1,0 +1,108 @@
+\chapter{Mod\+Apache\+Deny\+\_\+15\+Watt }
+\hypertarget{md__r_e_a_d_m_e}{}\label{md__r_e_a_d_m_e}\index{ModApacheDeny\_15Watt@{ModApacheDeny\_15Watt}}
+\label{md__r_e_a_d_m_e_autotoc_md0}%
+\Hypertarget{md__r_e_a_d_m_e_autotoc_md0}%
+
+
+An Apache 2.\+4.\+x module to deny access by ip address, ip range or user agent.\hypertarget{md__r_e_a_d_m_e_autotoc_md1}{}\doxysection{\texorpdfstring{Description}{Description}}\label{md__r_e_a_d_m_e_autotoc_md1}
+This Apache module reads data from a My\+SQL database to check if the incoming request\textquotesingle{}s IP address or user agent is listed in the database as blocked. If a match is found, the module denies access to the requested resource, by sending a 403 response. \textbackslash{} The information about blocked IP addresses, IP ranges, and user agents is loaded to memory from the database at apache server startup for efficient access during request processing. \textbackslash{} Changes to the database (additions or removals of blocked entries) are reflected in the module\textquotesingle{}s in-\/memory data structures by a apache server graceful restart.
+
+{\bfseries{This modules functionality is addes to all virtual hosts and directories of your Apache webserver!}}
+
+This module is designed to help web administrators to protect their servers from unwanted traffic, such as bots, scrapers, or malicious users.\hypertarget{md__r_e_a_d_m_e_autotoc_md2}{}\doxysection{\texorpdfstring{Compilation instructions}{Compilation instructions}}\label{md__r_e_a_d_m_e_autotoc_md2}
+At this Moment the module is only tested on Ubuntu 24.\+04 and Apache 2.\+4.\+x, no binaries are provided.\hypertarget{md__r_e_a_d_m_e_autotoc_md3}{}\doxysubsection{\texorpdfstring{To compile the module on Ubuntu 24.\+04, use the following commands:\+}{To compile the module on Ubuntu 24.\+04, use the following commands:\+}}\label{md__r_e_a_d_m_e_autotoc_md3}
+
+\begin{DoxyItemize}
+\item apt install apache2-\/dev
+\item apt install libmysqlclient-\/dev
+\item git clone \href{mailto:git@github.com}{\texttt{git@github.\+com}}:\+django15wattnet/\+\+Mod\+Apache\+Deny\+\_\+15\+Watt.\+git
+\item cd Mod\+Apache\+Deny\+\_\+15\+Watt/\+src
+\item {\ttfamily sudo apxs -\/I/\+usr/\+include/\+mysql -\/L/\+usr/\+lib/\+aarch64-\/linux-\/gnu -\/lmysqlclient -\/lz -\/lzstd -\/lssl -\/lcrypto -\/lresolv -\/lm -\/n mod\+Apache\+Deny\+\_\+15\+Watt -\/I /\+lib/\+aarch64-\/linux-\/gnu -\/Wl,-\/rpath,/\+usr/\+lib/\+x86\+\_\+64-\/linux-\/gnu -\/i -\/a -\/c mod\+Apache\+Deny\+\_\+15\+Watt.\+c check\+Ip\+Addr.\+c load\+User\+Agents.\+c load\+User\+Agents\+White\+List.\+c load\+Ip\+Networks.\+c functions\+String.\+c should\+User\+Agent\+Be\+Blocked.\+c block\+Hash.\+c}
+\end{DoxyItemize}
+
+This also installs the module to Apache.\hypertarget{md__r_e_a_d_m_e_autotoc_md4}{}\doxysubsection{\texorpdfstring{Starting the server in debug mode}{Starting the server in debug mode}}\label{md__r_e_a_d_m_e_autotoc_md4}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{-\/e\ debug\ -\/X}
+
+\end{DoxyCode}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md5}{}\doxysection{\texorpdfstring{Configuration instructions}{Configuration instructions}}\label{md__r_e_a_d_m_e_autotoc_md5}
+You find a sample configuration file in the {\ttfamily config} folder named {\ttfamily mod\+Apache\+Deny\+\_\+15\+Watt.\+conf}. \textbackslash{} Copy this file to your Apache configuration folder, e.\+g. {\ttfamily /\+etc/\+apache2/\+conf-\/available/\+}, edit the file to fit your database settings and create in {\ttfamily /\+etc/\+apache2/\+conf-\/enabled/\+} a symbolic link to the configuration file. \textbackslash{} Enable the module with:\+
+\begin{DoxyItemize}
+\item {\ttfamily sudo a2enconf mod\+Apache\+Deny\+\_\+15\+Watt}
+\end{DoxyItemize}
+
+and restart the Apache server.\hypertarget{md__r_e_a_d_m_e_autotoc_md6}{}\doxysubsection{\texorpdfstring{Configuration directives}{Configuration directives}}\label{md__r_e_a_d_m_e_autotoc_md6}
+The module provides the following configuration directives:\+
+
+
+\begin{DoxyTable}{3}{}{}{1}
+\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Directive Name  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Description  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}default value  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+db\+Host  &Database host name or IP address  &localhost  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+db\+User  &Database user  &root  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+db\+Pwd  &Database password  &(empty)  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+db\+Port  &Database port  &3306  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+database  &Database name  &test  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+table\+Addresses  &Database table name ip-\/addresses and host to block  &block\+\_\+ip\+\_\+address  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+table\+User\+Agents  &Database table name user agents to block  &block\+\_\+user\+\_\+agent  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+table\+User\+Agents\+Wl  &Database table name user agents to white list  &block\+\_\+user\+\_\+agent\+\_\+white\+\_\+list  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+allow\+Empty\+User\+Agent  &Are empty user agent strings are allowed  &false  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+use\+Allowed\+Hash  &Use a hash to store allowed user agents and ip combinations for faster access  &true  \\
+mod\+Apache\+Deny\+\_\+15\+Watt\+\_\+allowed\+Hash\+Entry\+Count  &Number of entries in the allowed hash (if enabled)  &1000  \\
+\end{DoxyTable}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md7}{}\doxysection{\texorpdfstring{Database structure}{Database structure}}\label{md__r_e_a_d_m_e_autotoc_md7}
+The module expects a My\+SQL/\+\+Maria database with two tables with the following structures:\+
+\begin{DoxyItemize}
+\item One table for blocked user agents, with a column names value (varchar 255 /\+ text) all other columns are optional.
+\item One table for blocked ip addresses, ip ranges and hostnames, with a column names value (varchar 255 /\+ text) all other columns are optional.
+\item One table for whitelisted user agents, with a column names value (varchar 255 /\+ text) all other columns are optional.
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md8}{}\doxysection{\texorpdfstring{Data formats}{Data formats}}\label{md__r_e_a_d_m_e_autotoc_md8}
+The module supports the following data formats in the database:\+
+
+
+\begin{DoxyTable}{3}{}{}{1}
+\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Data Type  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Format Example  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Description  \\
+IP V4 Address  &129.\+168.\+0.\+1  &A single IPv4 address  \\
+IP V6 Address  &2001:\+0db8:\+85a3:\+0000:\+0000:\+8a2e:\+0370:\+7334  &A single IPv6 address  \\
+IP V4 Range  &192.\+168.\+0.\+0/\+24  &An IPv4 CIDR range  \\
+IP V6 Range  &2001:\+0db8:\+:\+/\+32  &An IPv6 CIDR range  \\
+Hostname  &example.\+com  &A hostname matched~\newline
+LIKE \textquotesingle{}example.\+com\textquotesingle{}  \\
+User Agent ~\newline
+User Agent whitelist  &&\\
+&Abc  &Matches any user agent containing \textquotesingle{}Abc\textquotesingle{}  \\
+&\+\#\+Abc  &Matches any user agent starting with \textquotesingle{}Abc\textquotesingle{}  \\
+&Abc\#  &Matches any user agent ending with \textquotesingle{}Abc\textquotesingle{}  \\
+&\+\#\+Abc\#  &Matches any user agent exactly \textquotesingle{}Abc\textquotesingle{}  \\
+\end{DoxyTable}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md9}{}\doxysection{\texorpdfstring{Version history}{Version history}}\label{md__r_e_a_d_m_e_autotoc_md9}
+
+\begin{DoxyTable}{3}{}{}{1}
+\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Version  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Date  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Description  \\
+0.\+0.\+1  &2026-\/01-\/09  &Initial release with all basic features  \\
+0.\+1.\+0  &2026-\/01-\/17  &Added type of string compare to check if user agent should be blocked  \\
+0.\+1.\+1  &2026-\/01-\/18  &Completion of the documentation  \\
+0.\+2.\+0  &2026-\/01-\/23  &Added support for user agent whitelisted  \\
+0.\+2.\+1  &2026-\/01-\/28  &Completion of the documentation  \\
+0.\+3.\+0  &2026-\/04-\/27  &Added support for allowed combinations of ip-\/address and user agent by hash to speed up access checks  \\
+\end{DoxyTable}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md10}{}\doxysection{\texorpdfstring{Future plans}{Future plans}}\label{md__r_e_a_d_m_e_autotoc_md10}
+
+\begin{DoxyItemize}
+\item \sout{add whitelist user agents (for example for Let\textquotesingle{}s encrypt bot)}
+\item add support for Postgre\+SQL database
+\item add support for SQLite database
+\item add more possible ways to load blocked entries (e.\+g. from flat/\+csv files)
+\item restrict module to specific virtual hosts or directories
+\item create binary packages for easy installation
+\item add more logging options
+\item add reload of blocked entries without apache restart
+\item add machine-\/readable log format
+\item add logging statistics
+\item add a temporary caching of blocked entries to reduce search load (apr\+\_\+hash\+\_\+\texorpdfstring{$\ast$}{*})
+\begin{DoxyItemize}
+\item the keys can be ip addresses or user agents
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md11}{}\doxysection{\texorpdfstring{License}{License}}\label{md__r_e_a_d_m_e_autotoc_md11}
+Apache License Version 2.\+0, January 2004 \textbackslash{} \href{http://www.apache.org/licenses/}{\texttt{http:\+/\+/\+www.\+apache.\+org/\+licenses/\+}}\hypertarget{md__r_e_a_d_m_e_autotoc_md12}{}\doxysection{\texorpdfstring{Author}{Author}}\label{md__r_e_a_d_m_e_autotoc_md12}
+\href{https://thomas.siemion.photography/}{\texttt{Thomas Siemion}} \textbackslash{} django15\+Wattnet:\+ \href{https://github.com/django15wattnet/}{\texttt{https:\+/\+/\+github.\+com/\+django15wattnet/\+}} \textbackslash{} Email:\+ \href{modapachedeny@15watt.net}{\texttt{modapachedeny@15watt.\+net}} 

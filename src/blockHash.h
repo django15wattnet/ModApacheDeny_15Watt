@@ -1,11 +1,8 @@
-//
-// Created by Thomas Siemion on 11.04.26.
-//
-
 #ifndef MODAPACHEDENY_15WATT_BLOCKHASH_H
 #define MODAPACHEDENY_15WATT_BLOCKHASH_H
 #include <stdbool.h>
 #include <apr_pools.h>
+#include <apr_thread_mutex.h>
 #include <httpd.h>
 
 // List of reasons an entry has been blocked
@@ -29,13 +26,15 @@ typedef struct {
 
 // Structure to hold the block list and all necessary informations
 typedef struct {
-    apr_hash_t *blockHash;
-    int        maxEntries;
+    apr_hash_t         *blockHash;
+    int                maxEntries;
+    apr_pool_t         *serverPool;
+    apr_thread_mutex_t *mutex;
 } BlockHash;
 
 extern BlockHash blockHash;
 
-bool blockHashSetUpStore(server_rec *serverRec, apr_pool_t *pool, const int maxEntries);
+bool blockHashSetUpStore(const server_rec *serverRec, const int maxEntries);
 bool blockHashRemoveOldestEntry();
 BlockHashEntry *blockHashGetEntry(const char *key);
 int blockHashAddEntry(const char *key, const enum EnumBlockType blockType, const bool doBlock, apr_pool_t *parentPool);

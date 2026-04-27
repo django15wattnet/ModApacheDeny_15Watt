@@ -1,7 +1,3 @@
-//
-// Created by Thomas Siemion on 29.11.25.
-//
-
 #ifndef MODAPACHEDENY_15WATT_MODAPACHEDENY_15WATT_H
 #define MODAPACHEDENY_15WATT_MODAPACHEDENY_15WATT_H
 
@@ -38,11 +34,18 @@ typedef struct {
     const char *tableAddresses;
     const char *tableUserAgents;
     const char *tableUserAgentsWl;
-    int  allowEmptyUserAgent;
+    int         allowEmptyUserAgent;
+    int         useAllowedHash;         // 1 = enabled, 2 = disabled
+    int         maxAllowedHashEntries;  // Maximum number of entries in the allowed/block hash
 } ModuleConfig;
 
 #define DoAllowEmptyUserAgent    1
 #define DoNotAllowEmptyUserAgent 2
+
+#define UseAllowedHash      1
+#define DoNotUseAllowedHash 2
+
+#define DefaultMaxAllowedHashEntries 1000
 
 /* Structure to hold the user agents to block */
 enum CompareType {
@@ -97,7 +100,7 @@ typedef struct {
 
 
 static void register_hooks(apr_pool_t *pool);
-static int requestHandler(request_rec *r);
+static int requestHandler(request_rec *requestRec);
 int handlerServerConfig(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, server_rec *s);
 
 #include "shouldUserAgentBeBlocked.h"

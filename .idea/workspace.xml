@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="4" type="long" />
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/LiveTemplatesHousekeeping/HotspotSessionHintIsShown/@EntryValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="CppIncludesOrderOptions" type="string" />
+    <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
+  </component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="ModApacheDeny_15Watt" targetName="ModApacheDeny_15Watt" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3d577fe5-878f-4603-92af-67c2e4c8ce1b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python/httpClient.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hashMap.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hashMap.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/ModApacheDeny_15Watt.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ModApacheDeny_15Watt.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/blockHash.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/blockHash.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/blockHash.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/blockHash.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/checkIpAddr.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/checkIpAddr.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/checkIpAddr.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/checkIpAddr.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/functionsString.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/functionsString.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loadIpNetworks.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/loadIpNetworks.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loadIpNetworks.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/loadIpNetworks.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loadUserAgents.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/loadUserAgents.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loadUserAgents.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/loadUserAgents.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loadUserAgentsWhiteList.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/loadUserAgentsWhiteList.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/loadUserAgentsWhiteList.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/loadUserAgentsWhiteList.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modApacheDeny_15Watt.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/modApacheDeny_15Watt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shouldUserAgentBeBlocked.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/shouldUserAgentBeBlocked.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shouldUserAgentBeBlocked.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/shouldUserAgentBeBlocked.h" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/Users/ts/www/ModApacheDeny_15Watt" value="3CszuficCSC8XMlBNk7aPvVLGL3" />
+    </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedChatMode">
+    <option name="chatModeId" value="Agent" />
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="agent-panel" value="Gemini 2.5 Pro" />
+      <entry key="chat-panel" value="Gemini 2.5 Pro" />
+    </selectedModels>
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="Qxj9jLqC" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="3CszuficCSC8XMlBNk7aPvVLGL3" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.RadMigrateCodeStyle": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Python",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-ca5e2b39c7df-6e1f45a539f7-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.29346.308" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3d577fe5-878f-4603-92af-67c2e4c8ce1b" name="Changes" comment="" />
+      <created>1777189291434</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1777189291434</updated>
+      <workItem from="1777300897886" duration="462000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VCPKGProject">
+    <isAutomaticCheckingOnLaunch value="false" />
+    <isAutomaticFoundErrors value="true" />
+    <isAutomaticReloadCMake value="true" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

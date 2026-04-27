@@ -1,9 +1,31 @@
-//
-// Created by Thomas Siemion on 13.12.25.
-//
-
 #include "loadUserAgents.h"
 
+/**
+ * Loads all user agents to block from the database and populates the in-memory
+ * data structure.
+ *
+ * Connects to the MySQL database specified in @p moduleConfig, queries the
+ * table defined by moduleConfig->tableUserAgents, and stores each row value
+ * together with its detected compare type in an APR-allocated array.
+ *
+ * The compare type is derived from optional '#' markers surrounding the value
+ * (see detectCompareType()). The markers are stripped from the stored string
+ * (see cutCompareTypeMarkers()).
+ *
+ * All allocated memory is bound to @p pool and will be released when that pool
+ * is destroyed.
+ *
+ * @param moduleConfig    Module configuration holding database credentials and
+ *                        the name of the user-agents table.
+ * @param dataUserAgents  Out-parameter. Receives a pointer to the allocated
+ *                        ModuleDataUserAgents structure.
+ * @param pool            APR pool used for all memory allocations.
+ * @param serverRec       Apache server record used for error logging.
+ *
+ * @return  0  on success.
+ * @return -1  if mysql_init(), mysql_store_result(), or the SELECT query fails.
+ * @return -2  if the database connection could not be established.
+ */
 int loadUserAgents(
     const ModuleConfig *moduleConfig,
     ModuleDataUserAgents **dataUserAgents,
@@ -84,6 +106,20 @@ int loadUserAgents(
 }
 
 
+/**
+ * Determines the compare type for a user-agent string based on '#' markers.
+ *
+ * The following marker conventions are supported:
+ *  - No markers  → CompareType_Contains   (e.g. "bot")
+ *  - Leading '#' → CompareType_StartsWith (e.g. "#Mozilla")
+ *  - Trailing '#'→ CompareType_EndsWith   (e.g. "Safari#")
+ *  - Both '#'    → CompareType_Equals     (e.g. "#Googlebot#")
+ *
+ * @param userAgentStr  The raw user-agent string as read from the database.
+ *                      Must be a valid, null-terminated C string.
+ *
+ * @return The detected CompareType value.
+ */
 enum CompareType detectCompareType(const char *userAgentStr)
 {
     const int start = stringStartsWith(userAgentStr, "#");
@@ -105,6 +141,20 @@ enum CompareType detectCompareType(const char *userAgentStr)
 }
 
 
+/**
+ * Removes the '#' marker characters from a user-agent string in-place,
+ * according to the given compare type.
+ *
+ *  - CompareType_Equals      → removes both the leading and trailing '#'
+ *  - CompareType_StartsWith  → removes the leading '#'
+ *  - CompareType_EndsWith    → removes the trailing '#'
+ *  - CompareType_Contains    → no change
+ *
+ * @param userAgentStr  The user-agent string to modify. Must be a writable,
+ *                      null-terminated buffer.
+ * @param compareType   The compare type previously determined by
+ *                      detectCompareType().
+ */
 void cutCompareTypeMarkers(char *userAgentStr, const enum CompareType compareType)
 {
     switch (compareType) {

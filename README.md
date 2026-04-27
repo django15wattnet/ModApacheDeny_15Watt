@@ -43,22 +43,24 @@ a symbolic link to the configuration file. \
 Enable the module with:
 - `sudo a2enconf modApacheDeny_15Watt`
 
-and restart teh Apache server.
+and restart the Apache server.
 
 ### Configuration directives
 The module provides the following configuration directives:
 
-| Directive Name               | Description                                        | default value                        |
-|------------------------------|----------------------------------------------------|--------------------------------------|
-| modApacheDeny_15Watt_dbHost  | Database host name or IP address                   | localhost                            |
-| modApacheDeny_15Watt_dbUser  | Database user                                      | root                                 |
-| modApacheDeny_15Watt_dbPwd   | Database password                                  | (empty)                              |
-| modApacheDeny_15Watt_dbPort  | Database port                                      | 3306                                 |
-| modApacheDeny_15Watt_database| Database name                                      | test                                 |
-| modApacheDeny_15Watt_tableAddresses | Database table name ip-addresses and host to block | block_ip_address |
-| modApacheDeny_15Watt_tableUserAgents | Database table name user agents to block           | block_user_agent |
-| modApacheDeny_15Watt_tableUserAgentsWl | Database table name user agents to white list      | block_user_agent_white_list |
-| modApacheDeny_15Watt_allowEmptyUserAgent | Are empty user agent strings are allowed           |  false |
+| Directive Name          | Description                                                                   | default value                     |
+|-------------------------|-------------------------------------------------------------------------------|-----------------------------------|
+| modApacheDeny_15Watt_dbHost | Database host name or IP address                                              | localhost                         |
+| modApacheDeny_15Watt_dbUser | Database user                                                                 | root                              |
+| modApacheDeny_15Watt_dbPwd | Database password                                                             | (empty)                           |
+| modApacheDeny_15Watt_dbPort | Database port                                                                 | 3306                              |
+| modApacheDeny_15Watt_database| Database name                                                                 | test                              |
+| modApacheDeny_15Watt_tableAddresses | Database table name ip-addresses and host to block                            | block_ip_address |
+| modApacheDeny_15Watt_tableUserAgents | Database table name user agents to block                                      | block_user_agent |
+| modApacheDeny_15Watt_tableUserAgentsWl | Database table name user agents to white list                                 | block_user_agent_white_list |
+| modApacheDeny_15Watt_allowEmptyUserAgent | Are empty user agent strings are allowed                                      |  false |
+| modApacheDeny_15Watt_useAllowedHash | Use a hash to store allowed user agents and ip combinations for faster access | true |
+| modApacheDeny_15Watt_allowedHashEntryCount | Number of entries in the allowed hash (if enabled)                                | 1000 |
 
 ## Database structure
 The module expects a MySQL/Maria database with two tables with the following 
@@ -89,13 +91,14 @@ The module supports the following data formats in the database:
 |                                      | #Abc#                                   | Matches any user agent exactly 'Abc'       
 
 ## Version history
-| Version | Date       | Description                                                           |
-|---------|------------|-----------------------------------------------------------------------|
-| 0.0.1   | 2026-01-09 | Initial release with all basic features                               |
-| 0.1.0   | 2026-01-17 | Added type of string compare to check if user agent should be blocked |
-| 0.1.1   | 2026-01-18 | Completion of the documentation                                       |
-| 0.2.0   | 2026-01-23 | Added support for user agent whitelisted                              |
-| 0.2.1   | 2026-01-28 | Completion of the documentation                                       |
+| Version | Date       | Description                                                                                           |
+|---------|------------|-------------------------------------------------------------------------------------------------------|
+| 0.0.1   | 2026-01-09 | Initial release with all basic features                                                               |
+| 0.1.0   | 2026-01-17 | Added type of string compare to check if user agent should be blocked                                 |
+| 0.1.1   | 2026-01-18 | Completion of the documentation                                                                       |
+| 0.2.0   | 2026-01-23 | Added support for user agent whitelisted                                                              |
+| 0.2.1   | 2026-01-28 | Completion of the documentation                                                                       |
+| 0.3.0   | 2026-04-27 | Added support for allowed combinations of ip-address and user agent by hash to speed up access checks |
 
 
 ## Future plans
@@ -109,8 +112,8 @@ The module supports the following data formats in the database:
 - add reload of blocked entries without apache restart
 - add machine-readable log format
 - add logging statistics
-- add a temporary caching of blocked entries to reduce search load (apr_hash_*)
-    - the keys can be ip addresses or user agents
+- ~~add a temporary caching of blocked entries to reduce search load (apr_hash_*)~~
+    - ~~the keys can be ip addresses or user agents~~
  
 ## License
 Apache License Version 2.0, January 2004 \

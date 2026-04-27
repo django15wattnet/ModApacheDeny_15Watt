@@ -1,6 +1,3 @@
-//
-// Created by Thomas Siemion on 29.11.25.
-//
 #include "modApacheDeny_15Watt.h"
 
 #include "blockHash.h"
@@ -68,17 +65,39 @@ const char *setConfigAllowEmptyUserAgent(cmd_parms *cmd, void *cfg, const char *
     return NULL;
 }
 
+const char *setConfigAllowedHash(cmd_parms *cmd, void *cfg, const char *arg)
+{
+    if (0 == strcasecmp(arg, "on") || 0 == strcasecmp(arg, "true") || 0 == strcasecmp(arg, "1")) {
+        moduleConfig.useAllowedHash = UseAllowedHash;
+    } else {
+        moduleConfig.useAllowedHash = DoNotUseAllowedHash;
+    }
+    return NULL;
+}
+
+const char *setConfigMaxAllowedHashEntries(cmd_parms *cmd, void *cfg, const char *arg)
+{
+    const int val = atoi(arg);
+    if (val <= 0) {
+        return "modApacheDeny_15Watt_maxAllowedHashEntries must be a positive integer";
+    }
+    moduleConfig.maxAllowedHashEntries = val;
+    return NULL;
+}
+
 static const command_rec modApacheDeny_15Watt_directives[] =
 {
-    AP_INIT_TAKE1("modApacheDeny_15Watt_dbHost",              setConfigDbHost,              NULL, RSRC_CONF, "Database host"),
-    AP_INIT_TAKE1("modApacheDeny_15Watt_dbUser",              setConfigDbUser,              NULL, RSRC_CONF, "Database user"),
-    AP_INIT_TAKE1("modApacheDeny_15Watt_dbPwd",               setConfigDbPwd,               NULL, RSRC_CONF, "Database pasword"),
-    AP_INIT_TAKE1("modApacheDeny_15Watt_dbPort",              setConfigDbPort,              0   , RSRC_CONF, "Database port"),
-    AP_INIT_TAKE1("modApacheDeny_15Watt_database",            setConfigDatabase,            NULL, RSRC_CONF, "Name of the database holding the tables"),
-    AP_INIT_TAKE1("modApacheDeny_15Watt_tableAddresses",      setConfigTableAddresses,      NULL, RSRC_CONF, "Name of the database table holding the addresses to block"),
-    AP_INIT_TAKE1("modApacheDeny_15Watt_tableUserAgents",     setConfigTableUserAgents,     NULL, RSRC_CONF, "Name of the database table holding the user agents to block"),
-    AP_INIT_TAKE1("modApacheDeny_15Watt_tableUserAgentsWl",   setConfigTableUserAgentsWl,   NULL, RSRC_CONF, "Name of the database table holding the user agents to white list"),
-    AP_INIT_TAKE1("modApacheDeny_15Watt_allowEmptyUserAgent", setConfigAllowEmptyUserAgent, NULL, RSRC_CONF, "Are empty or missing User-Agent headers allowed (on/off)"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_dbHost",                  setConfigDbHost,                  NULL, RSRC_CONF, "Database host"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_dbUser",                  setConfigDbUser,                  NULL, RSRC_CONF, "Database user"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_dbPwd",                   setConfigDbPwd,                   NULL, RSRC_CONF, "Database pasword"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_dbPort",                  setConfigDbPort,                  0   , RSRC_CONF, "Database port"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_database",                setConfigDatabase,                NULL, RSRC_CONF, "Name of the database holding the tables"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_tableAddresses",          setConfigTableAddresses,          NULL, RSRC_CONF, "Name of the database table holding the addresses to block"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_tableUserAgents",         setConfigTableUserAgents,         NULL, RSRC_CONF, "Name of the database table holding the user agents to block"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_tableUserAgentsWl",       setConfigTableUserAgentsWl,       NULL, RSRC_CONF, "Name of the database table holding the user agents to white list"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_allowEmptyUserAgent",     setConfigAllowEmptyUserAgent,     NULL, RSRC_CONF, "Are empty or missing User-Agent headers allowed (on/off)"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_useAllowedHash",          setConfigAllowedHash,             NULL, RSRC_CONF, "Whether to use the allowed hash to store allowed entries (on/off)"),
+    AP_INIT_TAKE1("modApacheDeny_15Watt_maxAllowedHashEntries",   setConfigMaxAllowedHashEntries,   NULL, RSRC_CONF, "Maximum number of entries in the allowed/block hash"),
     { NULL }
 };
 /* END config / directives handlers */
@@ -161,6 +180,12 @@ int handlerServerConfig(
     if (0 == moduleConfig.allowEmptyUserAgent) {
         moduleConfig.allowEmptyUserAgent = 1;       // Default: allow empty User-Agent
     }
+    if (0 == moduleConfig.useAllowedHash) {
+        moduleConfig.useAllowedHash = UseAllowedHash; // Default: use allowed hash
+    }
+    if (0 == moduleConfig.maxAllowedHashEntries) {
+        moduleConfig.maxAllowedHashEntries = DefaultMaxAllowedHashEntries;
+    }
 
     if (NULL == moduleDataUserAgents) {
         // Build the datastructure for user agents to block
@@ -206,14 +231,7 @@ int handlerServerConfig(
         }
     }
 
-    ap_log_error(
-        APLOG_MARK,
-        APLOG_ERR,
-        0,
-        s,
-        "XXX blockHashSetUpStore"
-    );
-    blockHashSetUpStore(s, pconf, 100);
+    blockHashSetUpStore(s, moduleConfig.maxAllowedHashEntries);
 
     return OK;
 }
@@ -230,23 +248,24 @@ static void register_hooks(apr_pool_t *pool)
 }
 
 
-static int requestHandler(request_rec *r)
+static int requestHandler(request_rec *requestRec)
 {
-    if (!r->handler) {
+    if (!requestRec->handler) {
         return DECLINED;
     }
 
-    const char *userAgent = apr_table_get(r->headers_in, "User-Agent");
+    const char *userAgent = apr_table_get(requestRec->headers_in, "User-Agent");
+    char userAgentKey[256];
 
     ap_log_rerror(
         APLOG_MARK,
         APLOG_INFO,
         0,
-        r,
+        requestRec,
         "modApacheDeny_15Watt client info, user agent=%s ip=%s host=%s",
         userAgent,
-        r->useragent_ip,
-        r->useragent_host
+        requestRec->useragent_ip,
+        requestRec->useragent_host
     );
 
     if (
@@ -259,22 +278,22 @@ static int requestHandler(request_rec *r)
             APLOG_MARK,
             APLOG_INFO,
             0,
-            r,
+            requestRec,
             "modApacheDeny_15Watt blocked client by empty user agent"
         );
 
         return HTTP_FORBIDDEN;
     }
 
-    // Check whitelist user agenta
+    // Check whitelist user agent
     if ((NULL != moduleDataUserAgentsWhiteList) && (NULL != userAgent)) {
-        // The request has a User-Agent, so check if it is in the block list
-        if (true == shouldUserAgentBeBlocked(r, userAgent, moduleDataUserAgentsWhiteList)) {
+        // The request has a User-Agent, so check if it is in the white list
+        if (true == shouldUserAgentBeBlocked(requestRec, userAgent, moduleDataUserAgentsWhiteList)) {
             ap_log_rerror(
                 APLOG_MARK,
                 APLOG_INFO,
                 0,
-                r,
+                requestRec,
                 "modApacheDeny_15Watt white listed client by user agent=%s",
                 userAgent
             );
@@ -283,42 +302,36 @@ static int requestHandler(request_rec *r)
         }
     }
 
-    // Ab hier den BlockHash verwenden
-    BlockHashEntry *blockHashEntry;
+    if (UseAllowedHash == moduleConfig.useAllowedHash) {
+
+        if (NULL == userAgent) {
+            userAgent = "---";
+        }
+        snprintf(userAgentKey, sizeof(userAgentKey), "%s|%s", userAgent, requestRec->useragent_ip);
+
+        if (NULL != blockHashGetEntry(userAgentKey)) {
+            ap_log_rerror(
+                APLOG_MARK,
+                APLOG_INFO,
+                0,
+                requestRec,
+                "modApacheDeny_15Watt allowed client by user agent=%s and ip=%s (cached)",
+                userAgent,
+                requestRec->useragent_ip
+            );
+
+            return DECLINED;
+        }
+    }
 
     if ((NULL != moduleDataUserAgents) && (NULL != userAgent)) {
-
-        ;
-        // blockHashAddEntry("bla bla", blockTypeUserAgent, true, r->server->process->pool);
-        ;
-        ap_log_rerror(
-                    APLOG_MARK,
-                    APLOG_INFO,
-                    0,
-                    r,
-                    "blockHashAddEntry, res = %d adr = %p",
-                    blockHashAddEntry(userAgent, blockTypeUserAgent, true, r->server->process->pool),
-                    blockHash.blockHash
-                );
-
-        ap_log_rerror(
-                    APLOG_MARK,
-                    APLOG_INFO,
-                    0,
-                    r,
-                    "blockHash count = %d",
-                    blockHashGetEntryCount()
-                );
-
-
-
         // The request has a User-Agent, so check if it is in the block list
-        if (true == shouldUserAgentBeBlocked(r, userAgent, moduleDataUserAgents)) {
+        if (true == shouldUserAgentBeBlocked(requestRec, userAgent, moduleDataUserAgents)) {
                 ap_log_rerror(
                     APLOG_MARK,
                     APLOG_INFO,
                     0,
-                    r,
+                    requestRec,
                     "modApacheDeny_15Watt blocked client by user agent=%s",
                     userAgent
                 );
@@ -333,20 +346,20 @@ static int requestHandler(request_rec *r)
     if (
         (NULL != moduleDataIpV4)
         &&
-        (NULL != r->useragent_ip)
+        (NULL != requestRec->useragent_ip)
         &&
-        (addressType_IPv4 == detectAddressType(r->useragent_ip))
+        (addressType_IPv4 == detectAddressType(requestRec->useragent_ip))
     ) {
 
         for (int i = 0; i < moduleDataIpV4->cntIpV4; i++) {
-            if (0 == strcmp(r->useragent_ip, moduleDataIpV4->ipV4[i])) {
+            if (0 == strcmp(requestRec->useragent_ip, moduleDataIpV4->ipV4[i])) {
                 ap_log_rerror(
                     APLOG_MARK,
                     APLOG_INFO,
                     0,
-                    r,
+                    requestRec,
                     "modApacheDeny_15Watt blocked client by ipV4 address=%s",
-                    r->useragent_ip
+                    requestRec->useragent_ip
                 );
 
                 return HTTP_FORBIDDEN;
@@ -358,19 +371,19 @@ static int requestHandler(request_rec *r)
     if (
         (NULL != moduleDataIpV6)
         &&
-        (NULL != r->useragent_ip)
+        (NULL != requestRec->useragent_ip)
         &&
-        (addressType_IPv6 == detectAddressType(r->useragent_ip))) {
+        (addressType_IPv6 == detectAddressType(requestRec->useragent_ip))) {
 
         for (int i = 0; i < moduleDataIpV6->cntIpV6; i++) {
-            if (0 == strcmp(r->useragent_ip, moduleDataIpV6->ipV6[i])) {
+            if (0 == strcmp(requestRec->useragent_ip, moduleDataIpV6->ipV6[i])) {
                 ap_log_rerror(
                     APLOG_MARK,
                     APLOG_INFO,
                     0,
-                    r,
+                    requestRec,
                     "modApacheDeny_15Watt blocked client by ipV6 address=%s",
-                    r->useragent_ip
+                    requestRec->useragent_ip
                 );
 
                 return HTTP_FORBIDDEN;
@@ -382,17 +395,17 @@ static int requestHandler(request_rec *r)
     if (
         (NULL != moduleDataHostnames)
         &&
-        (NULL != r->useragent_host)
+        (NULL != requestRec->useragent_host)
     ) {
         for (int i = 0; i < moduleDataHostnames->cntHostnames; i++) {
-            if (true == stringEndsWith(r->useragent_host, moduleDataHostnames->hostnames[i])) {
+            if (true == stringEndsWith(requestRec->useragent_host, moduleDataHostnames->hostnames[i])) {
                 ap_log_rerror(
                     APLOG_MARK,
                     APLOG_INFO,
                     0,
-                    r,
+                    requestRec,
                     "modApacheDeny_15Watt blocked client by hostname=%s",
-                    r->useragent_host
+                    requestRec->useragent_host
                 );
 
                 return HTTP_FORBIDDEN;
@@ -405,21 +418,21 @@ static int requestHandler(request_rec *r)
     if (
         (NULL != moduleDataNetInfoIpV6)
         &&
-        (NULL != r->useragent_ip)
+        (NULL != requestRec->useragent_ip)
         &&
-        (addressType_IPv6 == detectAddressType(r->useragent_ip))
+        (addressType_IPv6 == detectAddressType(requestRec->useragent_ip))
     ) {
         for (int i = 0; i < moduleDataNetInfoIpV6->cntNetInfoIpV6; i++) {
             const NetInfoIpV6 *netInfoV6 = moduleDataNetInfoIpV6->netInfoIpV6[i];
-            if (1 == isIpV6InNetwork(r->useragent_ip, netInfoV6)) {
+            if (1 == isIpV6InNetwork(requestRec->useragent_ip, netInfoV6)) {
 
                 ap_log_rerror(
                     APLOG_MARK,
                     APLOG_INFO,
                     0,
-                    r,
+                    requestRec,
                     "modApacheDeny_15Watt blocked client ip=%s by ipv6 cidr=%s",
-                    r->useragent_ip,
+                    requestRec->useragent_ip,
                     netInfoV6->cidr
                 );
 
@@ -433,12 +446,12 @@ static int requestHandler(request_rec *r)
     if (
         (NULL != moduleDataNetInfoIpV4)
         &&
-        (NULL != r->useragent_ip)
+        (NULL != requestRec->useragent_ip)
         &&
-        (addressType_IPv4 == detectAddressType(r->useragent_ip))
+        (addressType_IPv4 == detectAddressType(requestRec->useragent_ip))
     ) {
         struct in_addr ipAddr;
-        if (1 == inet_pton(AF_INET, r->useragent_ip, &ipAddr)) {
+        if (1 == inet_pton(AF_INET, requestRec->useragent_ip, &ipAddr)) {
             for (int i = 0; i < moduleDataNetInfoIpV4->cntNetInfoIpV4; i++) {
                 const NetInfoIpV4 *netInfoV4 = moduleDataNetInfoIpV4->netInfoIpV4[i];
 
@@ -448,9 +461,9 @@ static int requestHandler(request_rec *r)
                         APLOG_MARK,
                         APLOG_INFO,
                         0,
-                        r,
+                        requestRec,
                         "modApacheDeny_15Watt blocked client ip=%s by ipv4 cidr=%s",
-                        r->useragent_ip,
+                        requestRec->useragent_ip,
                         netInfoV4->cidr
                     );
 
@@ -458,6 +471,44 @@ static int requestHandler(request_rec *r)
                 }
             }
         }
+    }
+
+    // The request is allowed
+    if (UseAllowedHash == moduleConfig.useAllowedHash) {
+        const int res = blockHashAddEntry(
+            userAgentKey,
+            blockTypeNone,
+            false,
+            requestRec->server->process->pool
+        );
+
+        const char *resMsg;
+        switch (res) {
+            case 1:  resMsg = "hash not initialized";
+                break;
+
+            case 2:  resMsg = "existing entry updated";
+                break;
+
+            case 3:  resMsg = "failed to remove oldest entry";
+                break;
+
+            case 4:  resMsg = "new entry added";
+                break;
+
+            default: resMsg = "unknown result";
+                break;
+        }
+
+        ap_log_rerror(
+            APLOG_MARK,
+            APLOG_INFO,
+            0,
+            requestRec,
+            "modApacheDeny_15Watt blockHashAddEntry: %s (key=%s)",
+            resMsg,
+            userAgentKey
+        );
     }
 
     // DECLINED means "not handled", so other modules can try to handle the request

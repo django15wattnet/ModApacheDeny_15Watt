@@ -1,30 +1,40 @@
-//
-// Created by Thomas Siemion on 11.04.26.
-//
 #include <apr_hash.h>
 #include <apr_strings.h>
 #include <stdbool.h>
 #include <limits.h>
 #include <time.h>
-#include <stdio.h>
 #include "blockHash.h"
 
 #include <httpd.h>
 #include <http_log.h>
 
-
+// The hash
 BlockHash blockHash;
 
-/*
- * Die einzelnen Einträge im hash sind per apr_palloc alloziert.
-    * apr_pool_t *entryPool;
-    > apr_pool_create(&entryPool, parentPool);
-    > BlockHashEntry *entry = apr_palloc(entryPool, sizeof(BlockHashEntry));
-    > entry->pool = entryPool;
+
+/**
+ * Initializes the global block hash store.
+ *
+ * Creates a new APR hash table using the process pool of the given server record,
+ * sets the maximum number of entries, and creates a thread mutex to protect
+ * concurrent access from multiple threads (required for MPM Event).
+ *
+ * This function must be called once during the server configuration phase
+ * (ap_hook_post_config) before any calls to blockHashAddEntry or blockHashGetEntry.
+ * Calling it again will replace the existing hash with a new empty one.
+ *
+ * @param serverRec   Pointer to the server_rec. Its process pool is used as the
+ *                    parent pool for the hash, the mutex, and all entry sub-pools.
+ * @param maxEntries  Maximum number of entries the hash may hold. When this limit
+ *                    is reached, the oldest entry (by tsLastUse) is removed before
+ *                    a new one is inserted.
+ *
+ * @return true   on success.
+ * @return false  if the hash table or the mutex could not be created.
  */
-bool blockHashSetUpStore(server_rec *serverRec, apr_pool_t *pool, const int maxEntries)
+bool blockHashSetUpStore(const server_rec *serverRec, const int maxEntries)
 {
-    blockHash.blockHash = apr_hash_make(pool);
+    blockHash.blockHash = apr_hash_make(serverRec->process->pool);
     if (NULL == blockHash.blockHash) {
         ap_log_error(
             APLOG_MARK,
@@ -41,15 +51,45 @@ bool blockHashSetUpStore(server_rec *serverRec, apr_pool_t *pool, const int maxE
         APLOG_ERR,
         0,
         serverRec,
-        "blockHashSetUpStore adr = %p", blockHash.blockHash
+        "blockHashSetUpStore adr = 0x%lx", (unsigned long)(void *)blockHash.blockHash
     );
 
     blockHash.maxEntries = maxEntries;
+    blockHash.serverPool = serverRec->process->pool;
+
+    if (APR_SUCCESS != apr_thread_mutex_create(&blockHash.mutex, APR_THREAD_MUTEX_DEFAULT, blockHash.serverPool)) {
+
+        blockHash.blockHash = NULL;
+
+        ap_log_error(
+            APLOG_MARK,
+            APLOG_ERR,
+            0,
+            serverRec,
+            "blockHashSetUpStore: failed to create mutex"
+        );
+        return false;
+    }
 
     return true;
 }
 
 
+/**
+ * Adds a new entry to the hash or updates an existing one.
+ *
+ * Returns:
+ *  - 1 = the hash is not initialized
+ *  - 2 = existing entry updated
+ *  - 3 = error while removing the oldest entry (when maxEntries is reached)
+ *  - 4 = new entry successfully added to the hash
+ *
+ * @param key
+ * @param blockType
+ * @param doBlock
+ * @param parentPool
+ * @return
+ */
 int blockHashAddEntry(
     const char *key,
     const enum EnumBlockType blockType,
@@ -60,27 +100,27 @@ int blockHashAddEntry(
         return 1;
     }
 
+    apr_thread_mutex_lock(blockHash.mutex);
+
     // Check if key is already in the block hash
     BlockHashEntry *entry = apr_hash_get(blockHash.blockHash, key, APR_HASH_KEY_STRING);
     if (entry != NULL) {
-        // Set entry's tsLastUser to now
         entry->tsLastUse = time(NULL);
-
-        // save the updated entry to the block hash
         apr_hash_set(blockHash.blockHash, key, APR_HASH_KEY_STRING, entry);
+        apr_thread_mutex_unlock(blockHash.mutex);
         return 2;
     }
 
     if (apr_hash_count(blockHash.blockHash) >= blockHash.maxEntries) {
-        // To many entries, remove the oldest
         if (!blockHashRemoveOldestEntry()) {
+            apr_thread_mutex_unlock(blockHash.mutex);
             return 3;
         }
     }
 
-    // Add new entry to the hash list
+    // Add new entry to the hash list — eigener Sub-Pool pro Eintrag
     apr_pool_t *entryPool;
-    apr_pool_create(&entryPool, parentPool);
+    apr_pool_create(&entryPool, blockHash.serverPool);
 
     entry = apr_palloc(entryPool, sizeof(BlockHashEntry));
 
@@ -89,14 +129,17 @@ int blockHashAddEntry(
     entry->blockType = blockType;
     entry->tsLastUse = time(NULL);
 
-    apr_hash_set(blockHash.blockHash, key, APR_HASH_KEY_STRING, entry);
+    // Duplicate the key into the entryPool so it is not bound to the request pool
+    const char *keyCopy = apr_pstrdup(entryPool, key);
+    apr_hash_set(blockHash.blockHash, keyCopy, APR_HASH_KEY_STRING, entry);
 
+    apr_thread_mutex_unlock(blockHash.mutex);
     return 4;
 }
 
 
 /**
- * Returns the BlockHashEntry for the key key
+ * Returns the BlockHashEntry for the key, or NULL if the key is not in the hash.
  *
  * @param key
  * @return
@@ -107,24 +150,43 @@ BlockHashEntry *blockHashGetEntry(const char *key)
         return NULL;
     }
 
-   return apr_hash_get(blockHash.blockHash, key, APR_HASH_KEY_STRING);
+    apr_thread_mutex_lock(blockHash.mutex);
+    BlockHashEntry *entry = apr_hash_get(blockHash.blockHash, key, APR_HASH_KEY_STRING);
+    apr_thread_mutex_unlock(blockHash.mutex);
+    return entry;
 }
 
 
+/**
+ * Returns the count of entries in the hash or -1 if the hash is not initialized.
+ * @return int
+ */
 int blockHashGetEntryCount() {
     if (blockHash.blockHash == NULL) {
         return -1;
     }
 
-    return apr_hash_count(blockHash.blockHash);
+    apr_thread_mutex_lock(blockHash.mutex);
+    const int count = (int)apr_hash_count(blockHash.blockHash);
+    apr_thread_mutex_unlock(blockHash.mutex);
+    return count;
 }
 
 
-/*
-    apr_pool_t *entryPool;
-    > apr_pool_create(&entryPool, parentPool);
-    > BlockHashEntry *entry = apr_palloc(entryPool, sizeof(BlockHashEntry));
-    > entry->pool = entryPool;
+/**
+ * Removes the oldest entry from the block hash based on the tsLastUse timestamp.
+ *
+ * Iterates over all entries in the hash and identifies the one with the smallest
+ * tsLastUse value (i.e., the least recently used entry). That entry is then removed
+ * from the hash and its associated memory pool is destroyed.
+ *
+ * This function is intended to be called internally by blockHashAddEntry when the
+ * maximum number of entries has been reached. It must NOT be called while the mutex
+ * is not already held by the caller — it does not acquire the mutex itself to avoid
+ * a deadlock.
+ *
+ * @return true  if the oldest entry was successfully found and removed.
+ * @return false if the hash is NULL, empty, or no entry could be identified.
  */
 bool blockHashRemoveOldestEntry()
 {
@@ -132,10 +194,10 @@ bool blockHashRemoveOldestEntry()
         return false;
     }
 
-    const void       *oldestKey    = NULL;
-    apr_ssize_t       oldestKeyLen = 0;
-    void             *oldestVal    = NULL;
-    int               oldestTs     = INT_MAX;
+    const void  *oldestKey    = NULL;
+    apr_ssize_t  oldestKeyLen = 0;
+    void        *oldestVal    = NULL;
+    time_t       oldestTs     = (time_t)LONG_MAX;
 
     // Iterate over all entries
     for (apr_hash_index_t *hi = apr_hash_first(NULL, blockHash.blockHash); hi; hi = apr_hash_next(hi)) {

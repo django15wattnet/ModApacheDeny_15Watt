@@ -1,7 +1,3 @@
-//
-// Created by Thomas Siemion on 16.01.26.
-//
-
 #ifndef MODAPACHEDENY_15WATT_CHECKUSERAGENT_H
 #define MODAPACHEDENY_15WATT_CHECKUSERAGENT_H
 
@@ -9,7 +5,7 @@
 #include "modApacheDeny_15Watt.h"
 
 bool shouldUserAgentBeBlocked(
-    const request_rec *r,
+    const request_rec *serverRec,
     const char *userAgent,
     const ModuleDataUserAgents  *moduleDataUserAgents
 );

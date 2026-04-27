@@ -1,0 +1,35 @@
+\doxysection{hash\+Map.\+h}
+\hypertarget{hash_map_8h_source}{}\label{hash_map_8h_source}\index{src/hashMap.h@{src/hashMap.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Thomas\ Siemion\ on\ 25.04.26.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ HASHMAPDENAY\_15WATT\_HASHMAP\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ HASHMAPDENAY\_15WATT\_HASHMAP\_H}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#define\ TABLE\_SIZE\ 101}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{struct_entry}{Entry}}\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keywordtype}{char}\ *key;}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{int}\ value;}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keyword}{struct\ }\doxymbox{\hyperlink{struct_entry}{Entry}}\ *next;}
+\DoxyCodeLine{00014\ \}\ \doxymbox{\hyperlink{struct_entry}{Entry}};}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00017\ \ \ \ \ \doxymbox{\hyperlink{struct_entry}{Entry}}\ *buckets[TABLE\_SIZE];}
+\DoxyCodeLine{00018\ \}\ \doxymbox{\hyperlink{struct_hash_map}{HashMap}};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ hash(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{00021\ \textcolor{keywordtype}{char}\ \ \ \ \ \ \ \ *str\_copy(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *s);}
+\DoxyCodeLine{00022\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ hashmap\_init(\doxymbox{\hyperlink{struct_hash_map}{HashMap}}\ *map);}
+\DoxyCodeLine{00023\ \doxymbox{\hyperlink{struct_entry}{Entry}}\ \ \ \ \ \ \ *entry\_create(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keywordtype}{int}\ value);}
+\DoxyCodeLine{00024\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ hashmap\_put(\doxymbox{\hyperlink{struct_hash_map}{HashMap}}\ *map,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keywordtype}{int}\ value);}
+\DoxyCodeLine{00025\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ hashmap\_get(\textcolor{keyword}{const}\ \doxymbox{\hyperlink{struct_hash_map}{HashMap}}\ *map,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keywordtype}{int}\ *out\_value);}
+\DoxyCodeLine{00026\ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ hashmap\_remove(\doxymbox{\hyperlink{struct_hash_map}{HashMap}}\ *map,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{00027\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ hashmap\_free(\doxymbox{\hyperlink{struct_hash_map}{HashMap}}\ *map);}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//HASHMAPDENAY\_15WATT\_HASHMAP\_H}}
+
+\end{DoxyCode}

@@ -1,9 +1,35 @@
-//
-// Created by Thomas Siemion on 21.01.26.
-//
-
 #include "loadUserAgentsWhiteList.h"
 
+/**
+ * Loads all white-listed user agents from the database and populates the
+ * in-memory data structure.
+ *
+ * Connects to the MySQL database specified in @p moduleConfig, queries the
+ * table defined by moduleConfig->tableUserAgentsWl, and stores each row value
+ * together with its detected compare type in an APR-allocated array.
+ *
+ * The compare type is derived from optional '#' markers surrounding the value
+ * (see detectCompareType()). The markers are stripped from the stored string
+ * (see cutCompareTypeMarkers()).
+ *
+ * If a request's user agent matches an entry in this white-list, the request
+ * is passed through without further checks, regardless of any block rules.
+ *
+ * All allocated memory is bound to @p pool and will be released when that pool
+ * is destroyed.
+ *
+ * @param moduleConfig              Module configuration holding database
+ *                                  credentials and the name of the white-list
+ *                                  table.
+ * @param dataUserAgentsWhiteList   Out-parameter. Receives a pointer to the
+ *                                  allocated ModuleDataUserAgents structure.
+ * @param pool                      APR pool used for all memory allocations.
+ * @param serverRec                 Apache server record used for error logging.
+ *
+ * @return  0  on success.
+ * @return -1  if mysql_init(), mysql_store_result(), or the SELECT query fails.
+ * @return -2  if the database connection could not be established.
+ */
 int loadUserAgentsWhiteList(
     const ModuleConfig *moduleConfig,
     ModuleDataUserAgents **dataUserAgentsWhiteList,

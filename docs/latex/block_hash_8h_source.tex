@@ -1,0 +1,53 @@
+\doxysection{block\+Hash.\+h}
+\hypertarget{block_hash_8h_source}{}\label{block_hash_8h_source}\index{src/blockHash.h@{src/blockHash.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Thomas\ Siemion\ on\ 11.04.26.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ MODAPACHEDENY\_15WATT\_BLOCKHASH\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ MODAPACHEDENY\_15WATT\_BLOCKHASH\_H}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <apr\_pools.h>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <apr\_thread\_mutex.h>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <httpd.h>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ List\ of\ reasons\ an\ entry\ has\ been\ blocked}}
+\DoxyCodeLine{00013\ \textcolor{keyword}{enum}\ EnumBlockType\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ blockTypeNotFound\ \ \ \ \ \ \ \ \ \ \ =\ 0,}
+\DoxyCodeLine{00015\ \ \ \ \ blockTypeNone\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00016\ \ \ \ \ blockTypeIpV4\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 2,}
+\DoxyCodeLine{00017\ \ \ \ \ blockTypeIpV6\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 3,}
+\DoxyCodeLine{00018\ \ \ \ \ blockTypeCidrIpV4\ \ \ \ \ \ \ \ \ \ \ =\ 4,}
+\DoxyCodeLine{00019\ \ \ \ \ blockTypeCidrIpV6\ \ \ \ \ \ \ \ \ \ \ =\ 5,}
+\DoxyCodeLine{00020\ \ \ \ \ blockTypeUserAgent\ \ \ \ \ \ \ \ \ \ =\ 6,}
+\DoxyCodeLine{00021\ \};}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{comment}{//\ An\ entry\ in\ the\ block\ list}}
+\DoxyCodeLine{00024\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00025\ \ \ \ \ apr\_pool\_t\ \ \ \ \ \ \ \ \ *pool;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ doBlock;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{enum}\ EnumBlockType\ blockType;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tsLastUse;}
+\DoxyCodeLine{00029\ \}\ \doxymbox{\hyperlink{struct_block_hash_entry}{BlockHashEntry}};}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{comment}{//\ Structure\ to\ hold\ the\ block\ list\ and\ all\ necessary\ informations}}
+\DoxyCodeLine{00032\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00033\ \ \ \ \ apr\_hash\_t\ \ \ \ \ \ \ \ \ *blockHash;}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ maxEntries;}
+\DoxyCodeLine{00035\ \ \ \ \ apr\_pool\_t\ \ \ \ \ \ \ \ \ *serverPool;}
+\DoxyCodeLine{00036\ \ \ \ \ apr\_thread\_mutex\_t\ *mutex;}
+\DoxyCodeLine{00037\ \}\ \doxymbox{\hyperlink{struct_block_hash}{BlockHash}};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{extern}\ \doxymbox{\hyperlink{struct_block_hash}{BlockHash}}\ blockHash;}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{keywordtype}{bool}\ blockHashSetUpStore(\textcolor{keyword}{const}\ server\_rec\ *serverRec,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ maxEntries);}
+\DoxyCodeLine{00042\ \textcolor{keywordtype}{bool}\ blockHashRemoveOldestEntry();}
+\DoxyCodeLine{00043\ \doxymbox{\hyperlink{struct_block_hash_entry}{BlockHashEntry}}\ *blockHashGetEntry(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key);}
+\DoxyCodeLine{00044\ \textcolor{keywordtype}{int}\ blockHashAddEntry(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keyword}{const}\ \textcolor{keyword}{enum}\ EnumBlockType\ blockType,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ doBlock,\ apr\_pool\_t\ *parentPool);}
+\DoxyCodeLine{00045\ \textcolor{keywordtype}{int}\ blockHashGetEntryCount();}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MODAPACHEDENY\_15WATT\_BLOCKHASH\_H}}
+
+\end{DoxyCode}

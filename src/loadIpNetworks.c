@@ -1,9 +1,44 @@
-//
-// Created by Thomas Siemion on 19.12.25.
-//
-
 #include "loadIpNetworks.h"
 
+/**
+ * Loads all blocked IP addresses, IP ranges, and hostnames from the database
+ * and populates the corresponding in-memory data structures.
+ *
+ * Connects to the MySQL database specified in @p moduleConfig, queries the
+ * table defined by moduleConfig->tableAddresses, and classifies each row value
+ * as one of the following types:
+ *  - IPv4 address         → stored in @p dataIpV4
+ *  - IPv6 address         → stored in @p dataIpV6
+ *  - IPv4 CIDR range      → compiled and stored in @p dataNetInfoIpV4
+ *  - IPv6 CIDR range      → compiled and stored in @p dataNetInfoIpV6
+ *  - Hostname             → stored in @p dataHostnames
+ *
+ * The function performs two passes over the result set: the first pass counts
+ * the entries per type to allocate appropriately sized APR memory blocks; the
+ * second pass fills those blocks with the actual data.
+ *
+ * All allocated memory is bound to @p pool and will be released when that pool
+ * is destroyed.
+ *
+ * @param moduleConfig      Module configuration holding database credentials
+ *                          and the name of the addresses table.
+ * @param dataHostnames     Out-parameter. Receives a pointer to the allocated
+ *                          ModuleDataHostnames structure.
+ * @param dataIpV4          Out-parameter. Receives a pointer to the allocated
+ *                          ModuleDataIpV4 structure.
+ * @param dataIpV6          Out-parameter. Receives a pointer to the allocated
+ *                          ModuleDataIpV6 structure.
+ * @param dataNetInfoIpV4   Out-parameter. Receives a pointer to the allocated
+ *                          ModuleDataNetInfoIpV4 structure.
+ * @param dataNetInfoIpV6   Out-parameter. Receives a pointer to the allocated
+ *                          ModuleDataNetInfoIpV6 structure.
+ * @param pool              APR pool used for all memory allocations.
+ * @param serverRec         Apache server record used for error logging.
+ *
+ * @return  0  on success.
+ * @return -1  if mysql_init(), mysql_store_result(), or the SELECT query fails.
+ * @return -2  if the database connection could not be established.
+ */
 int loadIpNetworks(
     const ModuleConfig *moduleConfig,
     ModuleDataHostnames **dataHostnames,

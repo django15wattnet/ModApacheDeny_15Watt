@@ -1,7 +1,3 @@
-//
-// Created by Thomas Siemion on 02.12.25.
-//
-
 #ifndef MODAPACHEDENY_15WATT_CHECKIPADDR_H
 #define MODAPACHEDENY_15WATT_CHECKIPADDR_H
 

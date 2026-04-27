@@ -1,8 +1,4 @@
-//
-// Created by Thomas Siemion on 03.12.25.
-//
 #include "checkIpAddr.h"
-
 
 /**
  * Detects the IP family of the given IP address string.

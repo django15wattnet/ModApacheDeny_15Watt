@@ -48,6 +48,8 @@ add_library(${PROJECT_NAME} SHARED
         src/loadUserAgentsWl.h
         src/blockHash.c
         src/blockHash.h
+        src/hashMap.c
+        src/hashMap.h
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")

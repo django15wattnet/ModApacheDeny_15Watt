@@ -4,6 +4,15 @@
  */
 #include "functionsString.h"
 
+/**
+ * Checks whether a string ends with a given suffix.
+ *
+ * @param str    The string to examine. May not be NULL.
+ * @param suffix The suffix to look for. May not be NULL.
+ * @return true  if @p str ends with @p suffix.
+ * @return false if either argument is NULL, or @p suffix is longer than @p str,
+ *               or the suffix is not found at the end of @p str.
+ */
 bool stringEndsWith(const char *str, const char *suffix)
 {
     if (NULL == str || NULL == suffix) {
@@ -21,6 +30,15 @@ bool stringEndsWith(const char *str, const char *suffix)
 }
 
 
+/**
+ * Checks whether a string starts with a given prefix.
+ *
+ * @param str    The string to examine. May not be NULL.
+ * @param prefix The prefix to look for. May not be NULL.
+ * @return true  if @p str starts with @p prefix.
+ * @return false if either argument is NULL, or @p prefix is longer than @p str,
+ *               or the prefix is not found at the beginning of @p str.
+ */
 bool stringStartsWith(const char *str, const char *prefix)
 {
     if (NULL == str || NULL == prefix) {
@@ -39,7 +57,12 @@ bool stringStartsWith(const char *str, const char *prefix)
 
 
 /**
- * Deletes the last character of the string by replacing it with null terminator.
+ * Removes the last character of a string in-place.
+ *
+ * The last character is replaced with a null terminator ('\\0').
+ * If the string is empty, the function does nothing.
+ *
+ * @param str  The string to modify. Must be a writable, null-terminated buffer.
  */
 void stringDeleteCharRight(char *str)
 {
@@ -51,7 +74,13 @@ void stringDeleteCharRight(char *str)
 
 
 /**
- * Deletes the first character of the string by shifting the rest to the left.
+ * Removes the first character of a string in-place.
+ *
+ * All remaining characters (including the null terminator) are shifted one
+ * position to the left using memmove. If the string is empty, the function
+ * does nothing.
+ *
+ * @param str  The string to modify. Must be a writable, null-terminated buffer.
  */
 void stringDeleteCharLeft(char *str)
 {

@@ -1,7 +1,3 @@
-//
-// Created by Thomas Siemion on 19.12.25.
-//
-
 #ifndef MODAPACHEDENY_15WATT_LOADIPNETWORKS_H
 #define MODAPACHEDENY_15WATT_LOADIPNETWORKS_H
 
