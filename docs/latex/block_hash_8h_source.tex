@@ -2,34 +2,34 @@
 \hypertarget{block_hash_8h_source}{}\label{block_hash_8h_source}\index{src/blockHash.h@{src/blockHash.h}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//}}
-\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Thomas\ Siemion\ on\ 11.04.26.}}
-\DoxyCodeLine{00003\ \textcolor{comment}{//}}
-\DoxyCodeLine{00004\ }
-\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ MODAPACHEDENY\_15WATT\_BLOCKHASH\_H}}
-\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ MODAPACHEDENY\_15WATT\_BLOCKHASH\_H}}
-\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <apr\_pools.h>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <apr\_thread\_mutex.h>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <httpd.h>}}
-\DoxyCodeLine{00011\ }
-\DoxyCodeLine{00012\ \textcolor{comment}{//\ List\ of\ reasons\ an\ entry\ has\ been\ blocked}}
-\DoxyCodeLine{00013\ \textcolor{keyword}{enum}\ EnumBlockType\ \{}
-\DoxyCodeLine{00014\ \ \ \ \ blockTypeNotFound\ \ \ \ \ \ \ \ \ \ \ =\ 0,}
-\DoxyCodeLine{00015\ \ \ \ \ blockTypeNone\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 1,}
-\DoxyCodeLine{00016\ \ \ \ \ blockTypeIpV4\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 2,}
-\DoxyCodeLine{00017\ \ \ \ \ blockTypeIpV6\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 3,}
-\DoxyCodeLine{00018\ \ \ \ \ blockTypeCidrIpV4\ \ \ \ \ \ \ \ \ \ \ =\ 4,}
-\DoxyCodeLine{00019\ \ \ \ \ blockTypeCidrIpV6\ \ \ \ \ \ \ \ \ \ \ =\ 5,}
-\DoxyCodeLine{00020\ \ \ \ \ blockTypeUserAgent\ \ \ \ \ \ \ \ \ \ =\ 6,}
-\DoxyCodeLine{00021\ \};}
-\DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \textcolor{comment}{//\ An\ entry\ in\ the\ block\ list}}
-\DoxyCodeLine{00024\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00025\ \ \ \ \ apr\_pool\_t\ \ \ \ \ \ \ \ \ *pool;}
-\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ doBlock;}
-\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{enum}\ EnumBlockType\ blockType;}
-\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tsLastUse;}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MODAPACHEDENY\_15WATT\_BLOCKHASH\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MODAPACHEDENY\_15WATT\_BLOCKHASH\_H}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <stdbool.h>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <apr\_pools.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <apr\_hash.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <apr\_thread\_mutex.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <httpd.h>}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ List\ of\ reasons\ an\ entry\ has\ been\ blocked}}
+\DoxyCodeLine{00010\ \textcolor{keyword}{enum}\ EnumBlockType\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ blockTypeNotFound\ \ \ \ \ \ \ \ \ \ \ =\ 0,}
+\DoxyCodeLine{00012\ \ \ \ \ blockTypeNone\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00013\ \ \ \ \ blockTypeIpV4\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 2,}
+\DoxyCodeLine{00014\ \ \ \ \ blockTypeIpV6\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 3,}
+\DoxyCodeLine{00015\ \ \ \ \ blockTypeCidrIpV4\ \ \ \ \ \ \ \ \ \ \ =\ 4,}
+\DoxyCodeLine{00016\ \ \ \ \ blockTypeCidrIpV6\ \ \ \ \ \ \ \ \ \ \ =\ 5,}
+\DoxyCodeLine{00017\ \ \ \ \ blockTypeUserAgent\ \ \ \ \ \ \ \ \ \ =\ 6,}
+\DoxyCodeLine{00018\ \};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{extern}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ BlockTypeStrings[];}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ An\ entry\ in\ the\ block\ list}}
+\DoxyCodeLine{00023\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00024\ \ \ \ \ apr\_pool\_t\ \ \ \ \ \ \ \ \ *pool;}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{bool}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ doBlock;}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{enum}\ EnumBlockType\ blockType;}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tsLastUse;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ \ \ \ \ \ \ \ \ *key;}
 \DoxyCodeLine{00029\ \}\ \doxymbox{\hyperlink{struct_block_hash_entry}{BlockHashEntry}};}
 \DoxyCodeLine{00030\ }
 \DoxyCodeLine{00031\ \textcolor{comment}{//\ Structure\ to\ hold\ the\ block\ list\ and\ all\ necessary\ informations}}
@@ -47,7 +47,8 @@
 \DoxyCodeLine{00043\ \doxymbox{\hyperlink{struct_block_hash_entry}{BlockHashEntry}}\ *blockHashGetEntry(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key);}
 \DoxyCodeLine{00044\ \textcolor{keywordtype}{int}\ blockHashAddEntry(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *key,\ \textcolor{keyword}{const}\ \textcolor{keyword}{enum}\ EnumBlockType\ blockType,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ doBlock,\ apr\_pool\_t\ *parentPool);}
 \DoxyCodeLine{00045\ \textcolor{keywordtype}{int}\ blockHashGetEntryCount();}
-\DoxyCodeLine{00046\ }
-\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MODAPACHEDENY\_15WATT\_BLOCKHASH\_H}}
+\DoxyCodeLine{00046\ \textcolor{keywordtype}{void}\ blockHashGetOldestAndNewestEntries(\doxymbox{\hyperlink{struct_block_hash_entry}{BlockHashEntry}}*\ oldest\_entries[10],\ \textcolor{keywordtype}{int}*\ num\_oldest,\ \doxymbox{\hyperlink{struct_block_hash_entry}{BlockHashEntry}}*\ newest\_entries[10],\ \textcolor{keywordtype}{int}*\ num\_newest);}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ MODAPACHEDENY\_15WATT\_BLOCKHASH\_H}}
 
 \end{DoxyCode}

@@ -27,7 +27,7 @@ no binaries are provided.
 - apt install libmysqlclient-dev
 - git clone git@github.com:django15wattnet/ModApacheDeny_15Watt.git
 - cd ModApacheDeny_15Watt/src
-- `sudo apxs -I/usr/include/mysql -L/usr/lib/aarch64-linux-gnu -lmysqlclient -lz  -lzstd -lssl -lcrypto -lresolv -lm -n modApacheDeny_15Watt -I /lib/aarch64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -i -a -c modApacheDeny_15Watt.c checkIpAddr.c loadUserAgents.c loadUserAgentsWhiteList.c loadIpNetworks.c functionsString.c shouldUserAgentBeBlocked.c blockHash.c`
+- `sudo apxs -I/usr/include/mysql -L/usr/lib/aarch64-linux-gnu -lmysqlclient -lz  -lzstd -lssl -lcrypto -lresolv -lm -n modApacheDeny_15Watt -I /lib/aarch64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -i -a -c modApacheDeny_15Watt.c checkIpAddr.c loadUserAgents.c loadUserAgentsWhiteList.c loadIpNetworks.c functionsString.c shouldUserAgentBeBlocked.c blockHash.c status.c`
 
 This also installs the module to Apache.
 
@@ -90,15 +90,25 @@ The module supports the following data formats in the database:
 |                                      | Abc#                                    | Matches any user agent ending with 'Abc'   |
 |                                      | #Abc#                                   | Matches any user agent exactly 'Abc'       
 
+## Endpoint for status information
+The module provides an endpoint to get the number of entries, the 10 newest and oldest in the blockHash as a JSON-structure. \
+To enable this endpoint, add the following configuration to your Apache configuration file:
+```
+<Location /yourStatusEndpoint>
+  SetHandler mod_apache_deny_15watt_status
+  . . .
+</Location>
+```
 ## Version history
-| Version | Date       | Description                                                                                           |
-|---------|------------|-------------------------------------------------------------------------------------------------------|
-| 0.0.1   | 2026-01-09 | Initial release with all basic features                                                               |
-| 0.1.0   | 2026-01-17 | Added type of string compare to check if user agent should be blocked                                 |
-| 0.1.1   | 2026-01-18 | Completion of the documentation                                                                       |
-| 0.2.0   | 2026-01-23 | Added support for user agent whitelisted                                                              |
-| 0.2.1   | 2026-01-28 | Completion of the documentation                                                                       |
-| 0.3.0   | 2026-04-27 | Added support for allowed combinations of ip-address and user agent by hash to speed up access checks |
+| Version | Date       | Description                                                                                                        |
+|---------|------------|--------------------------------------------------------------------------------------------------------------------|
+| 0.0.1   | 2026-01-09 | Initial release with all basic features                                                                            |
+| 0.1.0   | 2026-01-17 | Added type of string compare to check if user agent should be blocked                                              |
+| 0.1.1   | 2026-01-18 | Completion of the documentation                                                                                    |
+| 0.2.0   | 2026-01-23 | Added support for user agent whitelisted                                                                           |
+| 0.2.1   | 2026-01-28 | Completion of the documentation                                                                                    |
+| 0.3.0   | 2026-04-27 | Added support for allowed combinations of ip-address and user agent by a hash to speed up access checks            |
+| 0.4.0   | 2026-05-01 | Added a status endpoint to get the number of entries, the 10 newest and oldest in the blockHash asa JSON-structure |
 
 
 ## Future plans

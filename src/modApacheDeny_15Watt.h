@@ -101,7 +101,7 @@ typedef struct {
 
 static void register_hooks(apr_pool_t *pool);
 static int requestHandler(request_rec *requestRec);
-int handlerServerConfig(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, server_rec *s);
+int serverConfigHandler(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, server_rec *s);
 
 #include "shouldUserAgentBeBlocked.h"
 #include "loadUserAgents.h"

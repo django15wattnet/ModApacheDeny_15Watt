@@ -8,5 +8,6 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
     [ "loadUserAgents.h", "load_user_agents_8h_source.html", null ],
     [ "loadUserAgentsWhiteList.h", "load_user_agents_white_list_8h_source.html", null ],
     [ "modApacheDeny_15Watt.h", "mod_apache_deny__15_watt_8h_source.html", null ],
-    [ "shouldUserAgentBeBlocked.h", "should_user_agent_be_blocked_8h_source.html", null ]
+    [ "shouldUserAgentBeBlocked.h", "should_user_agent_be_blocked_8h_source.html", null ],
+    [ "status.h", "status_8h_source.html", null ]
 ];

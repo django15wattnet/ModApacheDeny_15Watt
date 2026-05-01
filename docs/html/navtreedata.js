@@ -36,10 +36,11 @@ var NAVTREE =
       ] ],
       [ "Database structure", "md__r_e_a_d_m_e.html#autotoc_md7", null ],
       [ "Data formats", "md__r_e_a_d_m_e.html#autotoc_md8", null ],
-      [ "Version history", "md__r_e_a_d_m_e.html#autotoc_md9", null ],
-      [ "Future plans", "md__r_e_a_d_m_e.html#autotoc_md10", null ],
-      [ "License", "md__r_e_a_d_m_e.html#autotoc_md11", null ],
-      [ "Author", "md__r_e_a_d_m_e.html#autotoc_md12", null ]
+      [ "Endpoint for status information", "md__r_e_a_d_m_e.html#autotoc_md9", null ],
+      [ "Version history", "md__r_e_a_d_m_e.html#autotoc_md10", null ],
+      [ "Future plans", "md__r_e_a_d_m_e.html#autotoc_md11", null ],
+      [ "License", "md__r_e_a_d_m_e.html#autotoc_md12", null ],
+      [ "Author", "md__r_e_a_d_m_e.html#autotoc_md13", null ]
     ] ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],

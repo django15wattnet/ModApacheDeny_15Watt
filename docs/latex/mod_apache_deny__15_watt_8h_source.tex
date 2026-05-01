@@ -2,119 +2,115 @@
 \hypertarget{mod_apache_deny__15_watt_8h_source}{}\label{mod_apache_deny__15_watt_8h_source}\index{src/modApacheDeny\_15Watt.h@{src/modApacheDeny\_15Watt.h}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//}}
-\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Thomas\ Siemion\ on\ 29.11.25.}}
-\DoxyCodeLine{00003\ \textcolor{comment}{//}}
-\DoxyCodeLine{00004\ }
-\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ MODAPACHEDENY\_15WATT\_MODAPACHEDENY\_15WATT\_H}}
-\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ MODAPACHEDENY\_15WATT\_MODAPACHEDENY\_15WATT\_H}}
-\DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
-\DoxyCodeLine{00010\ \textcolor{comment}{//\ \#include\ "{}http\_config.h"{}}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}apr\_hash.h"{}}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}apr\_tables.h"{}}}
-\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}apr\_hooks.h"{}}}
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}apr\_strings.h"{}}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}ap\_config.h"{}}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}ap\_provider.h"{}}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}httpd.h"{}}}
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}http\_core.h"{}}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}http\_config.h"{}}}
-\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}http\_log.h"{}}}
-\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ "{}http\_protocol.h"{}}}
-\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ "{}http\_request.h"{}}}
-\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}ap\_config.h"{}}}
-\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ <mysql/mysql.h>}}
-\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ <arpa/inet.h>}}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MODAPACHEDENY\_15WATT\_MODAPACHEDENY\_15WATT\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MODAPACHEDENY\_15WATT\_MODAPACHEDENY\_15WATT\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00006\ \textcolor{comment}{//\ \#include\ "{}http\_config.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}apr\_hash.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}apr\_tables.h"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}apr\_hooks.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}apr\_strings.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}ap\_config.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}ap\_provider.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}httpd.h"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}http\_core.h"{}}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}http\_config.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ "{}http\_log.h"{}}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ "{}http\_protocol.h"{}}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}http\_request.h"{}}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ "{}ap\_config.h"{}}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <mysql/mysql.h>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ <arpa/inet.h>}}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ "{}checkIpAddr.h"{}}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ "{}functionsString.h"{}}}
+\DoxyCodeLine{00025\ }
 \DoxyCodeLine{00026\ }
-\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#include\ "{}checkIpAddr.h"{}}}
-\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#include\ "{}functionsString.h"{}}}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ }
-\DoxyCodeLine{00031\ \textcolor{comment}{/*\ Configuration\ structure\ for\ the\ module\ */}}
-\DoxyCodeLine{00032\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *dbHost;}
-\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *dbUser;}
-\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *dbPwd;}
-\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ dbPort;}
-\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *database;}
-\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *tableAddresses;}
-\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *tableUserAgents;}
-\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *tableUserAgentsWl;}
-\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ allowEmptyUserAgent;}
-\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ useAllowedHash;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1\ =\ enabled,\ 2\ =\ disabled}}
-\DoxyCodeLine{00043\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ maxAllowedHashEntries;\ \ \textcolor{comment}{//\ Maximum\ number\ of\ entries\ in\ the\ allowed/block\ hash}}
-\DoxyCodeLine{00044\ \}\ \doxymbox{\hyperlink{struct_module_config}{ModuleConfig}};}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ DoAllowEmptyUserAgent\ \ \ \ 1}}
-\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ DoNotAllowEmptyUserAgent\ 2}}
-\DoxyCodeLine{00048\ }
-\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#define\ UseAllowedHash\ \ \ \ \ \ 1}}
-\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ DoNotUseAllowedHash\ 2}}
-\DoxyCodeLine{00051\ }
-\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ DefaultMaxAllowedHashEntries\ 1000}}
-\DoxyCodeLine{00053\ }
-\DoxyCodeLine{00054\ \textcolor{comment}{/*\ Structure\ to\ hold\ the\ user\ agents\ to\ block\ */}}
-\DoxyCodeLine{00055\ \textcolor{keyword}{enum}\ CompareType\ \{}
-\DoxyCodeLine{00056\ \ \ \ \ CompareType\_Contains\ \ \ =\ 1,}
-\DoxyCodeLine{00057\ \ \ \ \ CompareType\_Equals\ \ \ \ \ =\ 2,}
-\DoxyCodeLine{00058\ \ \ \ \ CompareType\_StartsWith\ =\ 3,}
-\DoxyCodeLine{00059\ \ \ \ \ CompareType\_EndsWith\ \ \ =\ 4}
-\DoxyCodeLine{00060\ \};}
-\DoxyCodeLine{00061\ }
-\DoxyCodeLine{00062\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keywordtype}{char}\ *userAgent;}
-\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keyword}{enum}\ CompareType\ compareType;}
-\DoxyCodeLine{00065\ \}\ \doxymbox{\hyperlink{struct_user_agent_info}{UserAgentInfo}};}
-\DoxyCodeLine{00066\ }
-\DoxyCodeLine{00067\ \textcolor{comment}{//\ Structure\ to\ hold\ user\ agents\ to\ block\ or\ white\ list}}
-\DoxyCodeLine{00068\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{int}\ cntUserAgents;}
-\DoxyCodeLine{00070\ \ \ \ \ \doxymbox{\hyperlink{struct_user_agent_info}{UserAgentInfo}}\ userAgents[];}
-\DoxyCodeLine{00071\ \}\ \doxymbox{\hyperlink{struct_module_data_user_agents}{ModuleDataUserAgents}};}
-\DoxyCodeLine{00072\ }
-\DoxyCodeLine{00073\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv4\ network\ to\ block\ information\ */}}
-\DoxyCodeLine{00074\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keywordtype}{int}\ cntNetInfoIpV4;}
-\DoxyCodeLine{00076\ \ \ \ \ \doxymbox{\hyperlink{struct_net_info_ip_v4}{NetInfoIpV4}}\ *netInfoIpV4[];}
-\DoxyCodeLine{00077\ \}\ \doxymbox{\hyperlink{struct_module_data_net_info_ip_v4}{ModuleDataNetInfoIpV4}};}
-\DoxyCodeLine{00078\ }
-\DoxyCodeLine{00079\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv4\ addresses\ to\ block\ */}}
-\DoxyCodeLine{00080\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{int}\ cntIpV4;}
-\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{char}\ *ipV4[];}
-\DoxyCodeLine{00083\ \}\ \doxymbox{\hyperlink{struct_module_data_ip_v4}{ModuleDataIpV4}};}
-\DoxyCodeLine{00084\ }
-\DoxyCodeLine{00085\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv6\ addresses\ to\ block\ */}}
-\DoxyCodeLine{00086\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keywordtype}{int}\ cntIpV6;}
-\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{char}\ *ipV6[];}
-\DoxyCodeLine{00089\ \}\ \doxymbox{\hyperlink{struct_module_data_ip_v6}{ModuleDataIpV6}};}
-\DoxyCodeLine{00090\ }
-\DoxyCodeLine{00091\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv6\ network\ to\ block\ */}}
-\DoxyCodeLine{00092\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00093\ \ \ \textcolor{keywordtype}{int}\ cntNetInfoIpV6;}
-\DoxyCodeLine{00094\ \ \ \doxymbox{\hyperlink{struct_net_info_ip_v6}{NetInfoIpV6}}\ *netInfoIpV6[];}
-\DoxyCodeLine{00095\ \}\ \doxymbox{\hyperlink{struct_module_data_net_info_ip_v6}{ModuleDataNetInfoIpV6}};}
-\DoxyCodeLine{00096\ }
-\DoxyCodeLine{00097\ \textcolor{comment}{/*\ Structure\ to\ hold\ hostnames\ to\ block\ */}}
-\DoxyCodeLine{00098\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keywordtype}{int}\ cntHostnames;}
-\DoxyCodeLine{00100\ \ \ \ \ \textcolor{keywordtype}{char}\ *hostnames[];}
-\DoxyCodeLine{00101\ \}\ \doxymbox{\hyperlink{struct_module_data_hostnames}{ModuleDataHostnames}};}
-\DoxyCodeLine{00102\ }
-\DoxyCodeLine{00103\ \textcolor{comment}{/*\ @todo\ Struktur\ zum\ speichern\ von\ IpV6-\/Netzwerken\ */}}
-\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00027\ \textcolor{comment}{/*\ Configuration\ structure\ for\ the\ module\ */}}
+\DoxyCodeLine{00028\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *dbHost;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *dbUser;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *dbPwd;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ dbPort;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *database;}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *tableAddresses;}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *tableUserAgents;}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *tableUserAgentsWl;}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ allowEmptyUserAgent;}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ useAllowedHash;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ 1\ =\ enabled,\ 2\ =\ disabled}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ maxAllowedHashEntries;\ \ \textcolor{comment}{//\ Maximum\ number\ of\ entries\ in\ the\ allowed/block\ hash}}
+\DoxyCodeLine{00040\ \}\ \doxymbox{\hyperlink{struct_module_config}{ModuleConfig}};}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ DoAllowEmptyUserAgent\ \ \ \ 1}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ DoNotAllowEmptyUserAgent\ 2}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ UseAllowedHash\ \ \ \ \ \ 1}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ DoNotUseAllowedHash\ 2}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#define\ DefaultMaxAllowedHashEntries\ 1000}}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00050\ \textcolor{comment}{/*\ Structure\ to\ hold\ the\ user\ agents\ to\ block\ */}}
+\DoxyCodeLine{00051\ \textcolor{keyword}{enum}\ CompareType\ \{}
+\DoxyCodeLine{00052\ \ \ \ \ CompareType\_Contains\ \ \ =\ 1,}
+\DoxyCodeLine{00053\ \ \ \ \ CompareType\_Equals\ \ \ \ \ =\ 2,}
+\DoxyCodeLine{00054\ \ \ \ \ CompareType\_StartsWith\ =\ 3,}
+\DoxyCodeLine{00055\ \ \ \ \ CompareType\_EndsWith\ \ \ =\ 4}
+\DoxyCodeLine{00056\ \};}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{char}\ *userAgent;}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{enum}\ CompareType\ compareType;}
+\DoxyCodeLine{00061\ \}\ \doxymbox{\hyperlink{struct_user_agent_info}{UserAgentInfo}};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{comment}{//\ Structure\ to\ hold\ user\ agents\ to\ block\ or\ white\ list}}
+\DoxyCodeLine{00064\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{int}\ cntUserAgents;}
+\DoxyCodeLine{00066\ \ \ \ \ \doxymbox{\hyperlink{struct_user_agent_info}{UserAgentInfo}}\ userAgents[];}
+\DoxyCodeLine{00067\ \}\ \doxymbox{\hyperlink{struct_module_data_user_agents}{ModuleDataUserAgents}};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv4\ network\ to\ block\ information\ */}}
+\DoxyCodeLine{00070\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{int}\ cntNetInfoIpV4;}
+\DoxyCodeLine{00072\ \ \ \ \ \doxymbox{\hyperlink{struct_net_info_ip_v4}{NetInfoIpV4}}\ *netInfoIpV4[];}
+\DoxyCodeLine{00073\ \}\ \doxymbox{\hyperlink{struct_module_data_net_info_ip_v4}{ModuleDataNetInfoIpV4}};}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv4\ addresses\ to\ block\ */}}
+\DoxyCodeLine{00076\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00077\ \ \ \ \ \textcolor{keywordtype}{int}\ cntIpV4;}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{char}\ *ipV4[];}
+\DoxyCodeLine{00079\ \}\ \doxymbox{\hyperlink{struct_module_data_ip_v4}{ModuleDataIpV4}};}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv6\ addresses\ to\ block\ */}}
+\DoxyCodeLine{00082\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keywordtype}{int}\ cntIpV6;}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{char}\ *ipV6[];}
+\DoxyCodeLine{00085\ \}\ \doxymbox{\hyperlink{struct_module_data_ip_v6}{ModuleDataIpV6}};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv6\ network\ to\ block\ */}}
+\DoxyCodeLine{00088\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00089\ \ \ \textcolor{keywordtype}{int}\ cntNetInfoIpV6;}
+\DoxyCodeLine{00090\ \ \ \doxymbox{\hyperlink{struct_net_info_ip_v6}{NetInfoIpV6}}\ *netInfoIpV6[];}
+\DoxyCodeLine{00091\ \}\ \doxymbox{\hyperlink{struct_module_data_net_info_ip_v6}{ModuleDataNetInfoIpV6}};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{comment}{/*\ Structure\ to\ hold\ hostnames\ to\ block\ */}}
+\DoxyCodeLine{00094\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00095\ \ \ \ \ \textcolor{keywordtype}{int}\ cntHostnames;}
+\DoxyCodeLine{00096\ \ \ \ \ \textcolor{keywordtype}{char}\ *hostnames[];}
+\DoxyCodeLine{00097\ \}\ \doxymbox{\hyperlink{struct_module_data_hostnames}{ModuleDataHostnames}};}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \textcolor{comment}{/*\ @todo\ Struktur\ zum\ speichern\ von\ IpV6-\/Netzwerken\ */}}
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ register\_hooks(apr\_pool\_t\ *pool);}
+\DoxyCodeLine{00103\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ requestHandler(request\_rec\ *requestRec);}
+\DoxyCodeLine{00104\ \textcolor{keywordtype}{int}\ serverConfigHandler(apr\_pool\_t\ *pconf,\ apr\_pool\_t\ *plog,\ apr\_pool\_t\ *ptemp,\ server\_rec\ *s);}
 \DoxyCodeLine{00105\ }
-\DoxyCodeLine{00106\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ register\_hooks(apr\_pool\_t\ *pool);}
-\DoxyCodeLine{00107\ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ requestHandler(request\_rec\ *requestRec);}
-\DoxyCodeLine{00108\ \textcolor{keywordtype}{int}\ handlerServerConfig(apr\_pool\_t\ *pconf,\ apr\_pool\_t\ *plog,\ apr\_pool\_t\ *ptemp,\ server\_rec\ *s);}
+\DoxyCodeLine{00106\ \textcolor{preprocessor}{\#include\ "{}shouldUserAgentBeBlocked.h"{}}}
+\DoxyCodeLine{00107\ \textcolor{preprocessor}{\#include\ "{}loadUserAgents.h"{}}}
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#include\ "{}loadIpNetworks.h"{}}}
 \DoxyCodeLine{00109\ }
-\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#include\ "{}shouldUserAgentBeBlocked.h"{}}}
-\DoxyCodeLine{00111\ \textcolor{preprocessor}{\#include\ "{}loadUserAgents.h"{}}}
-\DoxyCodeLine{00112\ \textcolor{preprocessor}{\#include\ "{}loadIpNetworks.h"{}}}
-\DoxyCodeLine{00113\ }
-\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MODAPACHEDENY\_15WATT\_MODAPACHEDENY\_15WATT\_H}}
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MODAPACHEDENY\_15WATT\_MODAPACHEDENY\_15WATT\_H}}
 
 \end{DoxyCode}

@@ -8,6 +8,16 @@
 #include <httpd.h>
 #include <http_log.h>
 
+const char* BlockTypeStrings[] = {
+    "Not Found",
+    "None",
+    "IPv4",
+    "IPv6",
+    "CIDR IPv4",
+    "CIDR IPv6",
+    "User Agent"
+};
+
 // The hash
 BlockHash blockHash;
 
@@ -128,6 +138,7 @@ int blockHashAddEntry(
     entry->doBlock   = doBlock;
     entry->blockType = blockType;
     entry->tsLastUse = time(NULL);
+    entry->key       = apr_pstrdup(entryPool, key);
 
     // Duplicate the key into the entryPool so it is not bound to the request pool
     const char *keyCopy = apr_pstrdup(entryPool, key);
@@ -227,4 +238,61 @@ bool blockHashRemoveOldestEntry()
     apr_pool_destroy(((BlockHashEntry *)oldestVal)->pool);
 
     return true;
+}
+
+
+void blockHashGetOldestAndNewestEntries(
+    BlockHashEntry* oldest_entries[10],
+    int* num_oldest,
+    BlockHashEntry* newest_entries[10],
+    int* num_newest)
+{
+    *num_oldest = 0;
+    *num_newest = 0;
+
+    if (blockHash.blockHash == NULL) {
+        return;
+    }
+
+    apr_thread_mutex_lock(blockHash.mutex);
+
+    const int count = apr_hash_count(blockHash.blockHash);
+    if (count == 0) {
+        apr_thread_mutex_unlock(blockHash.mutex);
+        return;
+    }
+
+    BlockHashEntry** all_entries = apr_palloc(blockHash.serverPool, sizeof(BlockHashEntry*) * count);
+    int i = 0;
+    for (apr_hash_index_t* hi = apr_hash_first(NULL, blockHash.blockHash); hi; hi = apr_hash_next(hi)) {
+        void* val;
+        const void* key;
+        apr_hash_this(hi, &key, NULL, &val);
+        all_entries[i] = (BlockHashEntry*)val;
+        all_entries[i]->key = (const char*)key;
+        i++;
+    }
+
+    // Sort entries by tsLastUse
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count - i - 1; j++) {
+            if (all_entries[j]->tsLastUse > all_entries[j + 1]->tsLastUse) {
+                BlockHashEntry* temp = all_entries[j];
+                all_entries[j] = all_entries[j + 1];
+                all_entries[j + 1] = temp;
+            }
+        }
+    }
+
+    *num_oldest = count < 10 ? count : 10;
+    for (int i = 0; i < *num_oldest; i++) {
+        oldest_entries[i] = all_entries[i];
+    }
+
+    *num_newest = count < 10 ? count : 10;
+    for (int i = 0; i < *num_newest; i++) {
+        newest_entries[i] = all_entries[count - 1 - i];
+    }
+
+    apr_thread_mutex_unlock(blockHash.mutex);
 }

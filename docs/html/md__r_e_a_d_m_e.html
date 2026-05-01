@@ -108,7 +108,7 @@ To compile the module on Ubuntu 24.04, use the following commands:</h2>
 <li>apt install libmysqlclient-dev</li>
 <li>git clone <a href="#" onclick="location.href='mai'+'lto:'+'git'+'@g'+'ith'+'ub'+'.co'+'m'; return false;">git@g<span class="obfuscator">.nosp@m.</span>ithu<span class="obfuscator">.nosp@m.</span>b.com</a>:django15wattnet/ModApacheDeny_15Watt.git</li>
 <li>cd ModApacheDeny_15Watt/src</li>
-<li><span class="tt">sudo apxs -I/usr/include/mysql -L/usr/lib/aarch64-linux-gnu -lmysqlclient -lz  -lzstd -lssl -lcrypto -lresolv -lm -n modApacheDeny_15Watt -I /lib/aarch64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -i -a -c modApacheDeny_15Watt.c checkIpAddr.c loadUserAgents.c loadUserAgentsWhiteList.c loadIpNetworks.c functionsString.c shouldUserAgentBeBlocked.c blockHash.c</span></li>
+<li><span class="tt">sudo apxs -I/usr/include/mysql -L/usr/lib/aarch64-linux-gnu -lmysqlclient -lz  -lzstd -lssl -lcrypto -lresolv -lm -n modApacheDeny_15Watt -I /lib/aarch64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -i -a -c modApacheDeny_15Watt.c checkIpAddr.c loadUserAgents.c loadUserAgentsWhiteList.c loadIpNetworks.c functionsString.c shouldUserAgentBeBlocked.c blockHash.c status.c</span></li>
 </ul>
 <p>This also installs the module to Apache.</p>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
@@ -186,6 +186,12 @@ User Agent whitelist  </td><td class="markdownTableBodyNone"></td><td class="mar
 <td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">#Abc#  </td><td class="markdownTableBodyNone">Matches any user agent exactly 'Abc'  </td></tr>
 </table>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+Endpoint for status information</h1>
+<p>The module provides an endpoint to get the number of entries, the 10 newest and oldest in the blockHash as a JSON-structure. \ To enable this endpoint, add the following configuration to your Apache configuration file: </p><div class="fragment"><div class="line">&lt;Location /yourStatusEndpoint&gt;</div>
+<div class="line">  SetHandler mod_apache_deny_15watt_status</div>
+<div class="line">  . . .</div>
+<div class="line">&lt;/Location&gt;</div>
+</div><!-- fragment --> <h1 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 Version history</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -201,9 +207,11 @@ Version history</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">0.2.1  </td><td class="markdownTableBodyNone">2026-01-28  </td><td class="markdownTableBodyNone">Completion of the documentation  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">0.3.0  </td><td class="markdownTableBodyNone">2026-04-27  </td><td class="markdownTableBodyNone">Added support for allowed combinations of ip-address and user agent by hash to speed up access checks  </td></tr>
+<td class="markdownTableBodyNone">0.3.0  </td><td class="markdownTableBodyNone">2026-04-27  </td><td class="markdownTableBodyNone">Added support for allowed combinations of ip-address and user agent by a hash to speed up access checks  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">0.4.0  </td><td class="markdownTableBodyNone">2026-05-01  </td><td class="markdownTableBodyNone">Added a status endpoint to get the number of entries, the 10 newest and oldest in the blockHash asa JSON-structure  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
 Future plans</h1>
 <ul>
 <li><strike>add whitelist user agents (for example for Let's encrypt bot)</strike></li>
@@ -216,15 +224,15 @@ Future plans</h1>
 <li>add reload of blocked entries without apache restart</li>
 <li>add machine-readable log format</li>
 <li>add logging statistics</li>
-<li>add a temporary caching of blocked entries to reduce search load (apr_hash_*)<ul>
-<li>the keys can be ip addresses or user agents</li>
+<li><strike>add a temporary caching of blocked entries to reduce search load (apr_hash_*)</strike><ul>
+<li><strike>the keys can be ip addresses or user agents</strike></li>
 </ul>
 </li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 License</h1>
 <p>Apache License Version 2.0, January 2004 \ <a href="http://www.apache.org/licenses/">http://www.apache.org/licenses/</a></p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
 Author</h1>
 <p><a href="https://thomas.siemion.photography/">Thomas Siemion</a> \ django15Wattnet: <a href="https://github.com/django15wattnet/">https://github.com/django15wattnet/</a> \ Email: <a href="modapachedeny@15watt.net">modapachedeny@15watt.net</a> </p>
 </div></div><!-- contents -->

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['version_20history_0',['Version history',['../md__r_e_a_d_m_e.html#autotoc_md9',1,'']]]
+  ['ubuntu_2024_2004_20use_20the_20following_20commands_3a_0',['To compile the module on Ubuntu 24.04, use the following commands:',['../md__r_e_a_d_m_e.html#autotoc_md3',1,'']]],
+  ['use_20the_20following_20commands_3a_1',['To compile the module on Ubuntu 24.04, use the following commands:',['../md__r_e_a_d_m_e.html#autotoc_md3',1,'']]]
 ];

@@ -1,4 +1,5 @@
 #include "modApacheDeny_15Watt.h"
+#include "status.h"
 
 #include "blockHash.h"
 #include "loadUserAgentsWhiteList.h"
@@ -134,7 +135,7 @@ module AP_MODULE_DECLARE_DATA modApacheDeny_15Watt_module =
  * The configuration is read in.
  * Sets default values if no configuration was provided.
  */
-int handlerServerConfig(
+int serverConfigHandler(
     apr_pool_t *pconf,
     apr_pool_t *plog,
     apr_pool_t *ptemp,
@@ -242,9 +243,10 @@ static void register_hooks(apr_pool_t *pool)
     /* Create a hook in the request handler, so we get called when a request arrives */
     static const char * const as_late_as_default[] = { "default-handler", NULL };
     ap_hook_handler(requestHandler, NULL, NULL, APR_HOOK_FIRST);
+    ap_hook_handler(statusHandler, NULL, NULL, APR_HOOK_MIDDLE);
 
     /* Create a hook in the server configuration phase, so we can read our configuration */
-    ap_hook_post_config(handlerServerConfig, NULL, NULL, APR_HOOK_MIDDLE);
+    ap_hook_post_config(serverConfigHandler, NULL, NULL, APR_HOOK_MIDDLE);
 }
 
 

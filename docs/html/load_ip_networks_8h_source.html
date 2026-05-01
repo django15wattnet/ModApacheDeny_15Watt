@@ -91,34 +91,30 @@ $(function(){initNavTree('load_ip_networks_8h_source.html','',''); });
   <div class="headertitle"><div class="title">loadIpNetworks.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// Created by Thomas Siemion on 19.12.25.</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#ifndef MODAPACHEDENY_15WATT_LOADIPNETWORKS_H</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#define MODAPACHEDENY_15WATT_LOADIPNETWORKS_H</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;checkIpAddr.h&quot;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;modApacheDeny_15Watt.h&quot;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keywordtype">int</span> loadIpNetworks(</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keyword">const</span> <a class="code hl_struct" href="struct_module_config.html">ModuleConfig</a> *moduleConfig,</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <a class="code hl_struct" href="struct_module_data_hostnames.html">ModuleDataHostnames</a> **dataHostnames,</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <a class="code hl_struct" href="struct_module_data_ip_v4.html">ModuleDataIpV4</a> **dataIpV4,</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <a class="code hl_struct" href="struct_module_data_ip_v6.html">ModuleDataIpV6</a> **dataIpV6,</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <a class="code hl_struct" href="struct_module_data_net_info_ip_v4.html">ModuleDataNetInfoIpV4</a> **dataNetInfoIpV4,</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <a class="code hl_struct" href="struct_module_data_net_info_ip_v6.html">ModuleDataNetInfoIpV6</a> **dataNetInfoIpV6,</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    apr_pool_t *pool,</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">const</span> server_rec *serverRec</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>);</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#endif </span><span class="comment">//MODAPACHEDENY_15WATT_LOADIPNETWORKS_H</span></div>
-<div class="ttc" id="astruct_module_config_html"><div class="ttname"><a href="struct_module_config.html">ModuleConfig</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:32</div></div>
-<div class="ttc" id="astruct_module_data_hostnames_html"><div class="ttname"><a href="struct_module_data_hostnames.html">ModuleDataHostnames</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:98</div></div>
-<div class="ttc" id="astruct_module_data_ip_v4_html"><div class="ttname"><a href="struct_module_data_ip_v4.html">ModuleDataIpV4</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:80</div></div>
-<div class="ttc" id="astruct_module_data_ip_v6_html"><div class="ttname"><a href="struct_module_data_ip_v6.html">ModuleDataIpV6</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:86</div></div>
-<div class="ttc" id="astruct_module_data_net_info_ip_v4_html"><div class="ttname"><a href="struct_module_data_net_info_ip_v4.html">ModuleDataNetInfoIpV4</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:74</div></div>
-<div class="ttc" id="astruct_module_data_net_info_ip_v6_html"><div class="ttname"><a href="struct_module_data_net_info_ip_v6.html">ModuleDataNetInfoIpV6</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:92</div></div>
+<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef MODAPACHEDENY_15WATT_LOADIPNETWORKS_H</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define MODAPACHEDENY_15WATT_LOADIPNETWORKS_H</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &quot;checkIpAddr.h&quot;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;modApacheDeny_15Watt.h&quot;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="keywordtype">int</span> loadIpNetworks(</div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>    <span class="keyword">const</span> <a class="code hl_struct" href="struct_module_config.html">ModuleConfig</a> *moduleConfig,</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>    <a class="code hl_struct" href="struct_module_data_hostnames.html">ModuleDataHostnames</a> **dataHostnames,</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <a class="code hl_struct" href="struct_module_data_ip_v4.html">ModuleDataIpV4</a> **dataIpV4,</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <a class="code hl_struct" href="struct_module_data_ip_v6.html">ModuleDataIpV6</a> **dataIpV6,</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <a class="code hl_struct" href="struct_module_data_net_info_ip_v4.html">ModuleDataNetInfoIpV4</a> **dataNetInfoIpV4,</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <a class="code hl_struct" href="struct_module_data_net_info_ip_v6.html">ModuleDataNetInfoIpV6</a> **dataNetInfoIpV6,</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    apr_pool_t *pool,</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keyword">const</span> server_rec *serverRec</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>);</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#endif </span><span class="comment">//MODAPACHEDENY_15WATT_LOADIPNETWORKS_H</span></div>
+<div class="ttc" id="astruct_module_config_html"><div class="ttname"><a href="struct_module_config.html">ModuleConfig</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:28</div></div>
+<div class="ttc" id="astruct_module_data_hostnames_html"><div class="ttname"><a href="struct_module_data_hostnames.html">ModuleDataHostnames</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:94</div></div>
+<div class="ttc" id="astruct_module_data_ip_v4_html"><div class="ttname"><a href="struct_module_data_ip_v4.html">ModuleDataIpV4</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:76</div></div>
+<div class="ttc" id="astruct_module_data_ip_v6_html"><div class="ttname"><a href="struct_module_data_ip_v6.html">ModuleDataIpV6</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:82</div></div>
+<div class="ttc" id="astruct_module_data_net_info_ip_v4_html"><div class="ttname"><a href="struct_module_data_net_info_ip_v4.html">ModuleDataNetInfoIpV4</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:70</div></div>
+<div class="ttc" id="astruct_module_data_net_info_ip_v6_html"><div class="ttname"><a href="struct_module_data_net_info_ip_v6.html">ModuleDataNetInfoIpV6</a></div><div class="ttdef"><b>Definition</b> modApacheDeny_15Watt.h:88</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

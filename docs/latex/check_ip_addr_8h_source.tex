@@ -2,51 +2,47 @@
 \hypertarget{check_ip_addr_8h_source}{}\label{check_ip_addr_8h_source}\index{src/checkIpAddr.h@{src/checkIpAddr.h}}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{00001\ \textcolor{comment}{//}}
-\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ Thomas\ Siemion\ on\ 02.12.25.}}
-\DoxyCodeLine{00003\ \textcolor{comment}{//}}
-\DoxyCodeLine{00004\ }
-\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#ifndef\ MODAPACHEDENY\_15WATT\_CHECKIPADDR\_H}}
-\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#define\ MODAPACHEDENY\_15WATT\_CHECKIPADDR\_H}}
-\DoxyCodeLine{00007\ }
-\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <string.h>}}
-\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
-\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
-\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <regex.h>}}
-\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <arpa/inet.h>}}
-\DoxyCodeLine{00013\ }
-\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ addressType\_Unknown\ (-\/1)}}
-\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ addressType\_IPv4\ \ \ \ \ \ 1}}
-\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ addressType\_IPv6\ \ \ \ \ \ 2}}
-\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ addressType\_CidrIPv4\ \ 3}}
-\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ addressType\_CidrIPv6\ \ 4}}
-\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ addressType\_Hostname\ \ 5}}
-\DoxyCodeLine{00020\ }
-\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ addressType\_RegExHostname\ "{}\string^[A-\/Za-\/z0-\/9]([A-\/Za-\/z0-\/9-\/]\{0,61\}[A-\/Za-\/z0-\/9])?(\(\backslash\)\(\backslash\).[A-\/Za-\/z0-\/9]([A-\/Za-\/z0-\/9-\/]\{0,61\}[A-\/Za-\/z0-\/9])?)*\$"{}}}
-\DoxyCodeLine{00022\ }
-\DoxyCodeLine{00023\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv4\ network\ information\ */}}
-\DoxyCodeLine{00024\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00025\ \ \ \ \ uint32\_t\ network;}
-\DoxyCodeLine{00026\ \ \ \ \ uint32\_t\ mask;}
-\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *cidr;}
-\DoxyCodeLine{00028\ \}\ \doxymbox{\hyperlink{struct_net_info_ip_v4}{NetInfoIpV4}};}
-\DoxyCodeLine{00029\ }
-\DoxyCodeLine{00030\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv6\ network\ information\ */}}
-\DoxyCodeLine{00031\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
-\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{struct\ }in6\_addr\ net\_addr6;}
-\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{int}\ full\_bytes;}
-\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{int}\ remaining\_bits;}
-\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ mask;}
-\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *cidr;}
-\DoxyCodeLine{00037\ \}\ \doxymbox{\hyperlink{struct_net_info_ip_v6}{NetInfoIpV6}};}
-\DoxyCodeLine{00038\ }
-\DoxyCodeLine{00039\ }
-\DoxyCodeLine{00040\ \textcolor{keywordtype}{int}\ detectIpFamily(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *ip);}
-\DoxyCodeLine{00041\ \textcolor{keywordtype}{int}\ detectAddressType(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *addr);}
-\DoxyCodeLine{00042\ \textcolor{keywordtype}{int}\ compileIpV4Cidr(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *cidr,\ \doxymbox{\hyperlink{struct_net_info_ip_v4}{NetInfoIpV4}}\ *netInfoIpV4);}
-\DoxyCodeLine{00043\ \textcolor{keywordtype}{int}\ compileIpV6Cidr(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *cidr,\ \doxymbox{\hyperlink{struct_net_info_ip_v6}{NetInfoIpV6}}\ *netInfoIpV6);}
-\DoxyCodeLine{00044\ \textcolor{keywordtype}{int}\ isIpV6InNetwork(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *ipV6,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{struct_net_info_ip_v6}{NetInfoIpV6}}\ *netInfoIpV6);}
-\DoxyCodeLine{00045\ }
-\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MODAPACHEDENY\_15WATT\_CHECKIPADDR\_H}}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ MODAPACHEDENY\_15WATT\_CHECKIPADDR\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ MODAPACHEDENY\_15WATT\_CHECKIPADDR\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <stdlib.h>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <regex.h>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <arpa/inet.h>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#define\ addressType\_Unknown\ (-\/1)}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#define\ addressType\_IPv4\ \ \ \ \ \ 1}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#define\ addressType\_IPv6\ \ \ \ \ \ 2}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ addressType\_CidrIPv4\ \ 3}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#define\ addressType\_CidrIPv6\ \ 4}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ addressType\_Hostname\ \ 5}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ addressType\_RegExHostname\ "{}\string^[A-\/Za-\/z0-\/9]([A-\/Za-\/z0-\/9-\/]\{0,61\}[A-\/Za-\/z0-\/9])?(\(\backslash\)\(\backslash\).[A-\/Za-\/z0-\/9]([A-\/Za-\/z0-\/9-\/]\{0,61\}[A-\/Za-\/z0-\/9])?)*\$"{}}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv4\ network\ information\ */}}
+\DoxyCodeLine{00020\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00021\ \ \ \ \ uint32\_t\ network;}
+\DoxyCodeLine{00022\ \ \ \ \ uint32\_t\ mask;}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *cidr;}
+\DoxyCodeLine{00024\ \}\ \doxymbox{\hyperlink{struct_net_info_ip_v4}{NetInfoIpV4}};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{comment}{/*\ Structure\ to\ hold\ IPv6\ network\ information\ */}}
+\DoxyCodeLine{00027\ \textcolor{keyword}{typedef}\ \textcolor{keyword}{struct\ }\{}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{struct\ }in6\_addr\ net\_addr6;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{int}\ full\_bytes;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{int}\ remaining\_bits;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ mask;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *cidr;}
+\DoxyCodeLine{00033\ \}\ \doxymbox{\hyperlink{struct_net_info_ip_v6}{NetInfoIpV6}};}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{keywordtype}{int}\ detectIpFamily(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *ip);}
+\DoxyCodeLine{00037\ \textcolor{keywordtype}{int}\ detectAddressType(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *addr);}
+\DoxyCodeLine{00038\ \textcolor{keywordtype}{int}\ compileIpV4Cidr(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *cidr,\ \doxymbox{\hyperlink{struct_net_info_ip_v4}{NetInfoIpV4}}\ *netInfoIpV4);}
+\DoxyCodeLine{00039\ \textcolor{keywordtype}{int}\ compileIpV6Cidr(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *cidr,\ \doxymbox{\hyperlink{struct_net_info_ip_v6}{NetInfoIpV6}}\ *netInfoIpV6);}
+\DoxyCodeLine{00040\ \textcolor{keywordtype}{int}\ isIpV6InNetwork(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}\ *ipV6,\ \textcolor{keyword}{const}\ \doxymbox{\hyperlink{struct_net_info_ip_v6}{NetInfoIpV6}}\ *netInfoIpV6);}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//MODAPACHEDENY\_15WATT\_CHECKIPADDR\_H}}
 
 \end{DoxyCode}

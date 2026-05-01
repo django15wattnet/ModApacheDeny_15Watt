@@ -17,7 +17,7 @@ At this Moment the module is only tested on Ubuntu 24.\+04 and Apache 2.\+4.\+x,
 \item apt install libmysqlclient-\/dev
 \item git clone \href{mailto:git@github.com}{\texttt{git@github.\+com}}:\+django15wattnet/\+\+Mod\+Apache\+Deny\+\_\+15\+Watt.\+git
 \item cd Mod\+Apache\+Deny\+\_\+15\+Watt/\+src
-\item {\ttfamily sudo apxs -\/I/\+usr/\+include/\+mysql -\/L/\+usr/\+lib/\+aarch64-\/linux-\/gnu -\/lmysqlclient -\/lz -\/lzstd -\/lssl -\/lcrypto -\/lresolv -\/lm -\/n mod\+Apache\+Deny\+\_\+15\+Watt -\/I /\+lib/\+aarch64-\/linux-\/gnu -\/Wl,-\/rpath,/\+usr/\+lib/\+x86\+\_\+64-\/linux-\/gnu -\/i -\/a -\/c mod\+Apache\+Deny\+\_\+15\+Watt.\+c check\+Ip\+Addr.\+c load\+User\+Agents.\+c load\+User\+Agents\+White\+List.\+c load\+Ip\+Networks.\+c functions\+String.\+c should\+User\+Agent\+Be\+Blocked.\+c block\+Hash.\+c}
+\item {\ttfamily sudo apxs -\/I/\+usr/\+include/\+mysql -\/L/\+usr/\+lib/\+aarch64-\/linux-\/gnu -\/lmysqlclient -\/lz -\/lzstd -\/lssl -\/lcrypto -\/lresolv -\/lm -\/n mod\+Apache\+Deny\+\_\+15\+Watt -\/I /\+lib/\+aarch64-\/linux-\/gnu -\/Wl,-\/rpath,/\+usr/\+lib/\+x86\+\_\+64-\/linux-\/gnu -\/i -\/a -\/c mod\+Apache\+Deny\+\_\+15\+Watt.\+c check\+Ip\+Addr.\+c load\+User\+Agents.\+c load\+User\+Agents\+White\+List.\+c load\+Ip\+Networks.\+c functions\+String.\+c should\+User\+Agent\+Be\+Blocked.\+c block\+Hash.\+c status.\+c}
 \end{DoxyItemize}
 
 This also installs the module to Apache.\hypertarget{md__r_e_a_d_m_e_autotoc_md4}{}\doxysubsection{\texorpdfstring{Starting the server in debug mode}{Starting the server in debug mode}}\label{md__r_e_a_d_m_e_autotoc_md4}
@@ -75,7 +75,16 @@ User Agent whitelist  &&\\
 &Abc\#  &Matches any user agent ending with \textquotesingle{}Abc\textquotesingle{}  \\
 &\+\#\+Abc\#  &Matches any user agent exactly \textquotesingle{}Abc\textquotesingle{}  \\
 \end{DoxyTable}
-\hypertarget{md__r_e_a_d_m_e_autotoc_md9}{}\doxysection{\texorpdfstring{Version history}{Version history}}\label{md__r_e_a_d_m_e_autotoc_md9}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md9}{}\doxysection{\texorpdfstring{Endpoint for status information}{Endpoint for status information}}\label{md__r_e_a_d_m_e_autotoc_md9}
+The module provides an endpoint to get the number of entries, the 10 newest and oldest in the block\+Hash as a JSON-\/structure. \textbackslash{} To enable this endpoint, add the following configuration to your Apache configuration file:\+ 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{<Location\ /yourStatusEndpoint>}
+\DoxyCodeLine{\ \ SetHandler\ mod\_apache\_deny\_15watt\_status}
+\DoxyCodeLine{\ \ .\ .\ .}
+\DoxyCodeLine{</Location>}
+
+\end{DoxyCode}
+ \hypertarget{md__r_e_a_d_m_e_autotoc_md10}{}\doxysection{\texorpdfstring{Version history}{Version history}}\label{md__r_e_a_d_m_e_autotoc_md10}
 
 \begin{DoxyTable}{3}{}{}{1}
 \SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Version  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Date  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Description  \\
@@ -84,9 +93,10 @@ User Agent whitelist  &&\\
 0.\+1.\+1  &2026-\/01-\/18  &Completion of the documentation  \\
 0.\+2.\+0  &2026-\/01-\/23  &Added support for user agent whitelisted  \\
 0.\+2.\+1  &2026-\/01-\/28  &Completion of the documentation  \\
-0.\+3.\+0  &2026-\/04-\/27  &Added support for allowed combinations of ip-\/address and user agent by hash to speed up access checks  \\
+0.\+3.\+0  &2026-\/04-\/27  &Added support for allowed combinations of ip-\/address and user agent by a hash to speed up access checks  \\
+0.\+4.\+0  &2026-\/05-\/01  &Added a status endpoint to get the number of entries, the 10 newest and oldest in the block\+Hash asa JSON-\/structure  \\
 \end{DoxyTable}
-\hypertarget{md__r_e_a_d_m_e_autotoc_md10}{}\doxysection{\texorpdfstring{Future plans}{Future plans}}\label{md__r_e_a_d_m_e_autotoc_md10}
+\hypertarget{md__r_e_a_d_m_e_autotoc_md11}{}\doxysection{\texorpdfstring{Future plans}{Future plans}}\label{md__r_e_a_d_m_e_autotoc_md11}
 
 \begin{DoxyItemize}
 \item \sout{add whitelist user agents (for example for Let\textquotesingle{}s encrypt bot)}
@@ -99,10 +109,10 @@ User Agent whitelist  &&\\
 \item add reload of blocked entries without apache restart
 \item add machine-\/readable log format
 \item add logging statistics
-\item add a temporary caching of blocked entries to reduce search load (apr\+\_\+hash\+\_\+\texorpdfstring{$\ast$}{*})
+\item \sout{add a temporary caching of blocked entries to reduce search load (apr\+\_\+hash\+\_\+\texorpdfstring{$\ast$}{*})}
 \begin{DoxyItemize}
-\item the keys can be ip addresses or user agents
+\item \sout{the keys can be ip addresses or user agents}
 \end{DoxyItemize}
-\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md11}{}\doxysection{\texorpdfstring{License}{License}}\label{md__r_e_a_d_m_e_autotoc_md11}
-Apache License Version 2.\+0, January 2004 \textbackslash{} \href{http://www.apache.org/licenses/}{\texttt{http:\+/\+/\+www.\+apache.\+org/\+licenses/\+}}\hypertarget{md__r_e_a_d_m_e_autotoc_md12}{}\doxysection{\texorpdfstring{Author}{Author}}\label{md__r_e_a_d_m_e_autotoc_md12}
+\end{DoxyItemize}\hypertarget{md__r_e_a_d_m_e_autotoc_md12}{}\doxysection{\texorpdfstring{License}{License}}\label{md__r_e_a_d_m_e_autotoc_md12}
+Apache License Version 2.\+0, January 2004 \textbackslash{} \href{http://www.apache.org/licenses/}{\texttt{http:\+/\+/\+www.\+apache.\+org/\+licenses/\+}}\hypertarget{md__r_e_a_d_m_e_autotoc_md13}{}\doxysection{\texorpdfstring{Author}{Author}}\label{md__r_e_a_d_m_e_autotoc_md13}
 \href{https://thomas.siemion.photography/}{\texttt{Thomas Siemion}} \textbackslash{} django15\+Wattnet:\+ \href{https://github.com/django15wattnet/}{\texttt{https:\+/\+/\+github.\+com/\+django15wattnet/\+}} \textbackslash{} Email:\+ \href{modapachedeny@15watt.net}{\texttt{modapachedeny@15watt.\+net}} 
