@@ -29,40 +29,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d577fe5-878f-4603-92af-67c2e4c8ce1b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/status.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/status.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/block_hash_8h_source.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/block_hash_8h_source.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/check_ip_addr_8h_source.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/check_ip_addr_8h_source.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/dir_68267d1309a1af8e8297ef4c3efbcdba.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/dir_68267d1309a1af8e8297ef4c3efbcdba.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/dir_68267d1309a1af8e8297ef4c3efbcdba.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/dir_68267d1309a1af8e8297ef4c3efbcdba.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/doxygen_crawl.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/doxygen_crawl.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/files.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/files.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/load_ip_networks_8h_source.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/load_ip_networks_8h_source.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/load_user_agents_8h_source.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/load_user_agents_8h_source.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/load_user_agents_white_list_8h_source.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/load_user_agents_white_list_8h_source.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/md__r_e_a_d_m_e.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/md__r_e_a_d_m_e.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/mod_apache_deny__15_watt_8h_source.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/mod_apache_deny__15_watt_8h_source.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/navtreeindex0.js" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/navtreeindex0.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/should_user_agent_be_blocked_8h_source.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/should_user_agent_be_blocked_8h_source.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/html/struct_block_hash_entry.html" beforeDir="false" afterPath="$PROJECT_DIR$/docs/html/struct_block_hash_entry.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/block_hash_8h_source.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/block_hash_8h_source.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/check_ip_addr_8h_source.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/check_ip_addr_8h_source.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/files.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/files.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/load_ip_networks_8h_source.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/load_ip_networks_8h_source.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/load_user_agents_8h_source.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/load_user_agents_8h_source.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/load_user_agents_white_list_8h_source.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/load_user_agents_white_list_8h_source.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/md__r_e_a_d_m_e.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/md__r_e_a_d_m_e.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/mod_apache_deny__15_watt_8h_source.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/mod_apache_deny__15_watt_8h_source.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/refman.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/refman.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/should_user_agent_be_blocked_8h_source.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/should_user_agent_be_blocked_8h_source.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/latex/struct_block_hash_entry.tex" beforeDir="false" afterPath="$PROJECT_DIR$/docs/latex/struct_block_hash_entry.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/blockHash.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/blockHash.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/blockHash.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/blockHash.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modApacheDeny_15Watt.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/modApacheDeny_15Watt.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +122,7 @@
       <option name="presentableId" value="Default" />
       <updated>1777189291434</updated>
       <workItem from="1777300897886" duration="2595000" />
-      <workItem from="1777636233189" duration="8503000" />
+      <workItem from="1777636233189" duration="12324000" />
     </task>
     <servers />
   </component>

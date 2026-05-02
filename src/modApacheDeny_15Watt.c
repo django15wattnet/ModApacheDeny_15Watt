@@ -311,7 +311,8 @@ static int requestHandler(request_rec *requestRec)
         }
         snprintf(userAgentKey, sizeof(userAgentKey), "%s|%s", userAgent, requestRec->useragent_ip);
 
-        if (NULL != blockHashGetEntry(userAgentKey)) {
+        const BlockHashEntry *entry = blockHashGetEntry(userAgentKey);
+        if (NULL != entry) {
             ap_log_rerror(
                 APLOG_MARK,
                 APLOG_INFO,
@@ -321,6 +322,8 @@ static int requestHandler(request_rec *requestRec)
                 userAgent,
                 requestRec->useragent_ip
             );
+
+            blockHashAddEntry(userAgentKey, entry->blockType, entry->doBlock, requestRec->pool);
 
             return DECLINED;
         }
