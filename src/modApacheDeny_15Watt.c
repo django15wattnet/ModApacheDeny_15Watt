@@ -323,6 +323,7 @@ static int requestHandler(request_rec *requestRec)
                 requestRec->useragent_ip
             );
 
+            // Update entry->tsLastUse
             blockHashAddEntry(userAgentKey, entry->blockType, entry->doBlock, requestRec->pool);
 
             return DECLINED;
