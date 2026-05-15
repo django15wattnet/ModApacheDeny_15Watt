@@ -21,6 +21,7 @@ int statusHandler(request_rec *r)
 
     ap_rputs("{\n", r);
     ap_rprintf(r, "  \"blockHashEntryCount\": %d,\n", blockHashGetEntryCount());
+    ap_rprintf(r, "  \"blockHashAddress\": \"0x%lx\",\n", (unsigned long)(void *)blockHash.blockHash);
 
     BlockHashEntry* oldest_entries[10];
     BlockHashEntry* newest_entries[10];

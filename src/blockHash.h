@@ -3,7 +3,8 @@
 #include <stdbool.h>
 #include <apr_pools.h>
 #include <apr_hash.h>
-#include <apr_thread_mutex.h>
+#include <apr_proc_mutex.h>
+#include <apr_shm.h>
 #include <httpd.h>
 
 // List of reasons an entry has been blocked
@@ -33,7 +34,8 @@ typedef struct {
     apr_hash_t         *blockHash;
     int                maxEntries;
     apr_pool_t         *serverPool;
-    apr_thread_mutex_t *mutex;
+    apr_proc_mutex_t   *mutex;
+    apr_shm_t          *shm;
 } BlockHash;
 
 extern BlockHash blockHash;

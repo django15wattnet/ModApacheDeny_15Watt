@@ -1,5 +1,7 @@
 #include <apr_hash.h>
 #include <apr_strings.h>
+#include <apr_shm.h>
+#include <apr_proc_mutex.h>
 #include <stdbool.h>
 #include <limits.h>
 #include <time.h>
@@ -44,14 +46,46 @@ BlockHash blockHash;
  */
 bool blockHashSetUpStore(const server_rec *serverRec, const int maxEntries)
 {
-    blockHash.blockHash = apr_hash_make(serverRec->process->pool);
-    if (NULL == blockHash.blockHash) {
+    apr_pool_t *processPool = serverRec->process->pool;
+
+    // Create shared memory segment
+    apr_status_t status = apr_shm_create(&blockHash.shm, sizeof(BlockHash), "/tmp/blockhash_shm", processPool);
+    if (status != APR_SUCCESS) {
+        ap_log_error(
+            APLOG_MARK,
+            APLOG_ERR,
+            status,
+            serverRec,
+            "blockHashSetUpStore: apr_shm_create failed"
+        );
+        return false;
+    }
+
+    // Initialize process mutex for inter-process synchronization
+    status = apr_proc_mutex_create(&blockHash.mutex, "/tmp/blockhash_mutex", APR_LOCK_DEFAULT, processPool);
+    if (status != APR_SUCCESS) {
+        ap_log_error(
+            APLOG_MARK,
+            APLOG_ERR,
+            status,
+            serverRec,
+            "blockHashSetUpStore: apr_proc_mutex_create failed"
+        );
+        return false;
+    }
+
+    // Get base address of shared memory
+    BlockHash *shared_hash = (BlockHash *)apr_shm_baseaddr_get(blockHash.shm);
+
+    // Initialize shared hash structure
+    shared_hash->blockHash = apr_hash_make(processPool);
+    if (NULL == shared_hash->blockHash) {
         ap_log_error(
             APLOG_MARK,
             APLOG_ERR,
             0,
             serverRec,
-            "blockHashSetUpStore failed"
+            "blockHashSetUpStore: apr_hash_make failed"
         );
         return false;
     }
@@ -61,25 +95,18 @@ bool blockHashSetUpStore(const server_rec *serverRec, const int maxEntries)
         APLOG_ERR,
         0,
         serverRec,
-        "blockHashSetUpStore adr = 0x%lx", (unsigned long)(void *)blockHash.blockHash
+        "blockHashSetUpStore: blockHash created at adr = 0x%lx", (unsigned long)(void *)shared_hash->blockHash
     );
 
+    shared_hash->maxEntries = maxEntries;
+    shared_hash->serverPool = processPool;
+    shared_hash->mutex = blockHash.mutex;
+    shared_hash->shm = blockHash.shm;
+
+    // Update global blockHash to point to shared memory structure
+    blockHash.blockHash = shared_hash->blockHash;
     blockHash.maxEntries = maxEntries;
-    blockHash.serverPool = serverRec->process->pool;
-
-    if (APR_SUCCESS != apr_thread_mutex_create(&blockHash.mutex, APR_THREAD_MUTEX_DEFAULT, blockHash.serverPool)) {
-
-        blockHash.blockHash = NULL;
-
-        ap_log_error(
-            APLOG_MARK,
-            APLOG_ERR,
-            0,
-            serverRec,
-            "blockHashSetUpStore: failed to create mutex"
-        );
-        return false;
-    }
+    blockHash.serverPool = processPool;
 
     return true;
 }
@@ -110,20 +137,20 @@ int blockHashAddEntry(
         return 1;
     }
 
-    apr_thread_mutex_lock(blockHash.mutex);
+    apr_proc_mutex_lock(blockHash.mutex);
 
     // Check if key is already in the block hash
     BlockHashEntry *entry = apr_hash_get(blockHash.blockHash, key, APR_HASH_KEY_STRING);
     if (entry != NULL) {
         entry->tsLastUse = time(NULL);
         apr_hash_set(blockHash.blockHash, key, APR_HASH_KEY_STRING, entry);
-        apr_thread_mutex_unlock(blockHash.mutex);
+        apr_proc_mutex_unlock(blockHash.mutex);
         return 2;
     }
 
     if (apr_hash_count(blockHash.blockHash) >= blockHash.maxEntries) {
         if (!blockHashRemoveOldestEntry()) {
-            apr_thread_mutex_unlock(blockHash.mutex);
+            apr_proc_mutex_unlock(blockHash.mutex);
             return 3;
         }
     }
@@ -144,7 +171,7 @@ int blockHashAddEntry(
     const char *keyCopy = apr_pstrdup(entryPool, key);
     apr_hash_set(blockHash.blockHash, keyCopy, APR_HASH_KEY_STRING, entry);
 
-    apr_thread_mutex_unlock(blockHash.mutex);
+    apr_proc_mutex_unlock(blockHash.mutex);
     return 4;
 }
 
@@ -161,9 +188,9 @@ BlockHashEntry *blockHashGetEntry(const char *key)
         return NULL;
     }
 
-    apr_thread_mutex_lock(blockHash.mutex);
+    apr_proc_mutex_lock(blockHash.mutex);
     BlockHashEntry *entry = apr_hash_get(blockHash.blockHash, key, APR_HASH_KEY_STRING);
-    apr_thread_mutex_unlock(blockHash.mutex);
+    apr_proc_mutex_unlock(blockHash.mutex);
     return entry;
 }
 
@@ -177,9 +204,9 @@ int blockHashGetEntryCount() {
         return -1;
     }
 
-    apr_thread_mutex_lock(blockHash.mutex);
+    apr_proc_mutex_lock(blockHash.mutex);
     const int count = (int)apr_hash_count(blockHash.blockHash);
-    apr_thread_mutex_unlock(blockHash.mutex);
+    apr_proc_mutex_unlock(blockHash.mutex);
     return count;
 }
 
@@ -254,11 +281,11 @@ void blockHashGetOldestAndNewestEntries(
         return;
     }
 
-    apr_thread_mutex_lock(blockHash.mutex);
+    apr_proc_mutex_lock(blockHash.mutex);
 
     const int count = apr_hash_count(blockHash.blockHash);
     if (count == 0) {
-        apr_thread_mutex_unlock(blockHash.mutex);
+        apr_proc_mutex_unlock(blockHash.mutex);
         return;
     }
 
@@ -294,5 +321,5 @@ void blockHashGetOldestAndNewestEntries(
         newest_entries[i] = all_entries[count - 1 - i];
     }
 
-    apr_thread_mutex_unlock(blockHash.mutex);
+    apr_proc_mutex_unlock(blockHash.mutex);
 }
