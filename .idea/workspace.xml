@@ -31,9 +31,7 @@
     <list default="true" id="3d577fe5-878f-4603-92af-67c2e4c8ce1b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/blockHash.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/blockHash.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/blockHash.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/blockHash.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/status.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/status.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +44,7 @@
   <component name="CopilotChats">
     <option name="panelChat">
       <chat>
-        <option name="activeSessionId" value="cbfece00-7001-4990-b3f4-d21adab2b9f6" />
+        <option name="activeSessionId" value="abfddd37-314c-4854-9595-df3e5ee8dfad" />
         <option name="sessions">
           <session>
             <option name="chatType" value="PANEL" />
@@ -60,6 +58,14 @@
           <session>
             <option name="chatType" value="PANEL" />
             <option name="id" value="cbfece00-7001-4990-b3f4-d21adab2b9f6" />
+            <option name="modeId" value="Agent" />
+            <option name="modelType" value="builtin_family" />
+            <option name="modelValue" value="gemini-2.5-pro" />
+            <option name="targetType" value="LOCAL" />
+          </session>
+          <session>
+            <option name="chatType" value="PANEL" />
+            <option name="id" value="abfddd37-314c-4854-9595-df3e5ee8dfad" />
             <option name="modeId" value="Agent" />
             <option name="modelType" value="builtin_family" />
             <option name="modelValue" value="gemini-2.5-pro" />
@@ -156,7 +162,8 @@
       <workItem from="1777723663443" duration="114000" />
       <workItem from="1777723810339" duration="1364000" />
       <workItem from="1778849466790" duration="580000" />
-      <workItem from="1778850094172" duration="1779000" />
+      <workItem from="1778850094172" duration="1896000" />
+      <workItem from="1778852028818" duration="8289000" />
     </task>
     <servers />
   </component>

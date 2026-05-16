@@ -107,6 +107,8 @@ static const command_rec modApacheDeny_15Watt_directives[] =
 
 /* ***************** */
 /* START Module data */
+static int blockHashInitialized = 0;  /* Flag to ensure blockHash is initialized only once */
+
 ModuleDataUserAgents  *moduleDataUserAgents          = NULL;
 ModuleDataUserAgents  *moduleDataUserAgentsWhiteList = NULL;
 ModuleDataHostnames   *moduleDataHostnames           = NULL;
@@ -134,6 +136,7 @@ module AP_MODULE_DECLARE_DATA modApacheDeny_15Watt_module =
 /**
  * The configuration is read in.
  * Sets default values if no configuration was provided.
+ * Initializes shared memory once in the parent process.
  */
 int serverConfigHandler(
     apr_pool_t *pconf,
@@ -144,8 +147,6 @@ int serverConfigHandler(
 {
     if (ap_state_query(AP_SQ_MAIN_STATE) == AP_SQ_MS_CREATE_PRE_CONFIG) {
         // Running syntax checks
-        // Set marker for not set allowEmptyUserAgent
-        // moduleConfig.allowEmptyUserAgent = -1;
         return OK;
     }
 
@@ -232,7 +233,20 @@ int serverConfigHandler(
         }
     }
 
-    blockHashSetUpStore(s, moduleConfig.maxAllowedHashEntries);
+    // Initialize shared memory once in the parent process
+    // This happens after configuration but before worker processes are forked
+    if (blockHashInitialized == 0) {
+        ap_log_error(
+            APLOG_MARK,
+            APLOG_NOTICE,
+            0,
+            s,
+            "modApacheDeny_15Watt: Initializing shared memory for blockHash"
+        );
+
+        blockHashSetUpStore(s, moduleConfig.maxAllowedHashEntries);
+        blockHashInitialized = 1;
+    }
 
     return OK;
 }
@@ -244,6 +258,7 @@ static void register_hooks(apr_pool_t *pool)
     static const char * const as_late_as_default[] = { "default-handler", NULL };
     ap_hook_handler(requestHandler, NULL, NULL, APR_HOOK_FIRST);
     ap_hook_handler(statusHandler, NULL, NULL, APR_HOOK_MIDDLE);
+
 
     /* Create a hook in the server configuration phase, so we can read our configuration */
     ap_hook_post_config(serverConfigHandler, NULL, NULL, APR_HOOK_MIDDLE);
