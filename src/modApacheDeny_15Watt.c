@@ -3,10 +3,37 @@
 
 #include "blockHash.h"
 #include "loadUserAgentsWhiteList.h"
+#include <errno.h>
+#include <limits.h>
+
+static void register_hooks(apr_pool_t *pool);
+static int requestHandler(request_rec *requestRec);
 
 /* ********************************** */
 /* START config / directives handlers */
 ModuleConfig moduleConfig;
+
+static int parseIntStrict(const char *arg, int minVal, int maxVal, int *outVal)
+{
+    if (NULL == arg || NULL == outVal) {
+        return 0;
+    }
+
+    errno = 0;
+    char *endPtr = NULL;
+    long parsed = strtol(arg, &endPtr, 10);
+
+    if (errno != 0 || endPtr == arg || *endPtr != '\0') {
+        return 0;
+    }
+
+    if (parsed < (long)minVal || parsed > (long)maxVal) {
+        return 0;
+    }
+
+    *outVal = (int)parsed;
+    return 1;
+}
 
 const char *setConfigDbHost(cmd_parms *cmd, void *cfg, const char *arg)
 {
@@ -28,7 +55,12 @@ const char *setConfigDbPwd(cmd_parms *cmd, void *cfg, const char *arg)
 
 const char *setConfigDbPort(cmd_parms *cmd, void *cfg, const char *arg)
 {
-    moduleConfig.dbPort = atoi(arg);
+    int parsedPort = 0;
+    if (!parseIntStrict(arg, 1, 65535, &parsedPort)) {
+        return "modApacheDeny_15Watt_dbPort must be an integer between 1 and 65535";
+    }
+
+    moduleConfig.dbPort = parsedPort;
     return NULL;
 }
 
@@ -78,10 +110,11 @@ const char *setConfigAllowedHash(cmd_parms *cmd, void *cfg, const char *arg)
 
 const char *setConfigMaxAllowedHashEntries(cmd_parms *cmd, void *cfg, const char *arg)
 {
-    const int val = atoi(arg);
-    if (val <= 0) {
+    int val = 0;
+    if (!parseIntStrict(arg, 1, INT_MAX, &val)) {
         return "modApacheDeny_15Watt_maxAllowedHashEntries must be a positive integer";
     }
+
     moduleConfig.maxAllowedHashEntries = val;
     return NULL;
 }
@@ -255,7 +288,6 @@ int serverConfigHandler(
 static void register_hooks(apr_pool_t *pool)
 {
     /* Create a hook in the request handler, so we get called when a request arrives */
-    static const char * const as_late_as_default[] = { "default-handler", NULL };
     ap_hook_handler(requestHandler, NULL, NULL, APR_HOOK_FIRST);
     ap_hook_handler(statusHandler, NULL, NULL, APR_HOOK_MIDDLE);
 
@@ -286,7 +318,7 @@ static int requestHandler(request_rec *requestRec)
     );
 
     if (
-        (NULL == userAgent || 1 == strcmp(userAgent, ""))
+        (NULL == userAgent || 0 == strcmp(userAgent, ""))
         &&
         DoNotAllowEmptyUserAgent == moduleConfig.allowEmptyUserAgent
     ) {

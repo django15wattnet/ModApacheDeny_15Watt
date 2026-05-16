@@ -98,9 +98,7 @@ typedef struct {
 
 /* @todo Struktur zum speichern von IpV6-Netzwerken */
 
-
-static void register_hooks(apr_pool_t *pool);
-static int requestHandler(request_rec *requestRec);
+// File-local handler prototypes are declared in modApacheDeny_15Watt.c.
 int serverConfigHandler(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, server_rec *s);
 
 #include "shouldUserAgentBeBlocked.h"

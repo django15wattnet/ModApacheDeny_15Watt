@@ -1,16 +1,26 @@
-#include <apr_hash.h>
-#include <apr_strings.h>
 #include <apr_shm.h>
 #include <apr_proc_mutex.h>
+#include <apr_errno.h>
+#include <apr_file_io.h>
 #include <stdbool.h>
 #include <limits.h>
 #include <time.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "blockHash.h"
 
 #include <httpd.h>
 #include <http_log.h>
 
-const char* BlockTypeStrings[] = {
+#define BLOCK_HASH_SHM_PATH "/tmp/modapachedeny_15watt_blockhash_shm"
+#define BLOCK_HASH_MUTEX_PATH "/tmp/modapachedeny_15watt_blockhash_mutex"
+#define BLOCK_HASH_MAX_CAPACITY 20000
+#define BLOCK_HASH_BUCKET_COUNT 4096
+#define BLOCK_HASH_KEY_MAX_LEN 255
+#define BLOCK_HASH_INDEX_NONE -1
+
+const char *BlockTypeStrings[] = {
     "Not Found",
     "None",
     "IPv4",
@@ -20,305 +30,427 @@ const char* BlockTypeStrings[] = {
     "User Agent"
 };
 
-// The hash
+// Global runtime handle (contains shm/mutex handles and a debug pointer to the shared store)
 BlockHash blockHash;
 
+typedef struct {
+    int inUse;
+    int next;
+    unsigned int keyHash;
+    int tsLastUse;
+    unsigned char doBlock;
+    unsigned char blockType;
+    char key[BLOCK_HASH_KEY_MAX_LEN + 1];
+} SharedBlockHashEntry;
 
-/**
- * Initializes the global block hash store.
- *
- * Creates a new APR hash table using the process pool of the given server record,
- * sets the maximum number of entries, and creates a thread mutex to protect
- * concurrent access from multiple threads (required for MPM Event).
- *
- * This function must be called once during the server configuration phase
- * (ap_hook_post_config) before any calls to blockHashAddEntry or blockHashGetEntry.
- * Calling it again will replace the existing hash with a new empty one.
- *
- * @param serverRec   Pointer to the server_rec. Its process pool is used as the
- *                    parent pool for the hash, the mutex, and all entry sub-pools.
- * @param maxEntries  Maximum number of entries the hash may hold. When this limit
- *                    is reached, the oldest entry (by tsLastUse) is removed before
- *                    a new one is inserted.
- *
- * @return true   on success.
- * @return false  if the hash table or the mutex could not be created.
- */
+// Shared-memory payload: fixed-size hash table with separate chaining.
+typedef struct {
+    int initialized;
+    int entryCount;
+    int maxEntries;
+    int buckets[BLOCK_HASH_BUCKET_COUNT];
+    SharedBlockHashEntry entries[BLOCK_HASH_MAX_CAPACITY];
+} SharedBlockHashStore;
+
+static SharedBlockHashStore *getSharedStore()
+{
+    if (NULL == blockHash.shm) {
+        return NULL;
+    }
+    return (SharedBlockHashStore *)apr_shm_baseaddr_get(blockHash.shm);
+}
+
+// Lightweight stable hash for key distribution across buckets.
+static unsigned int keyHashDjb2(const char *str)
+{
+    unsigned int hash = 5381U;
+    unsigned char c;
+
+    while ((c = (unsigned char)*str++) != 0U) {
+        hash = ((hash << 5U) + hash) + c;
+    }
+
+    return hash;
+}
+
+// Finds an entry index in the chained bucket list.
+static int findEntryIndex(
+    const SharedBlockHashStore *store,
+    const char *key,
+    const unsigned int hash,
+    int *bucketOut,
+    int *prevOut
+)
+{
+    const int bucket = (int)(hash % BLOCK_HASH_BUCKET_COUNT);
+    int prev = BLOCK_HASH_INDEX_NONE;
+    int idx = store->buckets[bucket];
+
+    while (idx != BLOCK_HASH_INDEX_NONE) {
+        const SharedBlockHashEntry *entry = &store->entries[idx];
+        if (entry->inUse && entry->keyHash == hash && 0 == strcmp(entry->key, key)) {
+            if (bucketOut != NULL) {
+                *bucketOut = bucket;
+            }
+            if (prevOut != NULL) {
+                *prevOut = prev;
+            }
+            return idx;
+        }
+        prev = idx;
+        idx = entry->next;
+    }
+
+    if (bucketOut != NULL) {
+        *bucketOut = bucket;
+    }
+    if (prevOut != NULL) {
+        *prevOut = BLOCK_HASH_INDEX_NONE;
+    }
+
+    return BLOCK_HASH_INDEX_NONE;
+}
+
+// Returns the first unused entry slot from the fixed entry array.
+static int findFreeEntryIndex(const SharedBlockHashStore *store)
+{
+    for (int i = 0; i < BLOCK_HASH_MAX_CAPACITY; i++) {
+        if (!store->entries[i].inUse) {
+            return i;
+        }
+    }
+    return BLOCK_HASH_INDEX_NONE;
+}
+
+// Unlinks and clears one entry from its bucket chain.
+static bool removeEntryByIndex(SharedBlockHashStore *store, const int index)
+{
+    if (index < 0 || index >= BLOCK_HASH_MAX_CAPACITY || !store->entries[index].inUse) {
+        return false;
+    }
+
+    const unsigned int hash = store->entries[index].keyHash;
+    const int bucket = (int)(hash % BLOCK_HASH_BUCKET_COUNT);
+
+    int prev = BLOCK_HASH_INDEX_NONE;
+    int cur = store->buckets[bucket];
+
+    while (cur != BLOCK_HASH_INDEX_NONE) {
+        if (cur == index) {
+            if (prev == BLOCK_HASH_INDEX_NONE) {
+                store->buckets[bucket] = store->entries[cur].next;
+            } else {
+                store->entries[prev].next = store->entries[cur].next;
+            }
+
+            memset(&store->entries[cur], 0, sizeof(SharedBlockHashEntry));
+            store->entries[cur].next = BLOCK_HASH_INDEX_NONE;
+            if (store->entryCount > 0) {
+                store->entryCount--;
+            }
+            return true;
+        }
+
+        prev = cur;
+        cur = store->entries[cur].next;
+    }
+
+    return false;
+}
+
 bool blockHashSetUpStore(const server_rec *serverRec, const int maxEntries)
 {
     apr_pool_t *processPool = serverRec->process->pool;
 
-    // Create shared memory segment
-    apr_status_t status = apr_shm_create(&blockHash.shm, sizeof(BlockHash), "/tmp/blockhash_shm", processPool);
+    int configuredMaxEntries = maxEntries;
+    if (configuredMaxEntries <= 0) {
+        configuredMaxEntries = 1;
+    }
+    if (configuredMaxEntries > BLOCK_HASH_MAX_CAPACITY) {
+        configuredMaxEntries = BLOCK_HASH_MAX_CAPACITY;
+    }
+
+    // Remove stale OS objects from older runs before creating fresh shm/mutex objects.
+    apr_shm_remove(BLOCK_HASH_SHM_PATH, processPool);
+    apr_file_remove(BLOCK_HASH_MUTEX_PATH, processPool);
+
+    apr_status_t status = apr_shm_create(
+        &blockHash.shm,
+        sizeof(SharedBlockHashStore),
+        BLOCK_HASH_SHM_PATH,
+        processPool
+    );
     if (status != APR_SUCCESS) {
-        ap_log_error(
-            APLOG_MARK,
-            APLOG_ERR,
-            status,
-            serverRec,
-            "blockHashSetUpStore: apr_shm_create failed"
-        );
+        ap_log_error(APLOG_MARK, APLOG_ERR, status, serverRec, "blockHashSetUpStore: apr_shm_create failed");
         return false;
     }
 
-    // Initialize process mutex for inter-process synchronization
-    status = apr_proc_mutex_create(&blockHash.mutex, "/tmp/blockhash_mutex", APR_LOCK_DEFAULT, processPool);
+    status = apr_proc_mutex_create(&blockHash.mutex, BLOCK_HASH_MUTEX_PATH, APR_LOCK_DEFAULT, processPool);
     if (status != APR_SUCCESS) {
-        ap_log_error(
-            APLOG_MARK,
-            APLOG_ERR,
-            status,
-            serverRec,
-            "blockHashSetUpStore: apr_proc_mutex_create failed"
-        );
+        ap_log_error(APLOG_MARK, APLOG_ERR, status, serverRec, "blockHashSetUpStore: apr_proc_mutex_create failed");
         return false;
     }
 
-    // Get base address of shared memory
-    BlockHash *shared_hash = (BlockHash *)apr_shm_baseaddr_get(blockHash.shm);
-
-    // Initialize shared hash structure
-    shared_hash->blockHash = apr_hash_make(processPool);
-    if (NULL == shared_hash->blockHash) {
-        ap_log_error(
-            APLOG_MARK,
-            APLOG_ERR,
-            0,
-            serverRec,
-            "blockHashSetUpStore: apr_hash_make failed"
-        );
+    SharedBlockHashStore *store = getSharedStore();
+    if (NULL == store) {
+        ap_log_error(APLOG_MARK, APLOG_ERR, 0, serverRec, "blockHashSetUpStore: shared memory base address is NULL");
         return false;
     }
+
+    // Initialize the in-shm store state.
+    memset(store, 0, sizeof(SharedBlockHashStore));
+    for (int i = 0; i < BLOCK_HASH_BUCKET_COUNT; i++) {
+        store->buckets[i] = BLOCK_HASH_INDEX_NONE;
+    }
+    for (int i = 0; i < BLOCK_HASH_MAX_CAPACITY; i++) {
+        store->entries[i].next = BLOCK_HASH_INDEX_NONE;
+    }
+
+    store->maxEntries = configuredMaxEntries;
+    store->entryCount = 0;
+    store->initialized = 1;
+
+    blockHash.blockHash = (void *)store;
+    blockHash.maxEntries = configuredMaxEntries;
+    blockHash.serverPool = processPool;
 
     ap_log_error(
         APLOG_MARK,
-        APLOG_ERR,
+        APLOG_NOTICE,
         0,
         serverRec,
-        "blockHashSetUpStore: blockHash created at adr = 0x%lx", (unsigned long)(void *)shared_hash->blockHash
+        "blockHashSetUpStore: shared blockHash initialized adr=0x%lx maxEntries=%d",
+        (unsigned long)(void *)blockHash.blockHash,
+        configuredMaxEntries
     );
-
-    shared_hash->maxEntries = maxEntries;
-    shared_hash->serverPool = processPool;
-    shared_hash->mutex = blockHash.mutex;
-    shared_hash->shm = blockHash.shm;
-
-    // Update global blockHash to point to shared memory structure
-    blockHash.blockHash = shared_hash->blockHash;
-    blockHash.maxEntries = maxEntries;
-    blockHash.serverPool = processPool;
 
     return true;
 }
 
+bool blockHashRemoveOldestEntry()
+{
+    SharedBlockHashStore *store = getSharedStore();
+    if (NULL == store || !store->initialized || store->entryCount == 0) {
+        return false;
+    }
 
-/**
- * Adds a new entry to the hash or updates an existing one.
- *
- * Returns:
- *  - 1 = the hash is not initialized
- *  - 2 = existing entry updated
- *  - 3 = error while removing the oldest entry (when maxEntries is reached)
- *  - 4 = new entry successfully added to the hash
- *
- * @param key
- * @param blockType
- * @param doBlock
- * @param parentPool
- * @return
- */
+    int oldestIndex = BLOCK_HASH_INDEX_NONE;
+    int oldestTs = INT_MAX;
+
+    for (int i = 0; i < BLOCK_HASH_MAX_CAPACITY; i++) {
+        if (!store->entries[i].inUse) {
+            continue;
+        }
+        if (store->entries[i].tsLastUse < oldestTs) {
+            oldestTs = store->entries[i].tsLastUse;
+            oldestIndex = i;
+        }
+    }
+
+    if (oldestIndex == BLOCK_HASH_INDEX_NONE) {
+        return false;
+    }
+
+    return removeEntryByIndex(store, oldestIndex);
+}
+
+BlockHashEntry *blockHashGetEntry(const char *key)
+{
+    if (NULL == key || NULL == blockHash.mutex) {
+        return NULL;
+    }
+
+    SharedBlockHashStore *store = getSharedStore();
+    if (NULL == store || !store->initialized) {
+        return NULL;
+    }
+
+    apr_proc_mutex_lock(blockHash.mutex);
+
+    const unsigned int hash = keyHashDjb2(key);
+    const int idx = findEntryIndex(store, key, hash, NULL, NULL);
+    if (idx == BLOCK_HASH_INDEX_NONE) {
+        apr_proc_mutex_unlock(blockHash.mutex);
+        return NULL;
+    }
+
+    // Return a thread-local snapshot so callers never hold pointers into mutable shm state.
+    static __thread BlockHashEntry outEntry;
+    outEntry.doBlock = store->entries[idx].doBlock != 0;
+    outEntry.blockType = (enum EnumBlockType)store->entries[idx].blockType;
+    outEntry.tsLastUse = store->entries[idx].tsLastUse;
+    outEntry.key = store->entries[idx].key;
+
+    apr_proc_mutex_unlock(blockHash.mutex);
+    return &outEntry;
+}
+
 int blockHashAddEntry(
     const char *key,
     const enum EnumBlockType blockType,
     const bool doBlock,
     apr_pool_t *parentPool)
 {
-    if (blockHash.blockHash == NULL) {
+    (void)parentPool;
+
+    if (NULL == key || NULL == blockHash.mutex) {
+        return 1;
+    }
+
+    SharedBlockHashStore *store = getSharedStore();
+    if (NULL == store || !store->initialized) {
         return 1;
     }
 
     apr_proc_mutex_lock(blockHash.mutex);
 
-    // Check if key is already in the block hash
-    BlockHashEntry *entry = apr_hash_get(blockHash.blockHash, key, APR_HASH_KEY_STRING);
-    if (entry != NULL) {
-        entry->tsLastUse = time(NULL);
-        apr_hash_set(blockHash.blockHash, key, APR_HASH_KEY_STRING, entry);
+    const unsigned int hash = keyHashDjb2(key);
+    int bucket = 0;
+    int prev = BLOCK_HASH_INDEX_NONE;
+    int idx = findEntryIndex(store, key, hash, &bucket, &prev);
+
+    if (idx != BLOCK_HASH_INDEX_NONE) {
+        // Entry exists: refresh last-use timestamp and policy data.
+        store->entries[idx].tsLastUse = (int)time(NULL);
+        store->entries[idx].doBlock = doBlock ? 1U : 0U;
+        store->entries[idx].blockType = (unsigned char)blockType;
         apr_proc_mutex_unlock(blockHash.mutex);
         return 2;
     }
 
-    if (apr_hash_count(blockHash.blockHash) >= blockHash.maxEntries) {
+    // Evict least-recently-used entry when configured capacity is reached.
+    if (store->entryCount >= store->maxEntries) {
         if (!blockHashRemoveOldestEntry()) {
             apr_proc_mutex_unlock(blockHash.mutex);
             return 3;
         }
     }
 
-    // Add new entry to the hash list — eigener Sub-Pool pro Eintrag
-    apr_pool_t *entryPool;
-    apr_pool_create(&entryPool, blockHash.serverPool);
+    idx = findFreeEntryIndex(store);
+    if (idx == BLOCK_HASH_INDEX_NONE) {
+        apr_proc_mutex_unlock(blockHash.mutex);
+        return 3;
+    }
 
-    entry = apr_palloc(entryPool, sizeof(BlockHashEntry));
+    SharedBlockHashEntry *entry = &store->entries[idx];
+    memset(entry, 0, sizeof(SharedBlockHashEntry));
 
-    entry->pool      = entryPool;
-    entry->doBlock   = doBlock;
-    entry->blockType = blockType;
-    entry->tsLastUse = time(NULL);
-    entry->key       = apr_pstrdup(entryPool, key);
+    entry->inUse = 1;
+    entry->keyHash = hash;
+    entry->tsLastUse = (int)time(NULL);
+    entry->doBlock = doBlock ? 1U : 0U;
+    entry->blockType = (unsigned char)blockType;
+    entry->next = store->buckets[bucket];
 
-    // Duplicate the key into the entryPool so it is not bound to the request pool
-    const char *keyCopy = apr_pstrdup(entryPool, key);
-    apr_hash_set(blockHash.blockHash, keyCopy, APR_HASH_KEY_STRING, entry);
+    strncpy(entry->key, key, BLOCK_HASH_KEY_MAX_LEN);
+    entry->key[BLOCK_HASH_KEY_MAX_LEN] = '\0';
+
+    store->buckets[bucket] = idx;
+    store->entryCount++;
 
     apr_proc_mutex_unlock(blockHash.mutex);
     return 4;
 }
 
-
-/**
- * Returns the BlockHashEntry for the key, or NULL if the key is not in the hash.
- *
- * @param key
- * @return
- */
-BlockHashEntry *blockHashGetEntry(const char *key)
+int blockHashGetEntryCount()
 {
-    if (blockHash.blockHash == NULL) {
-        return NULL;
+    if (NULL == blockHash.mutex) {
+        return -1;
     }
 
-    apr_proc_mutex_lock(blockHash.mutex);
-    BlockHashEntry *entry = apr_hash_get(blockHash.blockHash, key, APR_HASH_KEY_STRING);
-    apr_proc_mutex_unlock(blockHash.mutex);
-    return entry;
-}
-
-
-/**
- * Returns the count of entries in the hash or -1 if the hash is not initialized.
- * @return int
- */
-int blockHashGetEntryCount() {
-    if (blockHash.blockHash == NULL) {
+    SharedBlockHashStore *store = getSharedStore();
+    if (NULL == store || !store->initialized) {
         return -1;
     }
 
     apr_proc_mutex_lock(blockHash.mutex);
-    const int count = (int)apr_hash_count(blockHash.blockHash);
+    const int count = store->entryCount;
     apr_proc_mutex_unlock(blockHash.mutex);
     return count;
 }
 
+static SharedBlockHashStore *gSortStore = NULL;
 
-/**
- * Removes the oldest entry from the block hash based on the tsLastUse timestamp.
- *
- * Iterates over all entries in the hash and identifies the one with the smallest
- * tsLastUse value (i.e., the least recently used entry). That entry is then removed
- * from the hash and its associated memory pool is destroyed.
- *
- * This function is intended to be called internally by blockHashAddEntry when the
- * maximum number of entries has been reached. It must NOT be called while the mutex
- * is not already held by the caller — it does not acquire the mutex itself to avoid
- * a deadlock.
- *
- * @return true  if the oldest entry was successfully found and removed.
- * @return false if the hash is NULL, empty, or no entry could be identified.
- */
-bool blockHashRemoveOldestEntry()
+static int compareEntryIndexByTs(const void *a, const void *b)
 {
-    if (blockHash.blockHash == NULL || apr_hash_count(blockHash.blockHash) == 0) {
-        return false;
+    const int idxA = *(const int *)a;
+    const int idxB = *(const int *)b;
+
+    const int tsA = gSortStore->entries[idxA].tsLastUse;
+    const int tsB = gSortStore->entries[idxB].tsLastUse;
+
+    if (tsA < tsB) {
+        return -1;
     }
-
-    const void  *oldestKey    = NULL;
-    apr_ssize_t  oldestKeyLen = 0;
-    void        *oldestVal    = NULL;
-    time_t       oldestTs     = (time_t)LONG_MAX;
-
-    // Iterate over all entries
-    for (apr_hash_index_t *hi = apr_hash_first(NULL, blockHash.blockHash); hi; hi = apr_hash_next(hi)) {
-        const void  *key;
-        apr_ssize_t  keyLen;
-        void        *val;
-
-        apr_hash_this(hi, &key, &keyLen, &val);
-        BlockHashEntry *entry = (BlockHashEntry *)val;
-
-        if (entry->tsLastUse < oldestTs) {
-            oldestTs     = entry->tsLastUse;
-            oldestKey    = key;
-            oldestKeyLen = keyLen;
-            oldestVal    = val;
-        }
+    if (tsA > tsB) {
+        return 1;
     }
-
-    if (oldestKey == NULL) {
-        return false;
-    }
-
-    /* Eintrag zuerst aus dem Hash entfernen, solange oldestKey noch gültig ist */
-    apr_hash_set(blockHash.blockHash, oldestKey, oldestKeyLen, NULL);
-
-    /* Danach Subpool des Eintrags zerstören — gibt den apr_palloc-Speicher frei */
-    apr_pool_destroy(((BlockHashEntry *)oldestVal)->pool);
-
-    return true;
+    return 0;
 }
 
-
 void blockHashGetOldestAndNewestEntries(
-    BlockHashEntry* oldest_entries[10],
-    int* num_oldest,
-    BlockHashEntry* newest_entries[10],
-    int* num_newest)
+    BlockHashEntry *oldest_entries[10],
+    int *num_oldest,
+    BlockHashEntry *newest_entries[10],
+    int *num_newest)
 {
     *num_oldest = 0;
     *num_newest = 0;
 
-    if (blockHash.blockHash == NULL) {
+    if (NULL == blockHash.mutex) {
+        return;
+    }
+
+    SharedBlockHashStore *store = getSharedStore();
+    if (NULL == store || !store->initialized) {
         return;
     }
 
     apr_proc_mutex_lock(blockHash.mutex);
 
-    const int count = apr_hash_count(blockHash.blockHash);
-    if (count == 0) {
+    if (store->entryCount <= 0) {
         apr_proc_mutex_unlock(blockHash.mutex);
         return;
     }
 
-    BlockHashEntry** all_entries = apr_palloc(blockHash.serverPool, sizeof(BlockHashEntry*) * count);
-    int i = 0;
-    for (apr_hash_index_t* hi = apr_hash_first(NULL, blockHash.blockHash); hi; hi = apr_hash_next(hi)) {
-        void* val;
-        const void* key;
-        apr_hash_this(hi, &key, NULL, &val);
-        all_entries[i] = (BlockHashEntry*)val;
-        all_entries[i]->key = (const char*)key;
-        i++;
-    }
+    int usedIdx[BLOCK_HASH_MAX_CAPACITY];
+    int usedCount = 0;
 
-    // Sort entries by tsLastUse
-    for (int i = 0; i < count - 1; i++) {
-        for (int j = 0; j < count - i - 1; j++) {
-            if (all_entries[j]->tsLastUse > all_entries[j + 1]->tsLastUse) {
-                BlockHashEntry* temp = all_entries[j];
-                all_entries[j] = all_entries[j + 1];
-                all_entries[j + 1] = temp;
-            }
+    for (int i = 0; i < BLOCK_HASH_MAX_CAPACITY; i++) {
+        if (store->entries[i].inUse) {
+            usedIdx[usedCount++] = i;
         }
     }
 
-    *num_oldest = count < 10 ? count : 10;
-    for (int i = 0; i < *num_oldest; i++) {
-        oldest_entries[i] = all_entries[i];
+    if (usedCount == 0) {
+        apr_proc_mutex_unlock(blockHash.mutex);
+        return;
     }
 
-    *num_newest = count < 10 ? count : 10;
+    gSortStore = store;
+    qsort(usedIdx, (size_t)usedCount, sizeof(int), compareEntryIndexByTs);
+
+    static __thread BlockHashEntry oldestSnap[10];
+    static __thread BlockHashEntry newestSnap[10];
+
+    *num_oldest = usedCount < 10 ? usedCount : 10;
+    for (int i = 0; i < *num_oldest; i++) {
+        const SharedBlockHashEntry *entry = &store->entries[usedIdx[i]];
+        oldestSnap[i].doBlock = entry->doBlock != 0;
+        oldestSnap[i].blockType = (enum EnumBlockType)entry->blockType;
+        oldestSnap[i].tsLastUse = entry->tsLastUse;
+        oldestSnap[i].key = entry->key;
+        oldest_entries[i] = &oldestSnap[i];
+    }
+
+    *num_newest = usedCount < 10 ? usedCount : 10;
     for (int i = 0; i < *num_newest; i++) {
-        newest_entries[i] = all_entries[count - 1 - i];
+        const SharedBlockHashEntry *entry = &store->entries[usedIdx[usedCount - 1 - i]];
+        newestSnap[i].doBlock = entry->doBlock != 0;
+        newestSnap[i].blockType = (enum EnumBlockType)entry->blockType;
+        newestSnap[i].tsLastUse = entry->tsLastUse;
+        newestSnap[i].key = entry->key;
+        newest_entries[i] = &newestSnap[i];
     }
 
     apr_proc_mutex_unlock(blockHash.mutex);

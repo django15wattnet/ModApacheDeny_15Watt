@@ -2,7 +2,6 @@
 #define MODAPACHEDENY_15WATT_BLOCKHASH_H
 #include <stdbool.h>
 #include <apr_pools.h>
-#include <apr_hash.h>
 #include <apr_proc_mutex.h>
 #include <apr_shm.h>
 #include <httpd.h>
@@ -18,20 +17,19 @@ enum EnumBlockType {
     blockTypeUserAgent          = 6,
 };
 
-extern const char* BlockTypeStrings[];
+extern const char *BlockTypeStrings[];
 
-// An entry in the block list
+// Public view of an entry in the block list
 typedef struct {
-    apr_pool_t         *pool;
     bool               doBlock;
     enum EnumBlockType blockType;
     int                tsLastUse;
     const char         *key;
 } BlockHashEntry;
 
-// Structure to hold the block list and all necessary informations
+// Structure to hold the block list runtime state
 typedef struct {
-    apr_hash_t         *blockHash;
+    void               *blockHash;   // debug/status pointer to shared store
     int                maxEntries;
     apr_pool_t         *serverPool;
     apr_proc_mutex_t   *mutex;
@@ -45,6 +43,6 @@ bool blockHashRemoveOldestEntry();
 BlockHashEntry *blockHashGetEntry(const char *key);
 int blockHashAddEntry(const char *key, const enum EnumBlockType blockType, const bool doBlock, apr_pool_t *parentPool);
 int blockHashGetEntryCount();
-void blockHashGetOldestAndNewestEntries(BlockHashEntry* oldest_entries[10], int* num_oldest, BlockHashEntry* newest_entries[10], int* num_newest);
+void blockHashGetOldestAndNewestEntries(BlockHashEntry *oldest_entries[10], int *num_oldest, BlockHashEntry *newest_entries[10], int *num_newest);
 
 #endif // MODAPACHEDENY_15WATT_BLOCKHASH_H
