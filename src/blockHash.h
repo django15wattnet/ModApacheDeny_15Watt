@@ -6,6 +6,16 @@
 #include <apr_shm.h>
 #include <httpd.h>
 
+// Shared memory and mutex paths for inter-process communication
+#define BLOCK_HASH_SHM_PATH "/tmp/modapachedeny_15watt_blockhash_shm"
+#define BLOCK_HASH_MUTEX_PATH "/tmp/modapachedeny_15watt_blockhash_mutex"
+
+// Hash table tuning constants
+#define BLOCK_HASH_MAX_CAPACITY 20000      // Maximum number of entries
+#define BLOCK_HASH_BUCKET_COUNT 4096       // Number of hash buckets (separate chaining)
+#define BLOCK_HASH_KEY_MAX_LEN 255         // Maximum key length
+#define BLOCK_HASH_INDEX_NONE -1           // Sentinel value for linked list termination
+
 // List of reasons an entry has been blocked
 enum EnumBlockType {
     blockTypeNotFound           = 0,
@@ -24,6 +34,7 @@ typedef struct {
     bool               doBlock;
     enum EnumBlockType blockType;
     int                tsLastUse;
+    int                cnt;
     const char         *key;
 } BlockHashEntry;
 
@@ -43,6 +54,7 @@ bool blockHashRemoveOldestEntry();
 BlockHashEntry *blockHashGetEntry(const char *key);
 int blockHashAddEntry(const char *key, const enum EnumBlockType blockType, const bool doBlock, apr_pool_t *parentPool);
 int blockHashGetEntryCount();
+unsigned long blockHashGetSharedStoreSizeKb();
 void blockHashGetOldestAndNewestEntries(BlockHashEntry *oldest_entries[10], int *num_oldest, BlockHashEntry *newest_entries[10], int *num_newest);
 
 #endif // MODAPACHEDENY_15WATT_BLOCKHASH_H

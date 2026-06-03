@@ -22,6 +22,7 @@ int statusHandler(request_rec *r)
     ap_rputs("{\n", r);
     ap_rprintf(r, "  \"blockHashEntryCount\": %d,\n", blockHashGetEntryCount());
     ap_rprintf(r, "  \"blockHashAddress\": \"0x%lx\",\n", (unsigned long)(void *)blockHash.blockHash);
+    ap_rprintf(r, "  \"blockHashSharedStoreSizeKb\": %lu,\n", blockHashGetSharedStoreSizeKb());
 
     BlockHashEntry* oldest_entries[10];
     BlockHashEntry* newest_entries[10];
@@ -50,13 +51,14 @@ int statusHandler(request_rec *r)
 
         ap_rprintf(
             r, "    "
-            "{\"userAgent\": \"%s\", \"ipAddress\": \"%s\", \"tsLastUse\": \"%s\", \"doBlock\": %s, \"blockType\": \"%s\"}%s\n",
+            "{\"userAgent\": \"%s\", \"ipAddress\": \"%s\", \"tsLastUse\": \"%s\", \"cnt\": %d, \"doBlock\": %s, \"blockType\": \"%s\"}%s\n",
            userAgent,
            ipAddress,
            time_str,
-           newest_entries[i]->doBlock ? "true" : "false",
-           BlockTypeStrings[newest_entries[i]->blockType],
-           i < num_newest - 1 ? "," : ""
+           newest_entries[i]->cnt,
+            newest_entries[i]->doBlock ? "true" : "false",
+            BlockTypeStrings[newest_entries[i]->blockType],
+            i < num_newest - 1 ? "," : ""
         );
     }
     ap_rputs("  ],\n", r);
@@ -82,13 +84,14 @@ int statusHandler(request_rec *r)
 
         ap_rprintf(
             r,
-            "    {\"userAgent\": \"%s\", \"ipAddress\": \"%s\", \"tsLastUse\": \"%s\", \"doBlock\": %s, \"blockType\": \"%s\"}%s\n",
+            "    {\"userAgent\": \"%s\", \"ipAddress\": \"%s\", \"tsLastUse\": \"%s\", \"cnt\": %d, \"doBlock\": %s, \"blockType\": \"%s\"}%s\n",
            userAgent,
            ipAddress,
            time_str,
-           oldest_entries[i]->doBlock ? "true" : "false",
-           BlockTypeStrings[oldest_entries[i]->blockType],
-           i < num_oldest - 1 ? "," : ""
+           oldest_entries[i]->cnt,
+            oldest_entries[i]->doBlock ? "true" : "false",
+            BlockTypeStrings[oldest_entries[i]->blockType],
+            i < num_oldest - 1 ? "," : ""
         );
     }
     ap_rputs("  ]\n", r);

@@ -29,11 +29,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d577fe5-878f-4603-92af-67c2e4c8ce1b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/blockHash.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/blockHash.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/blockHash.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/blockHash.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modApacheDeny_15Watt.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/modApacheDeny_15Watt.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/status.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/status.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +48,7 @@
   <component name="CopilotChats">
     <option name="panelChat">
       <chat>
-        <option name="activeSessionId" value="6b89ee96-a9c9-4fb8-b0d5-5028a8599658" />
+        <option name="activeSessionId" value="03c2a897-392e-4733-9684-9560c002ca49" />
         <option name="sessions">
           <session>
             <option name="chatType" value="PANEL" />
@@ -76,6 +78,14 @@
           <session>
             <option name="chatType" value="PANEL" />
             <option name="id" value="6b89ee96-a9c9-4fb8-b0d5-5028a8599658" />
+            <option name="modeId" value="Agent" />
+            <option name="modelType" value="builtin_family" />
+            <option name="modelValue" value="gemini-2.5-pro" />
+            <option name="targetType" value="LOCAL" />
+          </session>
+          <session>
+            <option name="chatType" value="PANEL" />
+            <option name="id" value="a026a95f-1cc5-4eb7-8b78-45df9832e79f" />
             <option name="modeId" value="Agent" />
             <option name="modelType" value="builtin_family" />
             <option name="modelValue" value="gemini-2.5-pro" />
@@ -175,7 +185,23 @@
       <workItem from="1778850094172" duration="1896000" />
       <workItem from="1778852028818" duration="9030000" />
       <workItem from="1778948766650" duration="99000" />
-      <workItem from="1778948881798" duration="2459000" />
+      <workItem from="1778948881798" duration="10155000" />
+      <workItem from="1779121005873" duration="508000" />
+      <workItem from="1779121551373" duration="84000" />
+      <workItem from="1779121643594" duration="33000" />
+      <workItem from="1779121684933" duration="47000" />
+      <workItem from="1779121742908" duration="782000" />
+      <workItem from="1779124125716" duration="694000" />
+      <workItem from="1779127932841" duration="49000" />
+      <workItem from="1779128013117" duration="55000" />
+      <workItem from="1779128110540" duration="46000" />
+      <workItem from="1779128187797" duration="81000" />
+      <workItem from="1779128308374" duration="50000" />
+      <workItem from="1779128389892" duration="67000" />
+      <workItem from="1779128494899" duration="69000" />
+      <workItem from="1779128598064" duration="13000" />
+      <workItem from="1780495064719" duration="230000" />
+      <workItem from="1780495322908" duration="1035000" />
     </task>
     <servers />
   </component>

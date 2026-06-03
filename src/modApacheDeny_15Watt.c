@@ -111,11 +111,16 @@ const char *setConfigAllowedHash(cmd_parms *cmd, void *cfg, const char *arg)
 const char *setConfigMaxAllowedHashEntries(cmd_parms *cmd, void *cfg, const char *arg)
 {
     int val = 0;
-    if (!parseIntStrict(arg, 1, INT_MAX, &val)) {
+    if (!parseIntStrict(arg, 1, BLOCK_HASH_MAX_CAPACITY, &val)) {
         return "modApacheDeny_15Watt_maxAllowedHashEntries must be a positive integer";
     }
 
+    if (val > BLOCK_HASH_MAX_CAPACITY) {
+        return "modApacheDeny_15Watt_maxAllowedHashEntries cannot exceed BLOCK_HASH_MAX_CAPACITY";
+    }
+
     moduleConfig.maxAllowedHashEntries = val;
+
     return NULL;
 }
 

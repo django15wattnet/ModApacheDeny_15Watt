@@ -13,12 +13,6 @@
 #include <httpd.h>
 #include <http_log.h>
 
-#define BLOCK_HASH_SHM_PATH "/tmp/modapachedeny_15watt_blockhash_shm"
-#define BLOCK_HASH_MUTEX_PATH "/tmp/modapachedeny_15watt_blockhash_mutex"
-#define BLOCK_HASH_MAX_CAPACITY 20000
-#define BLOCK_HASH_BUCKET_COUNT 4096
-#define BLOCK_HASH_KEY_MAX_LEN 255
-#define BLOCK_HASH_INDEX_NONE -1
 
 const char *BlockTypeStrings[] = {
     "Not Found",
@@ -38,6 +32,7 @@ typedef struct {
     int next;
     unsigned int keyHash;
     int tsLastUse;
+    int cnt;
     unsigned char doBlock;
     unsigned char blockType;
     char key[BLOCK_HASH_KEY_MAX_LEN + 1];
@@ -279,6 +274,7 @@ BlockHashEntry *blockHashGetEntry(const char *key)
     outEntry.doBlock = store->entries[idx].doBlock != 0;
     outEntry.blockType = (enum EnumBlockType)store->entries[idx].blockType;
     outEntry.tsLastUse = store->entries[idx].tsLastUse;
+    outEntry.cnt = store->entries[idx].cnt;
     outEntry.key = store->entries[idx].key;
 
     apr_proc_mutex_unlock(blockHash.mutex);
@@ -314,6 +310,7 @@ int blockHashAddEntry(
         store->entries[idx].tsLastUse = (int)time(NULL);
         store->entries[idx].doBlock = doBlock ? 1U : 0U;
         store->entries[idx].blockType = (unsigned char)blockType;
+        store->entries[idx].cnt++;
         apr_proc_mutex_unlock(blockHash.mutex);
         return 2;
     }
@@ -335,11 +332,12 @@ int blockHashAddEntry(
     SharedBlockHashEntry *entry = &store->entries[idx];
     memset(entry, 0, sizeof(SharedBlockHashEntry));
 
-    entry->inUse = 1;
-    entry->keyHash = hash;
+    entry->inUse     = 1;
+    entry->keyHash   = hash;
     entry->tsLastUse = (int)time(NULL);
-    entry->doBlock = doBlock ? 1U : 0U;
+    entry->doBlock   = doBlock ? 1U : 0U;
     entry->blockType = (unsigned char)blockType;
+    entry->cnt       = 1;
     entry->next = store->buckets[bucket];
 
     strncpy(entry->key, key, BLOCK_HASH_KEY_MAX_LEN);
@@ -367,6 +365,11 @@ int blockHashGetEntryCount()
     const int count = store->entryCount;
     apr_proc_mutex_unlock(blockHash.mutex);
     return count;
+}
+
+unsigned long blockHashGetSharedStoreSizeKb()
+{
+    return (unsigned long)sizeof(SharedBlockHashStore) / 1024;
 }
 
 static SharedBlockHashStore *gSortStore = NULL;
@@ -439,6 +442,7 @@ void blockHashGetOldestAndNewestEntries(
         oldestSnap[i].doBlock = entry->doBlock != 0;
         oldestSnap[i].blockType = (enum EnumBlockType)entry->blockType;
         oldestSnap[i].tsLastUse = entry->tsLastUse;
+        oldestSnap[i].cnt = entry->cnt;
         oldestSnap[i].key = entry->key;
         oldest_entries[i] = &oldestSnap[i];
     }
@@ -449,6 +453,7 @@ void blockHashGetOldestAndNewestEntries(
         newestSnap[i].doBlock = entry->doBlock != 0;
         newestSnap[i].blockType = (enum EnumBlockType)entry->blockType;
         newestSnap[i].tsLastUse = entry->tsLastUse;
+        newestSnap[i].cnt = entry->cnt;
         newestSnap[i].key = entry->key;
         newest_entries[i] = &newestSnap[i];
     }
