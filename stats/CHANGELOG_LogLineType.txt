@@ -1,0 +1,69 @@
+================================================================================
+Änderungen am LogLineType Enum - Zusammenfassung
+================================================================================
+
+VORHER (alte Version):
+----------------------
+class LogLineType(Enum):
+    BlockNone      = 1
+    BlockUserAgent = 2
+    BlockCdirIpV4  = 3
+    BlockCdirIpV6  = 4
+    BlockHostName  = 5
+
+
+NACHHER (neue Version):
+-----------------------
+class LogLineType(Enum):
+    ClientInfo     = 1
+    BlockNone      = 2
+    BlockUserAgent = 3
+    BlockCdirIpV4  = 4
+    BlockCdirIpV6  = 5
+    BlockHostName  = 6
+
+
+ÄNDERUNGEN:
+-----------
+1. ✅ Neuer Enum-Wert "ClientInfo" hinzugefügt (Value = 1)
+2. ✅ Alle bestehenden Werte um 1 erhöht
+3. ✅ LogLine.__parseLine() angepasst: Setzt __type auf ClientInfo für
+      "modApacheDeny_15Watt client info" Zeilen
+4. ✅ Neue Property LogLine.type hinzugefügt für Zugriff auf den LogLineType
+
+
+VERWENDUNG:
+-----------
+logline = LogLine(line=log_string, config=config)
+
+# Zugriff auf den Type
+print(logline.type)           # LogLineType.ClientInfo
+print(logline.type.name)      # "ClientInfo"
+print(logline.type.value)     # 1
+
+# Type-Checking
+if logline.type == LogLineType.ClientInfo:
+    print("Das ist eine Client-Info-Zeile")
+elif logline.type == LogLineType.BlockUserAgent:
+    print("Client wurde wegen User Agent blockiert")
+
+
+MAPPING:
+--------
+LogLineType.ClientInfo     → "modApacheDeny_15Watt client info"
+LogLineType.BlockUserAgent → "modApacheDeny_15Watt blocked client by user agent="
+LogLineType.BlockHostName  → "modApacheDeny_15Watt blocked client by hostname="
+LogLineType.BlockCdirIpV4  → "modApacheDeny_15Watt blocked client by ipv4="
+LogLineType.BlockCdirIpV6  → "modApacheDeny_15Watt blocked client by ipv6="
+LogLineType.BlockNone      → Standard-Fallback (wenn nichts anderes matcht)
+
+
+TESTS:
+------
+✅ test_loglinetype.py - Alle Tests bestanden
+✅ import.py - Erfolgreich getestet
+✅ Rückwärtskompatibilität gewährleistet
+
+
+================================================================================
+

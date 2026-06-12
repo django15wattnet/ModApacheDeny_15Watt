@@ -29,13 +29,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d577fe5-878f-4603-92af-67c2e4c8ce1b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stats/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stats/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stats/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stats/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stats/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stats/.idea/stats.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stats/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stats/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/stats/import.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/blockHash.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/blockHash.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/blockHash.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/blockHash.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/status.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/status.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,7 +204,7 @@
       <workItem from="1779128494899" duration="69000" />
       <workItem from="1779128598064" duration="13000" />
       <workItem from="1780495064719" duration="230000" />
-      <workItem from="1780495322908" duration="1035000" />
+      <workItem from="1780495322908" duration="2568000" />
     </task>
     <servers />
   </component>

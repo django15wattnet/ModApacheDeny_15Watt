@@ -1,0 +1,3 @@
+filePattern  = *.error.log.1
+pathLogFiles = /Users/ts/www/ModApacheDeny_15Watt/stats/logs
+pathStorage  = /Users/ts/www/ModApacheDeny_15Watt/stats/data/dahin
