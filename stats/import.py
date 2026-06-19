@@ -131,13 +131,13 @@ class LogLineType(Enum):
 
 
 class LogFile(object):
-    def __init__(self, pathFileConfig: str, config: ConfDict):
+    def __init__(self, pathLogFile: str, config: ConfDict):
         super().__init__()
         
-        self.__config         = config
-        self.__pathFileConfig = pathFileConfig
-        self.__handle         = open(self.__pathFileConfig, 'r', encoding='utf-8')
-        self.__lines          = []
+        self.__config      = config
+        self.__pathLogFile = pathLogFile
+        self.__handle      = open(self.__pathLogFile, 'r', encoding='utf-8')
+        self.__lines       = []
         
         # Iterate over lines
         for strLogLine in self.__handle.read().splitlines():
@@ -155,6 +155,21 @@ class LogFile(object):
     @property
     def lines(self):
         return self.__lines
+
+
+    @property
+    def namesDataFiles(self) -> list:
+        """
+            Returns a list of names for the data files that should be created based on the log lines.
+            The names are based on the day and month of the log lines.
+        """
+        names = set()
+        for logLine in self.__lines:
+            if logLine.type == LogLineType.BlockNone:
+                continue
+            names.add(logLine.dayString + '.json')
+            names.add(logLine.monthString + '.json')
+        return sorted(names)
 
 
 
@@ -201,8 +216,14 @@ class LogLine(object):
                 data[self.userAgent]['count'] += 1
             else:
                 data[self.userAgent] = {
-                    'count': 1
+                    'count': 1,
+                    'ips':   {}
                 }
+
+            if self.clientIp and self.clientIp not in data[self.userAgent]['ips']:
+                data[self.userAgent]['ips'][self.clientIp] = 1
+            elif self.clientIp:
+                data[self.userAgent]['ips'][self.clientIp] += 1
 
             # Move back to start and truncate the file before writing
             handleJsonFile.seek(0)
@@ -344,6 +365,12 @@ class LogLine(object):
     def userAgent(self) -> str:
         """Returns the extracted user agent string, or an empty string if not present"""
         return self.__components.get('user_agent', '')
+
+
+    @property
+    def clientIp(self) -> str:
+        """Returns the extracted client IP address, or None if not present"""
+        return self.__components.get('client_ip')
     
     
     def __str__(self):
@@ -411,9 +438,70 @@ class DataFile(object):
     """
         Represents a JSON data file with grouped data
     """
-    def __init__(self, confDict: ConfDict, dataType: str, dateStr: str):
+    def __init__(self, confDict: ConfDict, nameFile: str):
         self.__confDict = confDict
+        self.__nameFile = nameFile
 
+
+    def sort(self):
+        """
+            Sorts the data file by the count of blocked requests per user agent, in descending order.
+            Also sorts the IP addresses for each user agent by their count in descending order.
+        """
+        pathFile = f"{self.__confDict['pathStorage']}/{self.__nameFile}"
+
+        # Ensure file exists; create an empty JSON object if missing.
+        if not os.path.exists(pathFile):
+            with open(pathFile, 'w', encoding='utf-8') as handle:
+                json.dump({}, handle, indent=4)
+            return
+
+        with open(pathFile, 'r+', encoding='utf-8') as handle:
+            content = handle.read().strip()
+
+            if not content:
+                data = {}
+            else:
+                try:
+                    data = json.loads(content)
+                except json.JSONDecodeError as e:
+                    raise ValueError(f"Invalid JSON in data file '{pathFile}': {e}")
+
+            if not isinstance(data, dict):
+                raise ValueError(f"Unexpected JSON structure in '{pathFile}': expected object at root")
+
+            sorted_user_agents = sorted(
+                data.items(),
+                key=lambda item: item[1].get('count', 0) if isinstance(item[1], dict) else 0,
+                reverse=True
+            )
+
+            sorted_data = {}
+            for user_agent, user_data in sorted_user_agents:
+                if not isinstance(user_data, dict):
+                    sorted_data[user_agent] = user_data
+                    continue
+
+                ips = user_data.get('ips', {})
+                if isinstance(ips, dict):
+                    sorted_ips = dict(
+                        sorted(
+                            ips.items(),
+                            key=lambda ip_item: ip_item[1] if isinstance(ip_item[1], int) else 0,
+                            reverse=True
+                        )
+                    )
+                else:
+                    sorted_ips = {}
+
+                sorted_data[user_agent] = {
+                    **user_data,
+                    'ips': sorted_ips
+                }
+
+            handle.seek(0)
+            handle.truncate()
+            json.dump(sorted_data, handle, indent=4)
 
 class Import(object):
     __neededConfigKeys = ['pathLogFiles', 'filePattern', 'pathStorage']
@@ -425,13 +513,22 @@ class Import(object):
         self.__config = ConfDict(pathFileConfig=pathFileConfig)
         self.__checkConfig()
 
+        namesDataFiles = set()
         for pathLogFile in self.__getListLogFiles():
-            logFile = LogFile(pathFileConfig=pathLogFile, config=self.__config)
+            logFile = LogFile(pathLogFile=pathLogFile, config=self.__config)
+
+            namesDataFiles = namesDataFiles.union(set(logFile.namesDataFiles))
 
             for logLine in logFile.lines:
                 if logLine.components['action'] == 'blocked':
-                    # @todo hier müssen die JSON-Daten erstellt werden
                     logLine.writeToJson()
+
+        for n in namesDataFiles:
+            dataFile = DataFile(confDict=self.__config, nameFile=n)
+            dataFile.sort()
+
+        for n in namesDataFiles:
+            print(f"Data file created: {n}")
 
     def __get(self, timeType: str, timeStr: str) -> str:
         return
