@@ -315,7 +315,7 @@ class LogLine(object):
         if user_agent_match:
             self.__components['user_agent'] = user_agent_match.group(1).strip()
         else:
-            self.__components['user_agent'] = ''
+            self.__components['user_agent'] = '-'
         
         # Extract IP from message body
         ip_pattern = r'(?:^|\s)ip=([\d:.a-f]+)'

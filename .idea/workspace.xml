@@ -29,8 +29,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d577fe5-878f-4603-92af-67c2e4c8ce1b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/stats/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/config" beforeDir="false" afterPath="$PROJECT_DIR$/stats/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/import.py" beforeDir="false" afterPath="$PROJECT_DIR$/stats/import.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/aussichtslos.ms.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/aussichtslos.ms.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/callies.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/callies.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/cardcal.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/cardcal.15watt.net.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/error.log.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/frieling-huchzermeyer.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/frieling-huchzermeyer.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/hilje.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/hilje.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/honkundhonk.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/honkundhonk.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/kasse.honkundhonk.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/kasse.honkundhonk.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/maexchencam.honkundhonk.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/maexchencam.honkundhonk.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/modapachedeny.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/modapachedeny.15watt.net.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/muenster-analog.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/muenster-analog.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/sensors.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/sensors.15watt.net.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/siemion.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/siemion.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/tracks.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/tracks.15watt.net.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/turanga.15watt.net.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/turanga.15watt.net.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/webmail.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/webmail.15watt.net.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/logs/wsgi.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/wsgi.15watt.net.error.log.1" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,6 +143,65 @@
     <commands />
     <urls />
   </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="2.3829977892013492E-17" />
+      <entry key="MS500" value="4.7361421403404995E-4" />
+      <entry key="S2" value="0.14752180495143286" />
+      <entry key="S5" value="0.4659138393908179" />
+      <entry key="S10" value="0.7199446235239159" />
+      <entry key="S30" value="1.405298376773428" />
+      <entry key="S60" value="1.9608702799134516" />
+      <entry key="M2" value="2.3980246316138727" />
+      <entry key="M5" value="2.735670565339408" />
+      <entry key="M10" value="2.8635479341284418" />
+      <entry key="M15" value="2.9080501868661477" />
+      <entry key="M30" value="2.953526742201143" />
+      <entry key="H1" value="2.9766373630739156" />
+      <entry key="H2" value="2.9882870002104167" />
+      <entry key="H4" value="2.9941355572455786" />
+      <entry key="D1" value="2.9990214877819388" />
+      <entry key="W1" value="2.999860185451754" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="1.0000000161936113" />
+      <entry key="MS500" value="1.0276610551431107" />
+      <entry key="S2" value="1.407818911730205" />
+      <entry key="S5" value="1.700469592075602" />
+      <entry key="S10" value="1.879790521594998" />
+      <entry key="S30" value="2.2950125908508117" />
+      <entry key="S60" value="2.564729456440018" />
+      <entry key="M2" value="2.75599606724637" />
+      <entry key="M5" value="2.8951617416371063" />
+      <entry key="M10" value="2.9462899132903733" />
+      <entry key="M15" value="2.9638997521703807" />
+      <entry key="M30" value="2.9818014171920995" />
+      <entry key="H1" value="2.990863272182449" />
+      <entry key="H2" value="2.99542223647066" />
+      <entry key="H4" value="2.997708763246302" />
+      <entry key="D1" value="2.999617799693507" />
+      <entry key="W1" value="2.9999453919298142" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.003472041734489154" />
+      <entry key="MS500" value="0.3288574815571566" />
+      <entry key="S2" value="1.1574403197915117" />
+      <entry key="S5" value="1.928247557258839" />
+      <entry key="S10" value="2.4537514973264027" />
+      <entry key="S30" value="3.6321409534654983" />
+      <entry key="S60" value="4.485249215732872" />
+      <entry key="M2" value="5.131613268595491" />
+      <entry key="M5" value="5.621216944904382" />
+      <entry key="M10" value="5.804910027518985" />
+      <entry key="M15" value="5.868637115112141" />
+      <entry key="M30" value="5.933657706834572" />
+      <entry key="H1" value="5.966661854043703" />
+      <entry key="H2" value="5.983288951683881" />
+      <entry key="H4" value="5.991633953684621" />
+      <entry key="D1" value="5.998604195126405" />
+      <entry key="W1" value="5.999800563423622" />
+    </decayedShown>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -132,33 +211,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.RadMigrateCodeStyle": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.cidr.known.project.marker": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.readMode.enableVisualFormatting": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "cf.first.check.clang-format": "false",
-    "cidr.known.project.marker": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "junie.onboarding.icon.badge.shown": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -200,6 +279,7 @@
       <workItem from="1780495322908" duration="2568000" />
       <workItem from="1781444299871" duration="59000" />
       <workItem from="1781444512739" duration="2135000" />
+      <workItem from="1782146671661" duration="305000" />
     </task>
     <servers />
   </component>

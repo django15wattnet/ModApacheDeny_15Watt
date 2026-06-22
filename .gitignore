@@ -92,3 +92,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Data files needed for development
+stats/data
+stats/logs

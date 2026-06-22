@@ -5,9 +5,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e59088dc-91c8-4d8d-8799-05374529b03c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.ask.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config" beforeDir="false" afterPath="$PROJECT_DIR$/config" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/import.py" beforeDir="false" afterPath="$PROJECT_DIR$/import.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/aussichtslos.ms.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/aussichtslos.ms.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/callies.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/callies.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/cardcal.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/cardcal.15watt.net.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/error.log.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/frieling-huchzermeyer.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/frieling-huchzermeyer.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/hilje.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/hilje.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/honkundhonk.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/honkundhonk.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/kasse.honkundhonk.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/kasse.honkundhonk.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/maexchencam.honkundhonk.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/maexchencam.honkundhonk.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/modapachedeny.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/modapachedeny.15watt.net.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/muenster-analog.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/muenster-analog.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/sensors.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/sensors.15watt.net.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/siemion.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/siemion.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/tracks.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/tracks.15watt.net.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/turanga.15watt.net.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/turanga.15watt.net.de.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/webmail.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/webmail.15watt.net.error.log.1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/wsgi.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/logs/wsgi.15watt.net.error.log.1" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,18 +47,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "copilot.chat.legacySessionMetadata.migrated": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-babbdf50b680-746f403e7f0c-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-241.15989.155" />
+        <option value="bundled-python-sdk-c59985aa861c-c2ffad84badb-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.24374.152" />
       </set>
     </attachedChunks>
   </component>
@@ -55,6 +79,9 @@
       <updated>1781362733334</updated>
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
