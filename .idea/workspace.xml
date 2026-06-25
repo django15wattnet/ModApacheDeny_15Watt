@@ -29,28 +29,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3d577fe5-878f-4603-92af-67c2e4c8ce1b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stats/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/stats/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/config" beforeDir="false" afterPath="$PROJECT_DIR$/stats/config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/import.py" beforeDir="false" afterPath="$PROJECT_DIR$/stats/import.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/aussichtslos.ms.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/aussichtslos.ms.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/callies.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/callies.de.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/cardcal.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/cardcal.15watt.net.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/error.log.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/frieling-huchzermeyer.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/frieling-huchzermeyer.de.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/hilje.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/hilje.de.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/honkundhonk.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/honkundhonk.de.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/kasse.honkundhonk.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/kasse.honkundhonk.de.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/maexchencam.honkundhonk.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/maexchencam.honkundhonk.de.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/modapachedeny.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/modapachedeny.15watt.net.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/muenster-analog.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/muenster-analog.de.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/sensors.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/sensors.15watt.net.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/siemion.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/siemion.de.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/tracks.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/tracks.15watt.net.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/turanga.15watt.net.de.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/turanga.15watt.net.de.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/webmail.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/webmail.15watt.net.error.log.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/logs/wsgi.15watt.net.error.log.1" beforeDir="false" afterPath="$PROJECT_DIR$/stats/logs/wsgi.15watt.net.error.log.1" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -279,7 +259,7 @@
       <workItem from="1780495322908" duration="2568000" />
       <workItem from="1781444299871" duration="59000" />
       <workItem from="1781444512739" duration="2135000" />
-      <workItem from="1782146671661" duration="305000" />
+      <workItem from="1782146671661" duration="1781000" />
     </task>
     <servers />
   </component>
