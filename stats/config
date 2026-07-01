@@ -1,3 +1,3 @@
-filePattern  = *.error.log.14
-pathLogFiles = /Users/ts/www/ModApacheDeny_15Watt/stats/logs
-pathStorage  = /Users/ts/www/ModApacheDeny_15Watt/stats/data
+filePattern  = *.error.log.*
+pathLogFiles = /Users/ts/www/turanga.15watt.net/data/tmp
+pathStorage  = /Users/ts/www/turanga.15watt.net/data/modApacheDenyStats
