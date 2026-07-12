@@ -287,6 +287,7 @@ class LogLine(object):
             self.__components['client_port'] = int(client_match.group(2))
         
         # Determine message type (blocked or client info)
+        # todo: Determine allowed request too
         if 'modApacheDeny_15Watt blocked client' in self.__line:
             self.__components['action'] = 'blocked'
             
@@ -520,6 +521,9 @@ class Import(object):
             namesDataFiles = namesDataFiles.union(set(logFile.namesDataFiles))
 
             for logLine in logFile.lines:
+                if logLine.components['action'] != 'client_info':
+                    print(logLine.components)
+                    print('--------------------------')
                 if logLine.components['action'] == 'blocked':
                     logLine.writeToJson()
 

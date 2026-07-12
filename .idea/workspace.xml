@@ -4,23 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="BackendCodeEditorMiscSettings">
-    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="4" type="long" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
-    <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
-    <option name="/Default/Housekeeping/LiveTemplatesHousekeeping/HotspotSessionHintIsShown/@EntryValue" value="true" type="bool" />
-    <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="CppIncludesOrderOptions" type="string" />
-    <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
   </component>
-  <component name="CMakePresetLoader">{
-  &quot;useNewFormat&quot;: true
-}</component>
+  <component name="CMakePresetLoader"><![CDATA[{
+  "useNewFormat": true
+}]]></component>
   <component name="CMakeProjectFlavorService">
     <option name="flavorId" value="CMakePlainProjectFlavor" />
   </component>
+  <component name="CMakeReloadState">
+    <option name="reloaded" value="true" />
+  </component>
   <component name="CMakeRunConfigurationManager">
-    <generated>
-      <config projectName="ModApacheDeny_15Watt" targetName="ModApacheDeny_15Watt" />
-    </generated>
+    <generated />
   </component>
   <component name="CMakeSettings">
     <configurations>
@@ -28,9 +24,16 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3d577fe5-878f-4603-92af-67c2e4c8ce1b" name="Changes" comment="">
+    <list default="true" id="6c51cb9f-ea63-4fed-8b45-2618b88cf5a8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/ModApacheDeny_15Watt.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ModApacheDeny_15Watt.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stats/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/stats/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/config" beforeDir="false" afterPath="$PROJECT_DIR$/stats/config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stats/import.py" beforeDir="false" afterPath="$PROJECT_DIR$/stats/import.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,152 +43,28 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="CopilotChats">
-    <option name="panelChat">
-      <chat>
-        <option name="activeSessionId" value="03c2a897-392e-4733-9684-9560c002ca49" />
-        <option name="sessions">
-          <session>
-            <option name="chatType" value="PANEL" />
-            <option name="id" value="03c2a897-392e-4733-9684-9560c002ca49" />
-            <option name="modeId" value="Agent" />
-            <option name="modelType" value="builtin_family" />
-            <option name="modelValue" value="auto" />
-            <option name="status" value="Completed" />
-            <option name="targetType" value="LOCAL" />
-          </session>
-          <session>
-            <option name="chatType" value="PANEL" />
-            <option name="id" value="cbfece00-7001-4990-b3f4-d21adab2b9f6" />
-            <option name="modeId" value="Agent" />
-            <option name="modelType" value="builtin_family" />
-            <option name="modelValue" value="gemini-2.5-pro" />
-            <option name="targetType" value="LOCAL" />
-          </session>
-          <session>
-            <option name="chatType" value="PANEL" />
-            <option name="id" value="abfddd37-314c-4854-9595-df3e5ee8dfad" />
-            <option name="modeId" value="Agent" />
-            <option name="modelType" value="builtin_family" />
-            <option name="modelValue" value="gemini-2.5-pro" />
-            <option name="targetType" value="LOCAL" />
-          </session>
-          <session>
-            <option name="chatType" value="PANEL" />
-            <option name="id" value="6b89ee96-a9c9-4fb8-b0d5-5028a8599658" />
-            <option name="modeId" value="Agent" />
-            <option name="modelType" value="builtin_family" />
-            <option name="modelValue" value="gemini-2.5-pro" />
-            <option name="targetType" value="LOCAL" />
-          </session>
-          <session>
-            <option name="chatType" value="PANEL" />
-            <option name="id" value="a026a95f-1cc5-4eb7-8b78-45df9832e79f" />
-            <option name="modeId" value="Agent" />
-            <option name="modelType" value="builtin_family" />
-            <option name="modelValue" value="gemini-2.5-pro" />
-            <option name="targetType" value="LOCAL" />
-          </session>
-        </option>
-        <option name="type" value="PANEL" />
-      </chat>
-    </option>
-  </component>
   <component name="CopilotPersistence">
     <persistenceIdMap>
-      <entry key="_/Users/ts/www/ModApacheDeny_15Watt" value="3CszuficCSC8XMlBNk7aPvVLGL3" />
+      <entry key="_/Users/ts/www/ModApacheDeny_15Watt" value="3GOz720gd26mXlYFrDGLC69SgJB" />
     </persistenceIdMap>
-  </component>
-  <component name="CopilotUserSelectedChatMode">
-    <option name="chatModeId" value="Agent" />
-  </component>
-  <component name="CopilotUserSelectedModel">
-    <selectedModels>
-      <entry key="agent-panel" value="Gemini 2.5 Pro" />
-      <entry key="chat-panel" value="Gemini 2.5 Pro" />
-    </selectedModels>
-  </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MacroExpansionManager">
-    <option name="directoryName" value="Qxj9jLqC" />
+    <option name="directoryName" value="naP7sTje" />
   </component>
-  <component name="McpProjectServerCommands">
-    <commands />
-    <urls />
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2026" />
+    <option name="minorVersion" value="1.4" />
+    <option name="productBranch" value="Classic" />
   </component>
-  <component name="NextEditCompletionFeaturesState">
-    <decayedCancelled>
-      <entry key="MS100" value="2.3829977892013492E-17" />
-      <entry key="MS500" value="4.7361421403404995E-4" />
-      <entry key="S2" value="0.14752180495143286" />
-      <entry key="S5" value="0.4659138393908179" />
-      <entry key="S10" value="0.7199446235239159" />
-      <entry key="S30" value="1.405298376773428" />
-      <entry key="S60" value="1.9608702799134516" />
-      <entry key="M2" value="2.3980246316138727" />
-      <entry key="M5" value="2.735670565339408" />
-      <entry key="M10" value="2.8635479341284418" />
-      <entry key="M15" value="2.9080501868661477" />
-      <entry key="M30" value="2.953526742201143" />
-      <entry key="H1" value="2.9766373630739156" />
-      <entry key="H2" value="2.9882870002104167" />
-      <entry key="H4" value="2.9941355572455786" />
-      <entry key="D1" value="2.9990214877819388" />
-      <entry key="W1" value="2.999860185451754" />
-    </decayedCancelled>
-    <decayedSelected>
-      <entry key="MS100" value="1.0000000161936113" />
-      <entry key="MS500" value="1.0276610551431107" />
-      <entry key="S2" value="1.407818911730205" />
-      <entry key="S5" value="1.700469592075602" />
-      <entry key="S10" value="1.879790521594998" />
-      <entry key="S30" value="2.2950125908508117" />
-      <entry key="S60" value="2.564729456440018" />
-      <entry key="M2" value="2.75599606724637" />
-      <entry key="M5" value="2.8951617416371063" />
-      <entry key="M10" value="2.9462899132903733" />
-      <entry key="M15" value="2.9638997521703807" />
-      <entry key="M30" value="2.9818014171920995" />
-      <entry key="H1" value="2.990863272182449" />
-      <entry key="H2" value="2.99542223647066" />
-      <entry key="H4" value="2.997708763246302" />
-      <entry key="D1" value="2.999617799693507" />
-      <entry key="W1" value="2.9999453919298142" />
-    </decayedSelected>
-    <decayedShown>
-      <entry key="MS100" value="0.003472041734489154" />
-      <entry key="MS500" value="0.3288574815571566" />
-      <entry key="S2" value="1.1574403197915117" />
-      <entry key="S5" value="1.928247557258839" />
-      <entry key="S10" value="2.4537514973264027" />
-      <entry key="S30" value="3.6321409534654983" />
-      <entry key="S60" value="4.485249215732872" />
-      <entry key="M2" value="5.131613268595491" />
-      <entry key="M5" value="5.621216944904382" />
-      <entry key="M10" value="5.804910027518985" />
-      <entry key="M15" value="5.868637115112141" />
-      <entry key="M30" value="5.933657706834572" />
-      <entry key="H1" value="5.966661854043703" />
-      <entry key="H2" value="5.983288951683881" />
-      <entry key="H4" value="5.991633953684621" />
-      <entry key="D1" value="5.998604195126405" />
-      <entry key="W1" value="5.999800563423622" />
-    </decayedShown>
-  </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 1
-}</component>
-  <component name="ProjectId" id="3CszuficCSC8XMlBNk7aPvVLGL3" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3GOz720gd26mXlYFrDGLC69SgJB" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -194,74 +73,38 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.RadMigrateCodeStyle": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.west.config.association.type.startup.service": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "copilot.chat.legacySessionMetadata.migrated": "true",
     "git-widget-placeholder": "main",
-    "junie.onboarding.icon.badge.shown": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true",
+    "org.rust.first.attach.projects": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="SharedIndexes">
-    <attachedChunks>
-      <set>
-        <option value="bundled-python-sdk-ca5e2b39c7df-6e1f45a539f7-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.29346.308" />
-      </set>
-    </attachedChunks>
+  <component name="RunManager">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="3d577fe5-878f-4603-92af-67c2e4c8ce1b" name="Changes" comment="" />
-      <created>1777189291434</created>
+      <changelist id="6c51cb9f-ea63-4fed-8b45-2618b88cf5a8" name="Changes" comment="" />
+      <created>1783857233288</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1777189291434</updated>
-      <workItem from="1777300897886" duration="2595000" />
-      <workItem from="1777636233189" duration="13060000" />
-      <workItem from="1777723663443" duration="114000" />
-      <workItem from="1777723810339" duration="1364000" />
-      <workItem from="1778849466790" duration="580000" />
-      <workItem from="1778850094172" duration="1896000" />
-      <workItem from="1778852028818" duration="9030000" />
-      <workItem from="1778948766650" duration="99000" />
-      <workItem from="1778948881798" duration="10155000" />
-      <workItem from="1779121005873" duration="508000" />
-      <workItem from="1779121551373" duration="84000" />
-      <workItem from="1779121643594" duration="33000" />
-      <workItem from="1779121684933" duration="47000" />
-      <workItem from="1779121742908" duration="782000" />
-      <workItem from="1779124125716" duration="694000" />
-      <workItem from="1779127932841" duration="49000" />
-      <workItem from="1779128013117" duration="55000" />
-      <workItem from="1779128110540" duration="46000" />
-      <workItem from="1779128187797" duration="81000" />
-      <workItem from="1779128308374" duration="50000" />
-      <workItem from="1779128389892" duration="67000" />
-      <workItem from="1779128494899" duration="69000" />
-      <workItem from="1779128598064" duration="13000" />
-      <workItem from="1780495064719" duration="230000" />
-      <workItem from="1780495322908" duration="2568000" />
-      <workItem from="1781444299871" duration="59000" />
-      <workItem from="1781444512739" duration="2135000" />
-      <workItem from="1782146671661" duration="2439000" />
-      <workItem from="1782474579804" duration="4000" />
+      <updated>1783857233288</updated>
+      <workItem from="1783857236234" duration="190000" />
     </task>
     <servers />
   </component>
@@ -272,13 +115,6 @@
     <isAutomaticCheckingOnLaunch value="false" />
     <isAutomaticFoundErrors value="true" />
     <isAutomaticReloadCMake value="true" />
-  </component>
-  <component name="github-copilot-workspace">
-    <instructionFileLocations>
-      <option value=".github/instructions" />
-    </instructionFileLocations>
-    <promptFileLocations>
-      <option value=".github/prompts" />
-    </promptFileLocations>
+    <isAutomaticBootstrapAfterUpdate value="false" />
   </component>
 </project>
