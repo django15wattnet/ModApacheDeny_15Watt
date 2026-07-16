@@ -27,7 +27,7 @@ no binaries are provided.
 - apt install libmysqlclient-dev
 - git clone git@github.com:django15wattnet/ModApacheDeny_15Watt.git
 - cd ModApacheDeny_15Watt/src
-- `sudo apxs -I/usr/include/mysql -L/usr/lib/aarch64-linux-gnu -lmysqlclient -lz  -lzstd -lssl -lcrypto -lresolv -lm -n modApacheDeny_15Watt -I /lib/aarch64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -i -a -c modApacheDeny_15Watt.c checkIpAddr.c loadUserAgents.c loadUserAgentsWhiteList.c loadIpNetworks.c functionsString.c shouldUserAgentBeBlocked.c blockHash.c status.c`
+- `sudo apxs -I/usr/include/mysql -L/usr/lib/aarch64-linux-gnu -lmysqlclient -lz  -lzstd -lssl -lcrypto -lresolv -lm -n modApacheDeny_15Watt -I /lib/aarch64-linux-gnu -Wl,-rpath,/usr/lib/x86_64-linux-gnu -i -a -c modApacheDeny_15Watt.c checkIpAddr.c loadUserAgents.c loadUserAgentsWhiteList.c loadIpNetworks.c functionsString.c shouldUserAgentBeBlocked.c blockHash.c status.c jsonEscape.c`
 
 This also installs the module to Apache.
 
@@ -111,6 +111,7 @@ To enable this endpoint, add the following configuration to your Apache configur
 | 0.4.0   | 2026-05-01 | Added a status endpoint to get the number of entries, the 10 newest and oldest in the blockHash asa JSON-structure          |
 | 0.5.0   | 2026-05-15 | Moved the BlockHash to apr_shm to share it between apache processes and added a lock to synchronize access to the BlockHash |
 | 0.6.0   | 2026-06-03 | Added how often an entry is found in the BlockHash                                                                          | 
+| 0.6.1   | 2026-06-10 | Added JSON escape function to handle special characters in JSON output of handler mod_apache_deny_15watt_status             |
 
 
 ## Future plans

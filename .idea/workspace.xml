@@ -4,11 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="BackendCodeEditorMiscSettings">
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="4" type="long" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/LiveTemplatesHousekeeping/HotspotSessionHintIsShown/@EntryValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="CppIncludesOrderOptions" type="string" />
+    <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
   </component>
-  <component name="CMakePresetLoader"><![CDATA[{
-  "useNewFormat": true
-}]]></component>
+  <component name="BackgroundAgentGlobalSettings">
+    <option name="selectedModelId" value="kimi-k2.7-code" />
+  </component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
   <component name="CMakeProjectFlavorService">
     <option name="flavorId" value="CMakePlainProjectFlavor" />
   </component>
@@ -26,14 +34,12 @@
   <component name="ChangeListManager">
     <list default="true" id="6c51cb9f-ea63-4fed-8b45-2618b88cf5a8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/ModApacheDeny_15Watt.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ModApacheDeny_15Watt.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/stats/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/config" beforeDir="false" afterPath="$PROJECT_DIR$/stats/config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stats/import.py" beforeDir="false" afterPath="$PROJECT_DIR$/stats/import.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/modApacheDeny_15Watt.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/status.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/status.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,13 +52,91 @@
   <component name="CopilotPersistence">
     <persistenceIdMap>
       <entry key="_/Users/ts/www/ModApacheDeny_15Watt" value="3GOz720gd26mXlYFrDGLC69SgJB" />
+      <entry key="_/Users/ts/www/ModApacheDeny_15Watt/.idea" value="3GanlvKxDCCFVPpgVjODtZG4N4y" />
     </persistenceIdMap>
   </component>
+  <component name="CurrentDebugProfile">
+    <option name="debugProfileId" value="875529a7-6354-421d-9e41-d49ca7c6f274" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/blockHash.c" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/blockHash.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/loadUserAgents.c" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/loadUserAgents.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/modApacheDeny_15Watt.c" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/modApacheDeny_15Watt.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/status.c" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/status.h" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="naP7sTje" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0000000000000357" />
+      <entry key="S5" value="1.0000063300874475" />
+      <entry key="S10" value="1.003566693697237" />
+      <entry key="S30" value="1.2936192793904289" />
+      <entry key="S60" value="2.191028084395159" />
+      <entry key="M2" value="3.7439601898968555" />
+      <entry key="M5" value="5.756235037653767" />
+      <entry key="M10" value="6.759099844386519" />
+      <entry key="M15" value="7.143583012153926" />
+      <entry key="M30" value="7.556473440665907" />
+      <entry key="H1" value="7.7742610060068245" />
+      <entry key="H2" value="7.886117669784044" />
+      <entry key="H4" value="7.942803222957126" />
+      <entry key="D1" value="7.990431496242516" />
+      <entry key="W1" value="7.998632193722101" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9526379980439373" />
+      <entry key="MS500" value="0.9903428719330246" />
+      <entry key="S2" value="0.9975769252644898" />
+      <entry key="S5" value="0.999036380338231" />
+      <entry key="S10" value="1.0030775453141383" />
+      <entry key="S30" value="1.2933505265519476" />
+      <entry key="S60" value="2.190740193595231" />
+      <entry key="M2" value="3.7436871030052905" />
+      <entry key="M5" value="5.756059408022074" />
+      <entry key="M10" value="6.758995511970077" />
+      <entry key="M15" value="7.143509236277877" />
+      <entry key="M30" value="7.556434286385405" />
+      <entry key="H1" value="7.774240831146623" />
+      <entry key="H2" value="7.886107428856014" />
+      <entry key="H4" value="7.942798063598715" />
+      <entry key="D1" value="7.990430630902777" />
+      <entry key="W1" value="7.998632069968165" />
+    </decayedShown>
   </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
@@ -60,11 +144,29 @@
     <option name="minorVersion" value="1.4" />
     <option name="productBranch" value="Classic" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3,
-  "fromUser": false
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3GOz720gd26mXlYFrDGLC69SgJB" />
+  <component name="ProjectSessionTemplates">
+    <option name="panelTemplate">
+      <template>
+        <option name="modeId" value="Agent" />
+        <option name="model">
+          <model>
+            <option name="modelType" value="builtin_id" />
+            <option name="modelValue" value="kimi-k2.7-code" />
+          </model>
+        </option>
+        <option name="targetType" value="BACKGROUND" />
+        <option name="worktreeMode" value="WORKSPACE" />
+      </template>
+    </option>
+  </component>
+  <component name="ProjectStatusUIService"><![CDATA[{
+  "uiKindId": "Widget"
+}]]></component>
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -72,7 +174,9 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "CidrDebugProfileConversion": "true",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.RadMigrateCodeStyle": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
@@ -83,10 +187,17 @@
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "copilot.chat.legacySessionMetadata.migrated": "true",
     "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "org.rust.first.attach.projects": "true",
+    "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -105,6 +216,7 @@
       <option name="presentableId" value="Default" />
       <updated>1783857233288</updated>
       <workItem from="1783857236234" duration="190000" />
+      <workItem from="1784218702981" duration="3341000" />
     </task>
     <servers />
   </component>

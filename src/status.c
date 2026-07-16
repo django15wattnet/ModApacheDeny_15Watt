@@ -1,5 +1,6 @@
 #include "status.h"
 #include "blockHash.h"
+#include "jsonEscape.h"
 #include "httpd.h"
 #include "http_core.h"
 #include "http_protocol.h"
@@ -52,7 +53,7 @@ int statusHandler(request_rec *r)
         ap_rprintf(
             r, "    "
             "{\"userAgent\": \"%s\", \"ipAddress\": \"%s\", \"tsLastUse\": \"%s\", \"cnt\": %d, \"doBlock\": %s, \"blockType\": \"%s\"}%s\n",
-           userAgent,
+           jsonEscapeString(r->pool, userAgent),
            ipAddress,
            time_str,
            newest_entries[i]->cnt,
@@ -85,7 +86,7 @@ int statusHandler(request_rec *r)
         ap_rprintf(
             r,
             "    {\"userAgent\": \"%s\", \"ipAddress\": \"%s\", \"tsLastUse\": \"%s\", \"cnt\": %d, \"doBlock\": %s, \"blockType\": \"%s\"}%s\n",
-           userAgent,
+           jsonEscapeString(r->pool, userAgent),
            ipAddress,
            time_str,
            oldest_entries[i]->cnt,

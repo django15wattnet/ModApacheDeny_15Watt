@@ -35,6 +35,8 @@ add_library(${PROJECT_NAME} SHARED
         src/modApacheDeny_15Watt.c
         src/status.c
         src/status.h
+        src/jsonEscape.c
+        src/jsonEscape.h
         src/CheckIpAddr.h
         src/checkIpAddr.c
         src/test.c

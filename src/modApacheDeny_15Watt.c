@@ -173,7 +173,7 @@ module AP_MODULE_DECLARE_DATA modApacheDeny_15Watt_module =
 
 /**
  * The configuration is read in.
- * Sets default values if no configuration was provided.
+ * Sets default values if no configuration is provided.
  * Initializes shared memory once in the parent process.
  */
 int serverConfigHandler(
