@@ -111,7 +111,7 @@ To enable this endpoint, add the following configuration to your Apache configur
 | 0.4.0   | 2026-05-01 | Added a status endpoint to get the number of entries, the 10 newest and oldest in the blockHash asa JSON-structure          |
 | 0.5.0   | 2026-05-15 | Moved the BlockHash to apr_shm to share it between apache processes and added a lock to synchronize access to the BlockHash |
 | 0.6.0   | 2026-06-03 | Added how often an entry is found in the BlockHash                                                                          | 
-| 0.6.1   | 2026-06-10 | Added JSON escape function to handle special characters in JSON output of handler mod_apache_deny_15watt_status             |
+| 0.6.1   | 2026-07-16 | Added JSON escape function to handle special characters in JSON output of handler mod_apache_deny_15watt_status             |
 
 
 ## Future plans
