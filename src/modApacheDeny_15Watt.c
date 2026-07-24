@@ -333,7 +333,8 @@ static int requestHandler(request_rec *requestRec)
             APLOG_INFO,
             0,
             requestRec,
-            "modApacheDeny_15Watt blocked client by empty user agent"
+            "modApacheDeny_15Watt blocked client by empty user agent, ip=%s",
+            requestRec->useragent_ip
         );
 
         return HTTP_FORBIDDEN;
@@ -348,8 +349,9 @@ static int requestHandler(request_rec *requestRec)
                 APLOG_INFO,
                 0,
                 requestRec,
-                "modApacheDeny_15Watt white listed client by user agent=%s",
-                userAgent
+                "modApacheDeny_15Watt white listed client by user agent=%s, ip=%s",
+                userAgent,
+                requestRec->useragent_ip
             );
 
             return DECLINED;
@@ -390,8 +392,9 @@ static int requestHandler(request_rec *requestRec)
                     APLOG_INFO,
                     0,
                     requestRec,
-                    "modApacheDeny_15Watt blocked client by user agent=%s",
-                    userAgent
+                    "modApacheDeny_15Watt blocked client by user agent=%s ip=%s",
+                    userAgent,
+                    requestRec->useragent_ip
                 );
 
             return HTTP_FORBIDDEN;
@@ -563,9 +566,10 @@ static int requestHandler(request_rec *requestRec)
             APLOG_INFO,
             0,
             requestRec,
-            "modApacheDeny_15Watt blockHashAddEntry: %s (key=%s)",
+            "modApacheDeny_15Watt blockHashAddEntry: %s user agent=%s ip=%s",
             resMsg,
-            userAgentKey
+            userAgent,
+            requestRec->useragent_ip
         );
     }
 
