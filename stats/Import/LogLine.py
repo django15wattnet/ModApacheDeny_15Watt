@@ -194,7 +194,7 @@ class LogLine(object):
         user_agent_pattern = r'user agent=(.+?)(?:\s+(?:ip|host)=|\s*$)'
         user_agent_match = re.search(user_agent_pattern, self.__line)
         if user_agent_match:
-            self.__components['user_agent'] = user_agent_match.group(1).strip()
+            self.__components['user_agent'] = user_agent_match.group(1).strip().removesuffix(' and')
         else:
             self.__components['user_agent'] = '-'
 
